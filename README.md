@@ -1,38 +1,24 @@
 [![Experimental Project header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#experimental)
 
-# [Name of Project] [build badges go here when available]
+# V3 Deployer
 
->[Brief description - what is the project and value does it provide? How often should users expect to get releases? How is versioning set up? Where does this project want to go?]
+The deployer is a ruby application that can be used to deploy an environment and configure the applications on this environment. The deployer supports various cloud providers, and can be run locally, or through docker.
 
-## Installation
+## Tutorial
 
-> [Include a step-by-step procedure on how to get your code installed. Be sure to include any third-party dependencies that need to be installed separately]
+To learn and how to use the deployer, you may want to go through the [Tutorial](documentation/tutorial/README.md).
 
-## Getting Started
->[Simple steps to start working with the software similar to a "Hello World"]
+This tutorial will guide you step by step to install the minimum dependency and set your local configuration to run the deployer. 
 
-## Usage
->[**Optional** - Include more thorough instructions on how to use the software. This section might not be needed if the Getting Started section is enough. Remove this section if it's not needed.]
+You'll also practice how to deploy some examples to get more familiar with the deployer and its configuration.
 
+## Developer
 
-## Building
-
->[**Optional** - Include this section if users will need to follow specific instructions to build the software from source. Be sure to include any third party build dependencies that need to be installed separately. Remove this section if it's not needed.]
-
-## Testing
-
->[**Optional** - Include instructions on how to run tests if we include tests with the codebase. Remove this section if it's not needed.]
-
-## Support
-
-New Relic hosts and moderates an online forum where customers can interact with New Relic employees as well as other customers to get help and share best practices. Like all official New Relic open source projects, there's a related Community topic in the New Relic Explorers Hub. You can find this project's topic/threads here:
-
->Add the url for the support thread here
+For a more advanced insights of what the deployer is and does, check the [Developer](documentation/developer/README.md). You'll find some architecture information, how to run the deployer locally with all its dependencies, and how to run the various deployer tests.
 
 ## Contributing
 We encourage your contributions to improve [project name]! Keep in mind when you submit your pull request, you'll need to sign the CLA via the click-through using CLA-Assistant. You only have to sign the CLA one time per project.
 If you have any questions, or to execute our corporate CLA, required if your contribution is on behalf of a company,  please drop us an email at opensource@newrelic.com.
 
 ## License
-[Project Name] is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License.
->[If applicable: The [project name] also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the third-party notices document.]
+V3 Deployer is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License. V3 Deployer also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the [third-party notices document](./THIRD_PARTY_NOTICES.md).
