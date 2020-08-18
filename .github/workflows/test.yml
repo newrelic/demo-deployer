@@ -1,0 +1,45 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.4
+
+      - name: Ruby Gem Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install Gems
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+    
+      - name: Unit Tests
+        if: ${{ always() }}
+        run: bundle exec rake test:unit
+      
+      - name: Integration Tests
+        if: ${{ always() }}
+        run: bundle exec rake test:uat:integration
+
+      # TODO: there are a lot of secrets in cloud provider tests that need migrating
+      - name: Cloud Provider Tests (AWS)
+        if: ${{ always() }}
+        run: bundle exec rake test:uat:aws
+
+      - name: Cloud Provider Tests (Azure)
+        if: ${{ always() }}
+        run: bundle exec rake test:uat:azure
