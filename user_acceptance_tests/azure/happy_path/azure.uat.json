@@ -1,0 +1,131 @@
+{
+  "services": [
+    {
+      "id": "simulator",
+      "display_name": "Simulator",
+      "source_repository": "git@source.datanerd.us:Demotron/Simulator.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5000,
+      "endpoints": [
+        "[service:uat1]/api/inventory/10",
+        "[service:uat1]/api/inventory",
+        "[service:uat1]/api/validateMessage?message=x"],
+      "destinations": ["host1"]
+    },
+    {
+      "id": "uat1",
+      "display_name": "UAT Azure Python App",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5001,
+      "relationships": ["uat2"],
+      "destinations": ["host1"]
+    },{
+      "id": "uat2",
+      "display_name": "UAT Azure Go App",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Gotron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5002,
+      "relationships": ["uat3"],
+      "destinations": ["host1"]
+    },{
+      "id": "uat3",
+      "display_name": "UAT3 Azure Java App",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Javatron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5003,
+      "relationships": ["uat4"],
+      "destinations": ["host2"]
+    },{
+      "id": "uat4",
+      "display_name": "UAT4 Azure NodeJS App",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5004,
+      "destinations": ["host1"]
+    },{
+      "id": "fluentd",
+      "destinations": ["host1"],
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Fluentd.git",
+      "deploy_script_path": "/deploy/linux/roles",
+      "port": 9999
+    }
+  ],
+
+  "global_tags": {
+    "owning_team": "DEMO",
+    "Environment": "development",
+    "Department": "product",
+    "Product": "V3",
+    "DeployedBy": "UAT Azure"
+  },
+
+  "resources": [
+    {
+      "id": "host1",
+      "provider": "azure",
+      "type": "vm",
+      "size": "Standard_B1s",
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "2"
+      }
+    },
+    {
+      "id": "host2",
+      "provider": "azure",
+      "type": "vm",
+      "size": "Standard_B1s",
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "2"
+      }
+    }
+  ],
+
+  "instrumentations": {
+    "resources": [
+      {
+        "id": "nr_infra",
+        "resource_ids": ["host1", "host2"],
+        "provider": "newrelic",
+        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/linux/roles",
+        "version": "1.4.11" 
+      }
+    ],
+    "services": [
+      {
+        "id": "nr_agent_python",
+        "service_ids": ["uat1"],
+        "provider": "newrelic",
+        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/python/linux/roles",
+        "version": "5.4.1.134"
+      },
+      {
+        "id": "nr_agent_go",
+        "service_ids": ["uat2"],
+        "provider": "newrelic",
+        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/go/datanerd.us/demotron/V3-Gotron/roles",
+        "version": "3.6.0" 
+      },
+      {
+        "id": "nr_node_agent",
+        "service_ids": ["uat4"],
+        "provider": "newrelic",
+        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/node/linux/roles",
+        "version": "6.2.0"
+      },
+      {
+        "id": "nr_logging",
+        "service_ids": ["uat1", "uat2", "uat4", "simulator"],
+        "provider": "newrelic",
+        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/logging/roles"
+      }
+    ]
+  }
+}

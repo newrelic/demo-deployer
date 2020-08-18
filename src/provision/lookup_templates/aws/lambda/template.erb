@@ -1,0 +1,93 @@
+---
+
+- hosts: localhost
+  remote_user: <%= lambda_function[:remote_user] %>
+  gather_facts: True
+
+  vars:
+    resource_id: <%= lambda_function[:resource_id] %>
+    lambda_function_name: <%= lambda_function[:lambda_function_name] %>
+    apigw_name: <%= lambda_function[:lambda_function_name] %>
+    apigw_api_id: <%= lambda_function[:api_gateway_api_id] %>
+    aws_access_key: <%= lambda_function[:aws_access_key] %>
+    aws_secret_key: <%= lambda_function[:aws_secret_key] %>
+    region: <%= lambda_function[:aws_region] %>
+    iam_policy_name: <%= lambda_function[:iam_policy_name] %>
+    iam_role_name: <%= lambda_function[:iam_role_name] %>
+    vpc_security_group_name: <%= lambda_function[:vpc_security_group_name] %>
+    artifact_path: <%= lambda_function[:artifact_file_path] %>
+    output_file_path: <%= lambda_function[:output_file_path] %>
+    zip_file_path: <%= lambda_function[:zip_file_path] %>
+    swagger_file_path: <%= lambda_function[:swagger_file_path] %>
+    tags: <%= lambda_function[:tags] %>
+    handler_name: lambda.lambda_handler
+    memory_size: 128
+    runtime: python3.7
+    timeout: 15
+
+  tasks:
+    - include_tasks: vpc.yml
+
+    - name: Get lambda config facts
+      lambda_facts:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ region }}"
+        query: config
+        function_name: "{{ lambda_function_name }}"
+      register: lambda_function_details
+
+    - name: Get lambda arn
+      set_fact:
+        lambda_arn: "{{lambda_function_details.ansible_facts['lambda_facts']['function'][lambda_function_name]['function_arn']}}"
+      when: lambda_function_details is defined
+
+    - name: Create lambda uri
+      set_fact:
+        lambda_uri: "arn:aws:apigateway:{{ region }}:lambda:path/2015-03-31/functions/{{ lambda_arn }}/invocations"
+      when: lambda_function_details is defined
+
+    - name: Create api gateway url
+      set_fact:
+        apigw_url: "https://{{ apigw_api_id }}.execute-api.{{ region }}.amazonaws.com"
+      when: lambda_function_details is defined
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) }}"
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | combine({
+            'resource_id': resource_id,
+            'params': {
+                'url': apigw_url,
+                'aws_access_key': aws_access_key,
+                'iam_role_name': iam_role_name,
+                'aws_secret_key': aws_secret_key,
+                'region': region,
+                'lambda_arn': lambda_arn,
+                'lambda_uri': lambda_uri,
+                'lambda_function_name': lambda_function_name,
+                'apigw_name': apigw_name
+            }
+            })
+          }}"
+        when: lambda_function_details is defined
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost

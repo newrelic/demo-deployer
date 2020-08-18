@@ -1,0 +1,60 @@
+{
+  "services": [
+    {
+      "id": "configuat1",
+      "type": "tron",
+      "display_name": "UAT Python App",
+      "source_repository": "git@source.datanerd.us:Demotron/V3-Pythontron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5555,
+      "destinations": ["confighost1"]
+    },{
+      "id": "configuat2",
+      "display_name": "UAT Go App",
+      "source_repository": "git@source.datanerd.us:Demotron/V3-Gotron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 8000,
+      "destinations": ["confighost1"]
+    },{
+      "id": "configuat3",
+      "display_name": "UAT Lambda App",
+      "source_repository": "git@source.datanerd.us:Demotron/V3-Pythontron.git",
+      "deploy_script_path": "deploy/lambda/roles",
+      "destinations": ["configlambda1"]
+    }
+  ],
+
+  "global_tags": {
+    "DeployedBy": "UAT"
+  },
+
+  "resources": [
+    {
+      "id": "confighost1",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.nano",
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "1"
+      }
+    },{
+      "id": "configuatelb",
+      "provider": "aws",
+      "type": "elb",
+      "listeners": ["configuat1"],
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "2"
+      }
+    },{
+      "id": "configlambda1",
+      "provider": "aws",
+      "type": "lambda",
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "3"
+      }
+    }
+  ]
+}

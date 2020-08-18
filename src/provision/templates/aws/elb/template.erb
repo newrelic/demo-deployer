@@ -1,0 +1,172 @@
+---
+- name: Provision an Application Load Balancer
+  hosts: localhost
+  remote_user: <%= elb[:remote_user] %>
+  gather_facts: True
+
+  vars:
+    resource_id: <%= elb[:resource_id] %>
+    resource_name: <%= elb[:resource_name] %>
+    listener_resource_names: <%= elb[:listener_resource_names] %>
+    resource_port: <%= elb[:resource_port] %>
+    elb_port: <%= elb[:elb_port] %>
+    targets: []
+    aws_access_key: <%= elb[:aws_access_key] %>
+    aws_secret_key: <%= elb[:aws_secret_key] %>
+    region: <%= elb[:aws_region] %>
+    deployment_name: <%= elb[:deployment_name] %>
+    tags: <%= elb[:tags] %>
+    artifact_path: <%= elb[:artifact_file_path] %>
+
+  tasks:
+    - name: Get default VPC fact
+      ec2_vpc_net_facts:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        filters:
+          isDefault: "true"
+      register: default_vpc
+
+    - name: Set subnet_ids fact
+      set_fact:
+        default_vpc_id: "{{ default_vpc.vpcs | map(attribute='id') | list | first }}"
+
+    - name: Find availability zones in the default VPC
+      ec2_vpc_subnet_facts:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        filters:
+          defaultForAz: "true"
+          state: "available"
+          vpc-id: "{{ default_vpc_id }}"
+      register: default_subnets
+
+    - name: Set subnet_ids fact
+      set_fact:
+        subnet_ids: "{{ default_subnets.subnets | map(attribute='id') | list }}"
+
+    - name: Gather instance facts
+      ec2_instance_facts:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        filters:
+          "tag:Name": '{{item}}'
+          instance-state-name: running
+      register: ec2_facts
+      with_items: "{{ listener_resource_names }}"
+
+    - name: Set instances fact
+      set_fact:
+        instances: "{{ ec2_facts.results | map(attribute='instances') | list | flatten}}"
+      when: ec2_facts is defined
+
+    - name: Set instance_ids fact
+      set_fact:
+        instance_ids: "{{ instances | map(attribute='instance_id') | list }}"
+      when: instances is defined
+
+    - name: Set targets fact for creating target group
+      set_fact:
+        targets: "{{ targets + [ { 'Id': item, 'Port': resource_port } ] }}"
+      with_items: "{{ instance_ids }}"
+      when: instance_ids is defined
+
+    - fail:
+        msg: "ELB target listeners list is empty. Could not fetch EC2 instances instance_id with those configured resources:{{ listener_resource_names }}"
+      when: targets | length == 0
+
+    - name: Create Target Groups
+      elb_target_group:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        name: "{{ deployment_name }}-{{ resource_id }}"
+        protocol: http
+        port: 80
+        vpc_id: "{{ default_vpc_id }}"
+        health_check_path: /
+        health_check_interval: 60
+        successful_response_codes: "200"
+        targets: "{{ targets | list }}"
+        state: present
+        tags: "{{ tags }}"
+      register: target_groups
+
+    - name: create security group for the load balancer
+      ec2_group:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        name: "{{ deployment_name }}-{{ resource_id }}"
+        description: "security group for the {{ resource_id }} load balancer"
+        vpc_id: "{{ default_vpc_id }}"
+        tags:
+          Name: "{{ resource_name }}"
+        rules:
+          - proto: tcp
+            ports:
+            - 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: "allow internet traffic on port 80"
+      ignore_errors: yes
+
+    - name: create application load balancer
+      elb_application_lb:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        name: "{{ deployment_name }}-{{ resource_id }}"
+        subnets: "{{ subnet_ids }}"
+        security_groups:
+          - "{{ deployment_name }}-{{ resource_id }}"
+        listeners:
+          - Protocol: HTTP
+            Port: 80
+            DefaultActions:
+              - Type: forward
+                TargetGroupName: "{{ deployment_name }}-{{ resource_id }}"
+        state: present
+        tags: "{{ tags }}"
+      register: alb_facts
+
+    - fail:
+        msg: "application load balancer failed to create"
+      when: alb_facts is not defined
+
+    - name: Set elb url fact
+      set_fact:
+        elb_url: "{{ alb_facts.dns_name }}"
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: Load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) }}"
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | combine({
+            'resource_id': resource_id,
+            'params': {
+                'url': elb_url
+            }
+            })
+          }}"
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost

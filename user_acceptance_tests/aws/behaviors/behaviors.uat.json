@@ -1,0 +1,47 @@
+{
+  "services": [
+    {
+      "id": "nodetron",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5002,
+      "relationships": [],
+      "destinations": ["host1"]
+    },
+    {
+      "id": "pythontron",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5003,
+      "relationships": [],
+      "destinations": ["host1"]
+    },
+    {
+      "id": "javatron",
+      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Javatron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5004,
+      "relationships": [],
+      "destinations": ["host1"]
+    }
+  ],
+
+  "global_tags": {
+    "owning_team": "DEMO",
+    "Environment": "development",
+    "Department": "product",
+    "Product": "V3",
+    "DeployedBy": "UAT Behaviors"
+  },
+
+  "resources": [
+    {
+      "id": "host1",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.micro"
+    }
+  ],
+
+  "instrumentations": {}
+}

@@ -1,0 +1,91 @@
+{
+  "services": [
+    {
+      "id": "app1",
+      "display_name": "App 1",
+      "source_repository": "git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5001,
+      "relationships":["app2"],
+      "destinations": ["host1", "host2"]
+    },{
+      "id": "app2",
+      "display_name": "App 2",
+      "source_repository": "git@source.datanerd.us:Demotron/V3-Pythontron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5002,
+      "destinations": ["host2"]
+    },{
+      "id": "simulator",
+      "display_name": "Simulator",
+      "source_repository": "git@source.datanerd.us:Demotron/Simulator.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5000,
+      "endpoints": ["[resource:app1elb]/api/inventory", "[service:app2]/api/validateMessage"],
+      "destinations": ["simuhost"]
+    }
+  ],
+
+  "resources": [
+    {
+      "id": "host1",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.nano"
+    },{
+      "id": "host2",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.small"
+    },{
+      "id": "app1elb",
+      "provider": "aws",
+      "type": "elb",
+      "listeners": ["app1"]
+    },{
+      "id": "simuhost",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.nano"
+    }
+  ],
+
+  "instrumentations": {
+    "resources": [
+      {
+        "id": "nr_infra",
+        "resource_ids": ["host1","host2"],
+        "provider": "newrelic",
+        "source_repository": "git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/linux/roles",
+        "version": "1.11.4"
+      }
+    ],
+    "services": [
+      {
+        "id": "nr_agent_node",
+        "service_ids": ["app1", "simulator"],
+        "provider": "newrelic",
+        "source_repository": "git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/node/linux/roles",
+        "version": "6.5.0"
+      },
+      {
+        "id": "nr_agent_python",
+        "service_ids": ["app2"],
+        "provider": "newrelic",
+        "source_repository": "git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "deploy_script_path": "deploy/python/linux/roles",
+        "version": "5.10.0.138"
+      }
+    ]
+  },
+
+  "global_tags": {
+    "owning_team": "AWESOME_TEAM",
+    "Environment": "development",
+    "Department": "product",
+    "Product": "AWESOME_PRODUCT",
+    "DeployedBy": "me@newrelic.com"
+  }
+}

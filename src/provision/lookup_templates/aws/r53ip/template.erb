@@ -1,0 +1,70 @@
+---
+- name: Lookup a route53 A recordset
+  hosts: localhost
+  gather_facts: True
+
+  vars:
+    resource_id: <%= r53[:resource_id] %>
+    aws_access_key: <%= r53[:aws_access_key] %>
+    aws_secret_key: <%= r53[:aws_secret_key] %>
+    region: <%= r53[:aws_region] %>
+    deployment_name: <%= r53[:deployment_name] %>
+    domain: <%= r53[:domain] %>
+    dns: <%= r53[:dns] %>
+    ips: <%= r53[:ips] %>
+    port: <%= r53[:port] %>
+    reference_resource_name: <%= r53[:reference_resource_name] %>
+    artifact_path: <%= r53[:artifact_file_path] %>
+
+  tasks:
+    - name: lookup the record
+      route53:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        state: get
+        zone: "{{ domain }}"
+        record: "{{ dns }}"
+        type: A
+      register: record
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: Load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) }}"
+
+      - name: Set output dns when port is specified
+        set_fact:
+          output_dns: "{{ dns }}:{{ port }}"
+        when: port is defined and port is not none
+
+      - name: Set output dns when port is NOT specified
+        set_fact:
+          output_dns: "{{ dns }}"
+        when: port is not defined or port is none
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | combine({
+            'resource_id': resource_id,
+            'params': {
+              'url': output_dns
+            }
+            })
+          }}"
+        when: record is defined
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost

@@ -1,0 +1,43 @@
+---
+- block:
+    - name: Get VPC Facts
+      ec2_vpc_net_facts:
+        aws_access_key: <%= vpc[:aws_access_key] %>
+        aws_secret_key: <%= vpc[:aws_secret_key] %>
+        region: <%= vpc[:region] %>
+      register: vpcs_instances
+
+    - name: Find default VPC
+      set_fact:
+        default_vpc: "{{ item['id'] }}"
+      when: item.is_default == True
+      with_items: "{{ vpcs_instances['vpcs'] }}"
+
+    - fail:
+        msg: "VPC Subnet not found"
+      when: default_vpc is not defined
+
+    - name: get VPC subnets
+      ec2_vpc_subnet_facts:
+        aws_access_key: <%= vpc[:aws_access_key] %>
+        aws_secret_key: <%= vpc[:aws_secret_key] %>
+        region: <%= vpc[:region] %>
+        filters:
+          defaultForAz: "true"
+          state: "available"
+          vpc-id: "{{default_vpc}}"
+      register: default_vpc_subnets
+
+    - name: find first default subnet by AZ name order
+      set_fact:
+        default_vpc_subnet: "{{default_vpc_subnets.subnets | sort(attribute='availability_zone') | first}}"
+      when: default_vpc_subnets is defined
+
+    - name: find first default subnet_id
+      set_fact:
+        default_vpc_subnet_id: "{{default_vpc_subnet['subnet_id']}}"
+      when: default_vpc_subnet is defined
+
+    - fail:
+        msg: "VPC default subnet not found"
+      when: default_vpc_subnet_id is not defined

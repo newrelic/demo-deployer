@@ -1,0 +1,32 @@
+---
+swagger: "2.0"
+info:
+  version: "2019-06-07T21:10:46Z"
+  title: "{{ apigw_name }}"
+basePath: "/api"
+schemes:
+  - "http"
+paths:
+  /:
+    get:
+      x-amazon-apigateway-integration:
+        uri:  "{{ lambda_uri }}"
+        responses:
+          default:
+            statusCode: "200"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "AWS_PROXY"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+
+definitions:
+  Empty:
+    type: "object"
+    title: "Empty Schema"

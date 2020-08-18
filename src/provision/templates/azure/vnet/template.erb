@@ -1,0 +1,72 @@
+---
+- block:
+    - name: Create resource group
+      azure_rm_resourcegroup:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        name: "{{ resource_group }}"
+        location: "{{ region }}"
+
+    - name: Create virtual network
+      azure_rm_virtualnetwork:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ vnet_name }}"
+        address_prefixes: "172.0.0.0/16"
+        purge_address_prefixes: yes
+      retries: 10
+      delay: 6
+      register: result
+      until: result is not failed
+
+    - name: Add subnet
+      azure_rm_subnet:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ subnet_name }}"
+        address_prefix: "172.0.1.0/24"
+        virtual_network: "{{ vnet_name }}"
+      retries: 10
+      delay: 6
+      register: result
+      until: result is not failed
+
+    - name: Create Network Security Group that allows SSH
+      azure_rm_securitygroup:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ sg_name }}"
+        rules:
+          - name: SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1001
+            direction: Inbound
+
+    - name: Create Application Network Security Group
+      azure_rm_securitygroup:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ sg_name }}"
+        rules:
+          - name: AppPort
+            protocol: "*"
+            destination_port_range: "{{ range_ports }}"
+            access: Allow
+            priority: 1002
+            direction: Inbound

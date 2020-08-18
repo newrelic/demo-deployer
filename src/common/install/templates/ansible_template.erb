@@ -1,0 +1,10 @@
+[defaults]
+host_key_checking = False
+<% unless key[:secret_file_path].nil? %>
+private_key_file=<%= key[:secret_file_path] %>
+<% end %>
+
+timeout=30
+remote_tmp = $HOME/.ansible/tmp
+local_tmp = $HOME/.ansible/tmp
+roles_path = <%= template[:path] %>

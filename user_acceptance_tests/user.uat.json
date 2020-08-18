@@ -1,0 +1,29 @@
+{
+  "credentials": {
+    "aws": {
+      "apiKey": "AWS_ACCESS_ID",
+      "secretKey": "AWS_SECRET_KEY",
+      "secretKeyPath": "user_acceptance_tests/aws/secret_file.pem",
+      "region": "AWS_REGION"
+    },
+    "newrelic": {
+      "licenseKey": "NR_LICENSE_KEY",
+      "insightsInsertApiKey": "NR_INSIGHTS_INSERT_API_KEY",
+      "accountId": "NR_ACCOUNT_ID",
+      "accountRootId": "NR_ACCOUNT_ROOT_ID",
+      "urls":{
+        "collector": "NR_COLLECTOR_URL"
+      }
+    },
+    "azure": {
+      "client_id": "AZURE_CLIENT_ID",
+      "tenant": "AZURE_TENANT",
+      "subscription_id": "AZURE_SUBSCRIPTION_ID",
+      "secret": "AZURE_SECRET",
+      "region": "AZURE_REGION",
+      "sshPublicKeyPath": "/data/jenkins/.ssh/id_rsa.pub"
+    }
+  },
+  "globalTags": {
+  }
+}

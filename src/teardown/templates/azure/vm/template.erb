@@ -1,0 +1,34 @@
+---
+
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+
+  vars:
+    client_id: <%= azure[:client_id] %>
+    tenant: <%= azure[:tenant] %>
+    subscription_id: <%= azure[:subscription_id] %>
+    secret: <%= azure[:secret] %>
+    remote_user: <%= vm[:remote_user] %>
+    instance_size: <%= vm[:instance_size] %>
+    resource_id: <%= vm[:resource_id] %>
+    resource_name: <%= vm[:resource_name] %>
+    ami_name: <%= vm[:ami_name] %>
+    artifact_path: <%= vm[:artifact_file_path] %>
+    ip_name: <%= vm[:ip_name] %>
+    nic_name: <%= vm[:nic_name] %>
+    resource_group: <%= azure[:resource_group] %>
+    vnet_name: <%= azure[:vnet_name] %>
+    sg_name: <%= azure[:sg_name] %>
+    subnet_name: <%= azure[:subnet_name] %>
+
+  tasks:
+    - name: Delete a resource group including resources it contains
+      azure_rm_resourcegroup:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        name: "{{ resource_group }}"
+        force_delete_nonempty: yes
+        state: absent

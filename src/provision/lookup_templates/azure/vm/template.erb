@@ -1,0 +1,89 @@
+---
+
+# doc foc creating azure AD profile
+# https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal
+
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+
+  vars:
+    client_id: <%= azure[:client_id] %>
+    tenant: <%= azure[:tenant] %>
+    subscription_id: <%= azure[:subscription_id] %>
+    secret: <%= azure[:secret] %>
+    ssh_public_key: <%= azure[:ssh_public_key] %>
+    remote_user: <%= vm[:remote_user] %>
+    instance_size: <%= vm[:instance_size] %>
+    resource_id: <%= vm[:resource_id] %>
+    resource_name: <%= vm[:resource_name] %>
+    artifact_path: <%= vm[:artifact_file_path] %>
+    ip_name: <%= vm[:ip_name] %>
+    nic_name: <%= vm[:nic_name] %>
+    tags: <%= vm[:tags] %>
+    region: <%= azure[:region] %>
+    resource_group: <%= azure[:resource_group] %>
+    vnet_name: <%= azure[:vnet_name] %>
+    sg_name: <%= azure[:sg_name] %>
+    subnet_name: <%= azure[:subnet_name] %>
+    range_ports: <%= azure[:range_ports] %>
+
+  tasks:
+    - name: Get facts by name
+      azure_rm_virtualmachine_info:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ resource_name }}"
+      ignore_errors: yes
+      register: vm_facts
+
+    - name: Get facts for vm public ip
+      azure_rm_publicipaddress_info:
+        client_id: "{{ client_id }}"
+        tenant: "{{ tenant }}"
+        subscription_id: "{{ subscription_id }}"
+        secret: "{{ secret }}"
+        resource_group: "{{ resource_group }}"
+        name: "{{ ip_name }}"
+      register: ip_facts
+      when: vm_facts is defined
+
+    - name: create fact for public ip
+      set_fact:
+        vm_public_ip: "{{ ip_facts.publicipaddresses[0].ip_address }}"
+      when: ip_facts is defined and (ip_facts.publicipaddresses | length >0)
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) }}"
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | combine({
+            'resource_id': resource_id,
+            'params': {
+                'ip': vm_public_ip
+            }
+            })
+          }}"
+        when: vm_public_ip is defined
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost

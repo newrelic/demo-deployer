@@ -1,0 +1,102 @@
+---
+- name: Provision a route53 A recordset
+  hosts: localhost
+  gather_facts: True
+
+  vars:
+    resource_id: <%= r53[:resource_id] %>
+    aws_access_key: <%= r53[:aws_access_key] %>
+    aws_secret_key: <%= r53[:aws_secret_key] %>
+    region: <%= r53[:aws_region] %>
+    deployment_name: <%= r53[:deployment_name] %>
+    domain: <%= r53[:domain] %>
+    dns: <%= r53[:dns] %>
+    ips: <%= r53[:ips] %>
+    port: <%= r53[:port] %>
+    reference_resource_name: <%= r53[:reference_resource_name] %>
+    artifact_path: <%= r53[:artifact_file_path] %>
+
+  tasks:
+    - name: configure route53 A alias
+      route53:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        state: present
+        zone: "{{ domain }}"
+        record: "{{ dns }}"
+        type: A
+        value: "{{ ips }}"
+        wait: yes
+        overwrite: yes
+      when: ips is defined and ips is not none
+
+    - name: Get load balancer fact
+      elb_application_lb_facts:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{region}}"
+        names:
+          - "{{ reference_resource_name }}"
+      register: alb_facts
+      when: reference_resource_name is defined and reference_resource_name is not none
+
+    - name: Set elb url fact
+      set_fact:
+        elb_dns: "{{ alb_facts.load_balancers[0].dns_name }}"
+        elb_zone_id: "{{ alb_facts.load_balancers[0].canonical_hosted_zone_id }}"
+      when: reference_resource_name is defined and reference_resource_name is not none
+
+    - route53:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        state: present
+        zone: "{{ domain }}"
+        record: "{{ dns }}"
+        type: A
+        value: "{{ elb_dns }}"
+        alias: True
+        alias_hosted_zone_id: "{{ elb_zone_id }}"
+        wait: yes
+        overwrite: yes
+      when: elb_dns is defined and elb_zone_id is defined
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: Load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) }}"
+
+      - name: Set output dns when port is specified
+        set_fact:
+          output_dns: "{{ dns }}:{{ port }}"
+        when: port is defined and port is not none
+
+      - name: Set output dns when port is NOT specified
+        set_fact:
+          output_dns: "{{ dns }}"
+        when: port is not defined or port is none
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | combine({
+            'resource_id': resource_id,
+            'params': {
+              'url': output_dns
+            }
+            })
+          }}"
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost
