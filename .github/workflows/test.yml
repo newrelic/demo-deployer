@@ -30,6 +30,7 @@ jobs:
     
       - name: Lint
         id: lint
+        continue-on-error: true
         if: ${{ always() }}
         run: bundle exec rubocop
 
