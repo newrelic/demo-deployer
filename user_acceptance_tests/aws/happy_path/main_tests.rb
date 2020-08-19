@@ -26,7 +26,7 @@ describe "UserAcceptanceTests::Aws::HappyPath" do
   it "should provision successfully" do
     UserAcceptanceTests::Assertions::ServiceRelationship.new(@deployment_manager.context).execute(
       ["inventory","inventory/5","validateMessage?message=uat"],
-      ["uat1","uat2","uat3","uat5","uat6"]
+      ["uat5","uat6"]
     )
   end
 end

@@ -1,83 +1,33 @@
 {
   "services": [
     {
-      "id": "simulator",
-      "display_name": "Simulator",
-      "source_repository": "git@source.datanerd.us:Demotron/Simulator.git",
-      "deploy_script_path": "deploy/linux/roles",
-      "port": 5000,
-      "endpoints": [
-        "[service:uat1]/api/inventory/10",
-        "[service:uat1]/api/inventory",
-        "[service:uat1]/api/validateMessage?message=x"],
-      "destinations": ["host1"]
-    },
-    {
-      "id": "uat1",
-      "display_name": "UAT1 AWS Python App",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
-      "deploy_script_path": "deploy/linux/roles",
-      "port": 5001,
-      "relationships": ["uat2"],
-      "destinations": ["host1"]
-    },{
-      "id": "uat2",
-      "display_name": "UAT2 AWS Go App",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Gotron.git",
-      "deploy_script_path": "deploy/linux/roles",
-      "port": 5002,
-      "relationships": ["uat3"],
-      "destinations": ["host1"]
-    },{
-      "id": "uat3",
-      "display_name": "UAT3 AWS Lambda App",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
-      "deploy_script_path": "deploy/lambda/roles",
-      "relationships": ["uat5"],
-      "destinations": ["lambda3"]
-    },{
       "id": "uat5",
       "display_name": "UAT5 AWS NodeJS App",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5003,
       "relationships": ["uat6"],
       "destinations": ["host2"]
     },{
       "id": "uat6",
-      "display_name": "UAT6 AWS Java App",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Javatron.git",
+      "display_name": "UAT6 AWS NodeJS App",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5004,
       "destinations": ["host3"]
-    },{
-      "id": "fluentd",
-      "destinations": ["host1", "host2"],
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Fluentd.git",
-      "deploy_script_path": "/deploy/linux/roles",
-      "port": 9999
     }
   ],
 
   "global_tags": {
-    "owning_team": "DEMO",
-    "Environment": "development",
-    "Department": "product",
-    "Product": "V3",
-    "DeployedBy": "UAT Aws"
+    "dxOwningTeam": "DEMO",
+    "dxEnvironment": "development",
+    "dxDepartment": "product",
+    "dxProduct": "V3",
+    "dxDeployedBy": "UAT AWS Happy"
   },
 
   "resources": [
     {
-      "id": "host1",
-      "provider": "aws",
-      "type": "ec2",
-      "size": "t2.micro",
-      "tags": {
-        "OpsTeam": "OpsUat",
-        "BillingCode": "1"
-      }
-    },{
         "id": "host2",
         "provider": "aws",
         "type": "ec2",
@@ -95,23 +45,6 @@
           "OpsTeam": "OpsUat",
           "BillingCode": "1"
         }
-    },{
-      "id": "uatelb",
-      "provider": "aws",
-      "type": "elb",
-      "listeners": ["uat1"],
-      "tags": {
-        "OpsTeam": "OpsUat",
-        "BillingCode": "2"
-      }
-    },{
-      "id": "lambda3",
-      "provider": "aws",
-      "type": "lambda",
-      "tags": {
-        "OpsTeam": "OpsUat",
-        "BillingCode": "3"
-      }
     }
   ],
 
@@ -119,60 +52,21 @@
     "resources": [
       {
         "id": "nr_infra",
-        "resource_ids": ["host1","host2","host3"],
+        "resource_ids": ["host2","host3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
-        "version": "1.4.11" 
-      },
-      {
-        "id": "nr_lambda",
-        "resource_ids": ["lambda3"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/lambda_monitoring/roles",
-        "version": "5.14.0.142"
+        "version": "1.12.2" 
       }
     ],
     "services": [
       {
-        "id": "nr_python_agent",
-        "service_ids": ["uat1"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/python/linux/roles",
-        "version": "5.4.1.134"
-      },
-      {
-        "id": "nr_go_agent",
-        "service_ids": ["uat2"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/go/datanerd.us/demotron/V3-Gotron/roles",
-        "version": "3.6.0" 
-      },
-      {
-        "id": "nr_lambda_python",
-        "service_ids": ["uat3"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/python/lambda/roles",
-        "version": "5.14.0.142"
-      },
-      {
         "id": "nr_node_agent",
-        "service_ids": ["uat5"],
+        "service_ids": ["uat5","uat6"],
         "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
-        "version": "6.2.0"
-      },
-      {
-        "id": "nr_logging",
-        "service_ids": ["uat1", "uat2", "uat5", "simulator"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/logging/roles"
+        "version": "6.11.0"
       }
     ]
   }

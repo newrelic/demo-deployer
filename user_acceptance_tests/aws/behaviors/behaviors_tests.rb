@@ -27,59 +27,6 @@ describe "UserAcceptanceTests::Aws::Behaviors" do
   # We only want to deply these services once, so only one describe block is used for these tests.
 
   # START COMPUTE SECTION
-  ## START PYTHONTRON SECTION
-
-  it "Compute pythontron computes for at least the minimum time (targeted behavior)" do
-    start_time = Time.now()
-      UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-        "api/inventory",
-        "pythontron",
-        {"X-DEMO-COMPUTE-POST-pythontron": "[1000,2000]"},
-        lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-      )
-  end
-
-  it "Compute pythontron computes for at least the minimum time non range value" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-COMPUTE-POST-pythontron": "[1000,1000]"},
-      lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute pythontron computes for at least the minimum time (general behavior)" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-COMPUTE-PRE": "[1000,2000]"},
-      lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute pythontron does not compute when app id does not match" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-COMPUTE-POST-NOTTRON": "[1000,2000]"},
-      lambda { |response, service_id| check_max_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute pythontron does not compute when no behaviors are passed" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {},
-      lambda { |response, service_id| check_max_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  ## END PYTHONTRON SECTION
 
   ## START NODETRON SECTION
 
@@ -134,103 +81,9 @@ describe "UserAcceptanceTests::Aws::Behaviors" do
   end
 
   ## END NODETRON SECTION
-
-  ## START JAVATRON SECTION
-
-  it "Compute javatron computes for at least the minimum time (targeted behavior)" do
-    start_time = Time.now()
-      UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-        "api/inventory",
-        "javatron",
-        {"X-DEMO-COMPUTE-POST-javatron": "[1000,2000]"},
-        lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-      )
-  end
-
-  it "Compute javatron computes for at least the minimum time non range value" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-COMPUTE-POST-javatron": "[1000,1000]"},
-      lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute javatron computes for at least the minimum time (general behavior)" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-COMPUTE-PRE": "[1000,2000]"},
-      lambda { |response, service_id| check_min_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute javatron does not compute when app id does not match" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-COMPUTE-POST-NOTTRON": "[1000,2000]"},
-      lambda { |response, service_id| check_max_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  it "Compute javatron does not compute when no behaviors are passed" do
-    start_time = Time.now()
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {},
-      lambda { |response, service_id| check_max_response_time(response, service_id, start_time, 1000) }
-    )
-  end
-
-  ## END JAVATRON SECTION
   # END COMPUTE SECTION
 
   # START THROW SECTION
-  ## START PYTHONTRON SECTION
-
-  it "Throw pythontron throws error (targeted behavior)" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-THROW-POST-pythontron": ""},
-      lambda { |response, service_id| check_response_failed(response, service_id) }
-    )
-  end
-
-  it "Throw pythontron throws error (general behavior)" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-THROW-PRE": ""},
-      lambda { |response, service_id| check_response_failed(response, service_id) }
-    )
-  end
-
-  it "Throw pythontron does not throw error when app id does not match" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {"X-DEMO-THROW-POST-NOTRON": ""},
-      lambda { |response, service_id| check_response_succeded(response, service_id) }
-    )
-  end
-
-  it "Throw pythontron does not throw error when no headers are passed" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "pythontron",
-      {},
-      lambda { |response, service_id| check_response_succeded(response, service_id) }
-    )
-  end
-
-  ## END PYTHONTRON SECTION
-
   ## START NODETRON SECTION
 
   it "Throw nodetron throws error (targeted behavior)" do
@@ -271,45 +124,6 @@ describe "UserAcceptanceTests::Aws::Behaviors" do
 
   ## END NODETRON SECTION
 
-  ## START JAVATRON SECTION
-
-  it "Throw javatron throws error (targeted behavior)" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-THROW-POST-javatron": ""},
-      lambda { |response, service_id| check_response_failed(response, service_id) }
-    )
-  end
-
-  it "Throw javatron throws error (general behavior)" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-THROW-PRE": ""},
-      lambda { |response, service_id| check_response_failed(response, service_id) }
-    )
-  end
-
-  it "Throw javatron does not throw error when app id does not match" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {"X-DEMO-THROW-POST-NOTRON": ""},
-      lambda { |response, service_id| check_response_succeded(response, service_id) }
-    )
-  end
-
-  it "Throw javatron does not throw error when no headers are passed" do
-    UserAcceptanceTests::Assertions::ServiceBehaviorResponse.new(@deployment_manager.context).execute(
-      "api/inventory",
-      "javatron",
-      {},
-      lambda { |response, service_id| check_response_succeded(response, service_id) }
-    )
-  end
-
-  ## END JAVATRON SECTION
   # END THROW SECTION
 end
 
