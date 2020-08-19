@@ -3,7 +3,7 @@
     {
       "id": "uat5",
       "display_name": "UAT5 AWS NodeJS App",
-      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b master https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5003,
       "relationships": ["uat6"],
@@ -11,7 +11,7 @@
     },{
       "id": "uat6",
       "display_name": "UAT6 AWS NodeJS App",
-      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b master https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5004,
       "destinations": ["host3"]
@@ -54,7 +54,7 @@
         "id": "nr_infra",
         "resource_ids": ["host2","host3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b master https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.12.2" 
       }
@@ -64,7 +64,7 @@
         "id": "nr_node_agent",
         "service_ids": ["uat5","uat6"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b master https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.11.0"
       }
