@@ -1,6 +1,6 @@
 # Developer
 
-The deployer is part of an ecosystem, sometimes referenced as `V3`.
+The deployer is part of a `demo` ecosystem, sometimes referenced as `V3`.
 
 Each component can plug with the deployer through a set of Ansible plays which the deployer leverages and invokes. Specific data between resources and services get marshalled through, as needed.
 
@@ -87,7 +87,7 @@ rake
 
 ### Integration and UserAcceptanceTests
 
-We also use Rake to execute the integration and UATs. A jenkins file at the root also fire those tests up on PR creation.
+We also use Rake to execute the integration and user acceptance tests (UATs). 
 To run those locally, you'll want to update the [UAT user config file](../../user_acceptance_tests/user.uat.json) with your own user credentials.
 Then you can run any of the below commands to run the associated tests:
 

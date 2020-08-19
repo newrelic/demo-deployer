@@ -27,6 +27,7 @@ Proceed with the instructions below, read them all once before executing each st
 
 ## Step 1 - Deploy a single `Hello` application on AWS
 
-Follow the steps on the [Hello User Story](https://source.datanerd.us/Demotron/V3-Documentation/tree/master/UserStories/Hello) to deploy the single `Hello` application onto AWS.
+Follow the steps on the [Hello User Story](user_stories/Hello/README.md) to deploy the single `Hello` application onto AWS.
 
-Once `Hello` is deployed, login to NewRelic and see the application reporting into APM, and the host data reporting into Infrastructure.
+Once `Hello` is deployed, login to NewRelic and see the application reporting into APM, and the host data reporting into Infrastructure. You can search for all the `Hello` entities using the URL https://one.newrelic.com/redirect/search/Hello
+

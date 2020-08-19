@@ -8,7 +8,7 @@ The deployer can be run through a built image. A [Dockerfile](../../../Dockerfil
 * A user config file stored locally on your machine, see [UserConfig](../../user_config/README.md) for creating your user config file. Copy this file into your `$HOME/configs` folder.
 * A deploy config file stored locally on your machine, see [DeployConfig](../../deploy_config/README.md) for creating your deploy config. Copy this file into your `$HOME/configs` folder.
 
-Note, several deploy config examples are available in [UserStories](https://source.datanerd.us/Demotron/V3-Documentation/tree/DEMO-2285-hello/UserStories)
+Note, several deploy config examples are available in [UserStories](../../tutorial/user_stories/README.md)
 
 ## Building the docker image
 
@@ -67,7 +67,7 @@ The file looks like this:
   "services": [
     {
       "id": "app",
-      "source_repository": "-b master https://[credential:git:username]@source.datanerd.us/Demotron/V3-Nodetron.git",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5000,
       "destinations": ["host"]

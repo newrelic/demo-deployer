@@ -1,32 +1,9 @@
 {
   "services": [
     {
-      "id": "simulator",
-      "display_name": "SimDemoError",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/Simulator.git",
-      "deploy_script_path": "deploy/linux/roles",
-      "port": 5000,
-      "destinations": ["simuhost"],
-      "files":[{
-        "destination_filepath": "engine/startScenario.json",
-        "content":
-          {
-            "id": "scenario1",
-            "rpm": "30",
-            "steps": [
-              { "name": "httpGet", "params": ["[resource:spaelb1]/api/inventory"] },
-              { "name": "httpGet", "params": ["[resource:spaelb1]/api/inventory/1"] },
-              { "name": "httpGet", "params": ["[resource:spaelb1]/api/validateMessage?message=xyz"] },
-              { "name": "header", "params": ["X-DEMO-THROW-POST", ""] },
-              { "name": "httpGet", "params": ["[resource:spaelb1]/api/inventory/3"] }
-            ]
-          }
-      }]
-    },
-    {
       "id": "nodetron1",
       "display_name": "Nodetron1",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5001,
       "destinations": ["host1", "host2", "host3"],
@@ -35,7 +12,7 @@
     {
       "id": "nodetron2",
       "display_name": "Nodetron2",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5002,
       "destinations": ["host2"],
@@ -44,27 +21,14 @@
     {
       "id": "nodetron3",
       "display_name": "Nodetron3",
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Nodetron.git",
+      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5003,
       "destinations": ["host3"]
-    },
-    {
-      "id": "fluentd",
-      "destinations": ["simuhost", "host1", "host2", "host3"],
-      "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Fluentd.git",
-      "deploy_script_path": "/deploy/linux/roles",
-      "port": 9999
     }
   ],
 
   "resources": [
-    {
-      "id": "simuhost",
-      "provider": "aws",
-      "type": "ec2",
-      "size": "t3.micro"
-    },
     {
       "id": "host1",
       "provider": "aws",
@@ -94,9 +58,9 @@
     "resources": [
       {
         "id": "nr_infra",
-        "resource_ids": ["simuhost", "host1", "host2", "host3"],
+        "resource_ids": ["host1", "host2", "host3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.5.45"
       }
@@ -104,18 +68,11 @@
     "services": [
       {
         "id": "nr_node_agent",
-        "service_ids": ["simulator", "nodetron1", "nodetron2", "nodetron3"],
+        "service_ids": ["nodetron1", "nodetron2", "nodetron3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
+        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
-        "version": "6.8.0"
-      },
-      {
-        "id": "nr_logging_in_context",
-        "service_ids": ["simulator", "nodetron1", "nodetron2", "nodetron3"],
-        "provider": "newrelic",
-        "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Newrelic-Instrumentation.git",
-        "deploy_script_path": "deploy/logging_in_context/roles"
+        "version": "6.11.0"
       }
     ]
   }
