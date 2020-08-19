@@ -3,7 +3,7 @@ name: Test
 on: [push, pull_request]
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -31,33 +31,130 @@ jobs:
       - name: Lint
         id: lint
         continue-on-error: true
-        if: ${{ always() }}
         run: bundle exec rubocop
+  
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.4'
+
+      - name: Ruby Gem Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install Gems
+        id: install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Unit Tests
         id: unit
-        if: ${{ always() }}
         run: bundle exec rake test:unit
       
+  test-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.4'
+
+      - name: Ruby Gem Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install Gems
+        id: install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
       - name: Integration Tests 
         id: integration
-        if: ${{ always() }}
         run: bundle exec rake test:uat:integration
 
-      # TODO: there are a lot of secrets in cloud provider tests that need migrating
-      - name: Cloud Provider Tests (AWS)
-        id: aws
-        if: ${{ always() }}
-        run: bundle exec rake test:uat:aws
+  test-cloudprovider-azure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.4'
+
+      - name: Ruby Gem Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install Gems
+        id: install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Cloud Provider Tests (Azure)
         id: azure
-        if: ${{ always() }}
         run: bundle exec rake test:uat:azure
+
+  test-cloudprovider-aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
       
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.4'
+
+      - name: Ruby Gem Cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Install Gems
+        id: install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+  
+      - name: Cloud Provider Tests (AWS)
+        id: aws
+        run: bundle exec rake test:uat:aws
+  
+  slack-notify:
+    runs-on: ubuntu-latest
+    needs: [lint, test-unit, test-integration, test-cloudprovider-aws, test-cloudprovider-azure]
+    steps:
       - name: Build Result Slack Notification
         uses:  8398a7/action-slack@v3
-        if: ${{ always() }}
         with:
           author_name: GitHub Actions
           status: custom
@@ -67,7 +164,13 @@ jobs:
               username: "GitHub Actions",
               icon_emoji: ":octocat:",
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? '#43cc11' : '${{ job.status }}' === 'failure' ? '#e05d44' : '#dfb317',
+                color: ${{ 
+                  needs.lint.result == 'success' &&
+                  needs.test-unit.result == 'success' &&
+                  needs.test-integration.result == 'success' &&
+                  needs.test-cloudprovider-azure.result == 'success' &&
+                  needs.test-cloudprovider-aws.result == 'success'
+                }} === true ? '#43cc11' : '#e05d44',
                 blocks: [
                   {
                     type: "section",
@@ -115,12 +218,12 @@ jobs:
                       type: "mrkdwn",
                       text: [
                         "*Result:*",
-                        `• ${ ${{ steps.install.outcome == 'success' }} === true ? '✅' : '❌' } Install dependencies: ${{ steps.install.outcome }}`,
-                        `• ${ ${{ steps.lint.outcome == 'success' }} === true ? '✅' : '❌' } Lint: ${{ steps.lint.outcome }}`,
-                        `• ${ ${{ steps.unit.outcome == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ steps.unit.outcome }}`,
-                        `• ${ ${{ steps.integration.outcome == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ steps.integration.outcome }}`,
-                        `• ${ ${{ steps.aws.outcome == 'success' }} === true ? '✅' : '❌' } AWS cloud provider test: ${{ steps.aws.outcome }}`,
-                        `• ${ ${{ steps.azure.outcome == 'success' }} === true ? '✅' : '❌' } Azure cloud provider test: ${{ steps.azure.outcome }}`
+                        `• ${ ${{ needs.lint.result === 'success' }} === true ? '✅' : '❌' } Install dependencies: ${{ needs.lint.result }}`,
+                        `• ${ ${{ needs.test-unit.result == 'success' }} === true ? '✅' : '❌' } Lint: ${{ needs.test-unit.result }}`,
+                        `• ${ ${{ needs.test-integration.result == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ needs.test-unit.result }}`,
+                        `• ${ ${{ steps.integration.outcome == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ steps.test-integration.outcome }}`,
+                        `• ${ ${{ needs.test-cloudprovider-azure.result == 'success' }} === true ? '✅' : '❌' } AWS cloud provider test: ${{ needs.test-cloudprovider-azure.result }}`,
+                        `• ${ ${{ needs.test-cloudprovider-aws.result == 'success' }} === true ? '✅' : '❌' } Azure cloud provider test: ${{ needs.test-cloudprovider-aws.result }}`
                       ].join('\n')
                     }
                   },
@@ -144,4 +247,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+  
         
