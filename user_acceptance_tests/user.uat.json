@@ -3,7 +3,7 @@
     "aws": {
       "apiKey": "AWS_ACCESS_ID",
       "secretKey": "AWS_SECRET_KEY",
-      "secretKeyPath": "user_acceptance_tests/aws/secret_file.pem",
+      "secretKeyPath": "user_acceptance_tests/aws/uat-ca.pem",
       "region": "AWS_REGION"
     },
     "newrelic": {
