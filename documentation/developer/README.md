@@ -96,3 +96,19 @@ rake test:uat:integration
 rake test:uat:aws
 rake test:uat:azure
 ```
+
+### Trons definition
+
+A `Tron` is type of application that can be deployed with the `demo-deployer` for the purpose of a particular demo. It's typically a lightweight service, with the below APIs:
+* /api/inventory
+* /api/inventory/[1-10]
+* /api/validateMessage?message=[xxx]
+
+Current Trons
+* [Nodetron](https://github.com/newrelic/demo-nodetron)
+
+Each `Tron` can have various behavior defined.
+
+#### Tron Behaviors
+
+Each tron support the execution of [behaviors](behaviors/README.md).
