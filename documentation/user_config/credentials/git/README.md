@@ -18,7 +18,7 @@ The user config can contain a Git credential. The only element supported is a Gi
 
 To create a Git personal access token, follow the steps below:
 
-* Open https://source.datanerd.us/Demotron/V3-Deployer in your browser, and login with your Git username/password
+* Open your Git repository in your browser, and login with your Git username/password
 * Go to `Settings` under your profile (top right corner)
 * Go to `Developer Settings`
 * Select `Personal access tokens`
