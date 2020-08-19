@@ -1,0 +1,6 @@
+Lint:
+  Enabled: true
+
+AllCops:
+  DisabledByDefault: true
+  NewCops: enable
