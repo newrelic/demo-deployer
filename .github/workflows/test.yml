@@ -84,7 +84,7 @@ jobs:
           bundle install --jobs 4 --retry 3
       
       - name: Generate Azure Keypair
-        run: ssh-keygen -m PEM -t rsa -b 4096
+        run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
 
       - name: Write AWS Certificate to File
         env:
