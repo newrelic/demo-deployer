@@ -83,7 +83,7 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       
-      - name: Generate Azure Keypair
+      - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
 
       - name: Write AWS Certificate to File
@@ -122,8 +122,16 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       
-      - name: Generate Azure Keypair
+      - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
+      
+      - name: Write AWS Certificate to File
+        env:
+          AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
+        run: |
+          rm -f user_acceptance_tests/uat-ca.pem
+          echo $AWS_PEM > user_acceptance_tests/uat-ca.pem
+          sudo chmod 400 user_acceptance_tests/uat-ca.pem
       
       - name: Write UAT JSON to file
         env:
@@ -158,13 +166,16 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
+      - name: Generate Default SSH Keypair
+        run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
+        
       - name: Write AWS Certificate to File
         env:
           AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
         run: |
-          rm -f user_acceptance_tests/aws/uat-ca.pem
-          echo $AWS_PEM > user_acceptance_tests/aws/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/aws/uat-ca.pem
+          rm -f user_acceptance_tests/uat-ca.pem
+          echo $AWS_PEM > user_acceptance_tests/uat-ca.pem
+          sudo chmod 400 user_acceptance_tests/uat-ca.pem
       
       - name: Write UAT JSON to file
         env:
