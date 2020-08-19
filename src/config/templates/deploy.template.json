@@ -3,7 +3,7 @@
     {
       "id": "app1",
       "display_name": "App 1",
-      "source_repository": "git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5001,
       "relationships":["app2"],
@@ -11,7 +11,7 @@
     },{
       "id": "app2",
       "display_name": "App 2",
-      "source_repository": "git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5002,
       "destinations": ["host2"]
@@ -43,7 +43,7 @@
         "id": "nr_infra",
         "resource_ids": ["host1","host2"],
         "provider": "newrelic",
-        "source_repository": "git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.11.4"
       }
@@ -53,7 +53,7 @@
         "id": "nr_agent_node",
         "service_ids": ["app1", "app2"],
         "provider": "newrelic",
-        "source_repository": "git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.11.0"
       }
