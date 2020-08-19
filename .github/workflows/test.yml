@@ -23,23 +23,118 @@ jobs:
             ${{ runner.os }}-gems-
 
       - name: Install Gems
+        id: install
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
     
       - name: Unit Tests
+        id: unit
         if: ${{ always() }}
         run: bundle exec rake test:unit
       
-      - name: Integration Tests
+      - name: Integration Tests 
+        id: integration
         if: ${{ always() }}
         run: bundle exec rake test:uat:integration
 
       # TODO: there are a lot of secrets in cloud provider tests that need migrating
       - name: Cloud Provider Tests (AWS)
+        id: aws
         if: ${{ always() }}
         run: bundle exec rake test:uat:aws
 
       - name: Cloud Provider Tests (Azure)
+        id: azure
         if: ${{ always() }}
         run: bundle exec rake test:uat:azure
+      
+      - name: Build Result Slack Notification
+        uses:  8398a7/action-slack@v3
+        if: ${{ always() }}
+        with:
+          author_name: GitHub Actions
+          status: custom
+          fields: commit,repo,ref,author,eventName,message,workflow
+          custom_payload: |
+            {
+              username: "GitHub Actions",
+              icon_emoji: ":octocat:",
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? '#43cc11' : '${{ job.status }}' === 'failure' ? '#e05d44' : '#dfb317',
+                blocks: [
+                  {
+                    type: "section",
+                    text: {
+                      type: "mrkdwn",
+                      text: `Build for ${process.env.AS_REPO}`
+                    }
+                  },
+                  {
+                    type: "section",
+                    fields: [
+                      {
+                        type: "mrkdwn",
+                        text: `*Commit:*\n${process.env.AS_COMMIT}`
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: `*Author:*\n${process.env.AS_AUTHOR}`
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: `*Branch:*\n${process.env.AS_REF}`
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: `*Message:*\n${process.env.AS_MESSAGE}`
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: `*Type:*\n${process.env.AS_EVENT_NAME}`
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: "*PR:*\n${{ github.event.pull_request.html_url }}"
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: `*Workflow:*\n${ process.env.AS_WORKFLOW }`
+                      }
+                    ]
+                  },
+                  {
+                    type: "section",
+                    text: {
+                      type: "mrkdwn",
+                      text: [
+                        "*Result:*",
+                        `• ${ ${{ steps.install.outcome == 'success' }} === true ? '✅' : '❌' } Install dependencies: ${{ steps.install.outcome }}`,
+                        `• ${ ${{ steps.unit.outcome == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ steps.unit.outcome }}`,
+                        `• ${ ${{ steps.integration.outcome == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ steps.integration.outcome }}`,
+                        `• ${ ${{ steps.aws.outcome == 'success' }} === true ? '✅' : '❌' } AWS cloud provider test: ${{ steps.aws.outcome }}`,
+                        `• ${ ${{ steps.azure.outcome == 'success' }} === true ? '✅' : '❌' } Azure cloud provider test: ${{ steps.azure.outcome }}`
+                      ].join('\n')
+                    }
+                  },
+                  {
+                    type: "context",
+                    elements: [
+                      {
+                        type: "image",
+                        image_url: "https://avatars2.githubusercontent.com/in/15368",
+                        alt_text: "Github Actions"
+                      },
+                      {
+                        type: "mrkdwn",
+                        text: "This message was created automatically by GitHub Actions."
+                      }
+                    ]
+                  }
+                ]
+              }]
+            }
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+        
