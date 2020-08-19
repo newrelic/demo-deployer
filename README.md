@@ -2,6 +2,8 @@
 
 # V3 Deployer
 
+![Test](https://github.com/newrelic/demo-deployer/workflows/Test/badge.svg?event=push)
+
 The deployer is a ruby application that can be used to deploy an environment and configure the applications on this environment. The deployer supports various cloud providers, and can be run locally, or through docker.
 
 ## Tutorial
