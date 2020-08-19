@@ -135,7 +135,7 @@ jobs:
       - name: Install Python Packages
         run: |
           python -m pip install --upgrade pip setuptools
-          python3 -m pip install ansible boto3 botocore boto packaging
+          python3 -m pip install ansible boto3 botocore boto packaging azure msrest msrestazure
 
       - name: Install Ansible Galaxy Plugins
         run: ansible-galaxy install newrelic.newrelic_java_agent
