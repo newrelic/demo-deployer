@@ -1,6 +1,6 @@
 [![Experimental Project header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#experimental)
 
-# V3 Deployer
+# Demo Deployer
 
 ![Test](https://github.com/newrelic/demo-deployer/workflows/Test/badge.svg?event=push)
 
