@@ -21,7 +21,7 @@
       "subscription_id": "AZURE_SUBSCRIPTION_ID",
       "secret": "AZURE_SECRET",
       "region": "AZURE_REGION",
-      "sshPublicKeyPath": "~/.ssh/id_rsa.pub"
+      "sshPublicKeyPath": "/home/runner/.ssh/id_rsa.pub"
     }
   },
   "globalTags": {
