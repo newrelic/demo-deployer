@@ -218,7 +218,7 @@ jobs:
                       type: "mrkdwn",
                       text: [
                         "*Result:*",
-                        `• ${ ${{ needs.lint.result === 'success' }} === true ? '✅' : '❌' } Install dependencies: ${{ needs.lint.result }}`,
+                        `• ${ ${{ needs.lint.result == 'success' }} === true ? '✅' : '❌' } Install dependencies: ${{ needs.lint.result }}`,
                         `• ${ ${{ needs.test-unit.result == 'success' }} === true ? '✅' : '❌' } Lint: ${{ needs.test-unit.result }}`,
                         `• ${ ${{ needs.test-integration.result == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ needs.test-unit.result }}`,
                         `• ${ ${{ steps.integration.outcome == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ steps.test-integration.outcome }}`,
