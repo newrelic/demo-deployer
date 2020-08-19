@@ -2,14 +2,14 @@
   "services": [{
       "id": "uat4",
       "display_name": "UAT4 Azure NodeJS App",
-      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5004,
       "destinations": ["host1"]
     },{
       "id": "uat5",
       "display_name": "UAT5 Azure NodeJS App",
-      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5005,
       "destinations": ["host1"]
@@ -43,7 +43,7 @@
         "id": "nr_infra",
         "resource_ids": ["host1"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.12.2" 
       }
@@ -53,7 +53,7 @@
         "id": "nr_node_agent",
         "service_ids": ["uat4", "uat5"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.11.0"
       }

@@ -33,7 +33,7 @@ To create a Git personal access token, follow the steps below:
 The V3 repositories can be cloned by the Deployer using a Git access token. This is the recommended way for using the Deployer with docker.
 Typically a deploy config would have an element `source_repository` looking like this:
 ```json
-  "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+  "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
 ```
 
 The field `[credential:git:username]` is used at runtime by the Deployer to pull the Git access token value from the user config file with a json path query `/credentials/git/username`.

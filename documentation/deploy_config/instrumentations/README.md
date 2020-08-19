@@ -16,8 +16,8 @@ Here is an illustration of the configuration:
         "id": "my_resource_instrumentation1",
         "resource_ids": ["host1","host2","host3"],
         "provider": "my_instrumentation_provider",
-        "local_source_path": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "local_source_path": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.4.11"
       }
@@ -28,8 +28,8 @@ Here is an illustration of the configuration:
         "id": "my_service_instrumentation1",
         "service_ids": ["app1"],
         "provider": "my_instrumentation_provider",
-        "local_source_path": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "local_source_path": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/python/linux/roles",
         "version": "5.4.1.134",
         "params":{
@@ -92,7 +92,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_infra",
         "resource_ids": ["host1","host2","host3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.4.11" 
       },
@@ -100,7 +100,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_lambda",
         "resource_ids": ["lambda3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/lambda_monitoring/roles",
         "version": "5.14.0.142"
       }
@@ -110,7 +110,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_python_agent",
         "service_ids": ["app1"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/python/linux/roles",
         "version": "5.4.1.134"
       },
@@ -118,7 +118,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_go_agent",
         "service_ids": ["app2"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/go/datanerd.us/demotron/V3-Gotron/roles",
         "version": "3.6.0" 
       },
@@ -126,7 +126,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_lambda_python",
         "service_ids": ["app3"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/python/lambda/roles",
         "version": "5.14.0.142"
       },
@@ -134,7 +134,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_node_agent",
         "service_ids": ["app5"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.2.0"
       },
@@ -142,7 +142,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "id": "nr_logging",
         "service_ids": ["app1", "app2", "app5", "simulator"],
         "provider": "newrelic",
-        "source_repository": "-b master git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/logging/roles"
       }
     ]

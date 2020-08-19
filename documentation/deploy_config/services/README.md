@@ -9,8 +9,8 @@ A `service` definition has the possible elements below. Some of those elements a
         {
             "id": "my_service_id",
             "display_name": "My Service",
-            "local_source_path": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
-            "source_repository": "-b master git@source.datanerd.us:Demotron/V3-Pythontron.git",
+            "local_source_path": "-b main git@source.datanerd.us:Demotron/V3-Pythontron.git",
+            "source_repository": "-b main git@source.datanerd.us:Demotron/V3-Pythontron.git",
             "deploy_script_path": "deploy/linux/roles",
             "port": 5001,
             "destinations": ["resource_id_1"],

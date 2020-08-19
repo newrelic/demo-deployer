@@ -67,7 +67,7 @@ The file looks like this:
   "services": [
     {
       "id": "app",
-      "source_repository": "-b master git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5000,
       "destinations": ["host"]
