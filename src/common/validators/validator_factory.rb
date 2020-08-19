@@ -16,7 +16,7 @@ module Common
         @key_resolver_lambda = key_resolver_lambda
         @validator_construct_lambda = validator_construct_lambda
         @type_repository = type_repository
-        @default_type_resolver_lambda = default_type_resolver_lambda       
+        @default_type_resolver_lambda = default_type_resolver_lambda
       end
 
       def create_validators(resources)

@@ -17,13 +17,13 @@ module Infrastructure
       @is_validation_enabled = is_validation_enabled
     end
 
-    def execute(deploy_config_content = nil)
+    def execute(deploy_config_file = nil)
       command_line_provider = @context.get_command_line_provider()
       tags_provider = @context.get_tags_provider()
-      if deploy_config_content.nil?
-        deploy_config_content = command_line_provider.get_deployment_config_content()
+      if deploy_config_file.nil?
+        deploy_config_file = command_line_provider.get_deployment_config_file()
       end
-      parsed_resources = @parser.get_children(deploy_config_content, "resources")
+      parsed_resources = @parser.get_children(deploy_config_file, "resources")
       if @is_validation_enabled
         validation_errors = get_validator().execute(parsed_resources)
         unless validation_errors.empty?
@@ -38,8 +38,8 @@ module Infrastructure
 
     private
     def get_validator()
-      app_config_provider = @context.get_app_config_provider()
-     return @validator ||= Infrastructure::Validator.new(app_config_provider)
+      # app_config_provider = @context.get_app_config_provider()
+      return @validator ||= Infrastructure::Validator.new(@context)
     end
 
   end

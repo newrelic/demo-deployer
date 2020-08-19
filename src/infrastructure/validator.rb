@@ -9,13 +9,13 @@ module Infrastructure
   class Validator
 
     def initialize(
-        app_config_provider,
+        context,
         resource_id_validator = Common::Validators::FieldExistValidator.new("id", "Resource id is missing:"),
         unique_id_validator = Common::Validators::UniqueIdValidator.new("id", "Duplicate resource_id found:"),
         provider_validator_factory = nil,
         id_alphanumeric_validator = Common::Validators::AlphaNumericListValidator.new("id", "Resource id syntax error:")
         )
-      @app_config_provider = app_config_provider
+      @context = context
       @resource_id_validator = resource_id_validator
       @unique_id_validator = unique_id_validator
       @provider_validator_factory = provider_validator_factory
@@ -43,13 +43,19 @@ module Infrastructure
     end
 
     def get_resource_id_length_validator()
-      id_max_length = @app_config_provider.get_resource_id_max_length()
+      id_max_length = get_resource_id_max_length()
       return @resource_id_length_validator ||= Common::Validators::MaxLengthValidator.new("id", id_max_length, "Resource id should be #{id_max_length} characters at most")
     end
 
     def get_provider_validator_factory()
-      return @provider_validator_factory ||= ProviderValidatorFactory.new(@app_config_provider)
+      return @provider_validator_factory ||= ProviderValidatorFactory.new(@context)
+    end
+
+    def get_resource_id_max_length()
+      app_config_provider = @context.get_app_config_provider()
+      return app_config_provider.get_resource_id_max_length()
     end
 
   end
 end
+

@@ -2,27 +2,26 @@ require "minitest/spec"
 require "minitest/autorun"
 require "mocha/minitest"
 require "json"
-
-require "./src/infrastructure/validator"
+require "./tests/context_builder.rb"
 require "./tests/orchestrator_tests"
 
-describe "Infrastructure::Validator::execute" do
+require "./src/infrastructure/validator"
+
+describe "Infrastructure::Validator" do
   let(:resources) { [] }
   let(:resource_id_validator) { m = mock(); m.stubs(:execute); m }
   let(:unique_id_validator) { m = mock(); m.stubs(:execute); m }
   let(:id_alphanumeric_validator) { m = mock(); m.stubs(:execute); m }
-  let(:app_config_provider) {
-    m = mock();
-    m.stubs(:get_aws_ec2_supported_sizes).returns([]);
-    m.stubs(:get_aws_elb_max_listeners).returns(3);
-    m.stubs(:get_resource_id_max_length).returns(10);
-    m  }
+  let(:context){ Tests::ContextBuilder.new()
+    .user_config().with_aws()
+    .build() }
+
   let(:provider_validator_factory) { m = mock(); m.stubs(:create_validators).returns([]); m }
   let(:id_max_length) { 10 }
   let(:resource_id_length_validation) { Common::Validators::MaxLengthValidator.new("id", id_max_length, "Error") }
 
   let(:validator) { Infrastructure::Validator.new(
-    app_config_provider,
+    context,
     resource_id_validator,
     unique_id_validator,
     provider_validator_factory,

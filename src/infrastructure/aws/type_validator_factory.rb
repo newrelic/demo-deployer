@@ -8,11 +8,11 @@ module Infrastructure
   module Aws
     class TypeValidatorFactory < Common::Validators::ValidatorFactory
 
-      def initialize(app_config_provider)
-        @app_config_provider = app_config_provider
+      def initialize(context)
+        @context = context
         super(
           {
-            "ec2" => Ec2::Validator.new(get_supported_sizes()),
+            "ec2" => Ec2::Validator.new(@context),
             "elb" => Elb::Validator.new(get_aws_elb_max_listeners()),
             "lambda" => Lambda::Validator.new(),
             "r53ip" => R53Ip::Validator.new()
@@ -23,12 +23,9 @@ module Infrastructure
       end
 
       private
-      def get_supported_sizes()
-        return @app_config_provider.get_aws_ec2_supported_sizes()
-      end
 
       def get_aws_elb_max_listeners()
-        return @app_config_provider.get_aws_elb_max_listeners()
+        return @context.get_app_config_provider().get_aws_elb_max_listeners()
       end
 
     end
