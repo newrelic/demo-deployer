@@ -121,6 +121,15 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
+      
+      - name: Generate Azure Keypair
+        run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
+      
+      - name: Write UAT JSON to file
+        env:
+          UAT_JSON: ${{ secrets.USER_UAT_JSON }}
+        run: |
+          echo $UAT_JSON > user_acceptance_tests/azure/uatuser.json.local
 
       - name: Cloud Provider Tests (Azure)
         run: bundle exec rake test:uat:azure
@@ -148,6 +157,20 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
+
+      - name: Write AWS Certificate to File
+        env:
+          AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
+        run: |
+          rm -f user_acceptance_tests/aws/uat-ca.pem
+          echo $AWS_PEM > user_acceptance_tests/aws/uat-ca.pem
+          sudo chmod 400 user_acceptance_tests/aws/uat-ca.pem
+      
+      - name: Write UAT JSON to file
+        env:
+          UAT_JSON: ${{ secrets.USER_UAT_JSON }}
+        run: |
+          echo $UAT_JSON > user_acceptance_tests/aws/uatuser.json.local
   
       - name: Cloud Provider Tests (AWS)
         run: bundle exec rake test:uat:aws
