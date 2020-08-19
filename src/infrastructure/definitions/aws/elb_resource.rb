@@ -22,8 +22,9 @@ module Infrastructure
         end
 
         def get_tags()
-          return @tags
+          return @tags.merge({})
         end
+
 
       end
     end

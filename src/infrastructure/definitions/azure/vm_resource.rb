@@ -19,9 +19,9 @@ module Infrastructure
         def get_user_name()
           return @user_name
         end
-        
+
         def get_tags()
-          return @tags
+          return @tags.merge({})
         end
 
       end

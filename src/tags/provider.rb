@@ -29,7 +29,6 @@ module Tags
       command_line_provider = @context.get_command_line_provider()
       deployment_name = command_line_provider.get_deployment_name()
       username = command_line_provider.get_user_config_name()
-      date =
       tags = { 
         "dxDeploymentName" => deployment_name,
         "dxDeploymentDate" => Date.today.to_s,

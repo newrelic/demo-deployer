@@ -21,7 +21,7 @@
       "subscription_id": "AZURE_SUBSCRIPTION_ID",
       "secret": "AZURE_SECRET",
       "region": "AZURE_REGION",
-      "sshPublicKeyPath": "/data/jenkins/.ssh/id_rsa.pub"
+      "sshPublicKeyPath": "$HOME/.ssh/id_rsa.pub"
     }
   },
   "globalTags": {

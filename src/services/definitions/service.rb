@@ -31,7 +31,7 @@ module Services
       end
 
       def get_tags()
-        return @tags
+        return @tags.merge({})
       end
 
       def ==(other_resource)
