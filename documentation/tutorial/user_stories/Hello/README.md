@@ -27,7 +27,7 @@ docker run -it\
     --entrypoint ruby deployer main.rb -c configs/[user].docker.local.json -d configs/hello.json
 ```
 
-### Example output from the V3 Deployer
+### Example output from the Demo Deployer
 
 Assuming the following:
 * my `[user]` name is `jsmith`
