@@ -24,3 +24,5 @@ If you have any questions, or to execute our corporate CLA, required if your con
 
 ## License
 V3 Deployer is licensed under the [Apache 2.0](http://apache.org/licenses/LICENSE-2.0.txt) License. V3 Deployer also uses source code from third-party libraries. You can find full details on which libraries are used and the terms under which they are licensed in the [third-party notices document](./THIRD_PARTY_NOTICES.md).
+
+minor change
