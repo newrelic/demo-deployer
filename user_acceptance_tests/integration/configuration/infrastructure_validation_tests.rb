@@ -144,7 +144,7 @@ describe "UserAcceptanceTests::Infrastructure" do
       if local_user_filepath != nil && File.exist?(local_user_filepath)
         arguments.push(local_user_filepath)
       else
-        arguments.push(user_config_filename)
+        arguments.push("user_acceptance_tests/#{user_config_filename}")
       end
     end
 

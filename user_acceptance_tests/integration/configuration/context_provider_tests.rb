@@ -103,7 +103,7 @@ describe "UserAcceptanceTests::ContextProvider" do
     if local_user_filepath != nil && File.exist?(local_user_filepath)
       command_line_arguments.push(local_user_filepath)
     else
-      command_line_arguments.push(user_config_filename)
+      command_line_arguments.push("user_acceptance_tests/#{user_config_filename}")
     end
   end
 
