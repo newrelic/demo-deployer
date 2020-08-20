@@ -3,7 +3,7 @@
     {
       "id": "nodetron1",
       "display_name": "Nodetron1",
-      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5001,
       "destinations": ["host1", "host2", "host3"],
@@ -12,7 +12,7 @@
     {
       "id": "nodetron2",
       "display_name": "Nodetron2",
-      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5002,
       "destinations": ["host2"],
@@ -21,7 +21,7 @@
     {
       "id": "nodetron3",
       "display_name": "Nodetron3",
-      "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
+      "source_repository": "-b main https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5003,
       "destinations": ["host3"]
@@ -60,7 +60,7 @@
         "id": "nr_infra",
         "resource_ids": ["host1", "host2", "host3"],
         "provider": "newrelic",
-        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.5.45"
       }
@@ -70,7 +70,7 @@
         "id": "nr_node_agent",
         "service_ids": ["nodetron1", "nodetron2", "nodetron3"],
         "provider": "newrelic",
-        "source_repository": "-b main git@github.com:newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.11.0"
       }
