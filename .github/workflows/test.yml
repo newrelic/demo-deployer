@@ -98,7 +98,7 @@ jobs:
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > uatuser.json.local
+          echo $UAT_JSON > user_acceptance_tests/uatuser.json.local
 
       - name: Integration Tests 
         run: bundle exec rake test:uat:integration
