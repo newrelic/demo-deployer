@@ -12,7 +12,7 @@ The user is your typical user name on your local machine.
 
 ## Deploying
 
-The deploy config file [hello.json](hello.json) is provided for this user story. Make a copy of this file and put it in your configs folder at `$HOME/configs`.
+The deploy config file [hello.json](hello.json) is provided for this user story. 
 
 To execute the deployment with docker, run the below commands from within your local deployer directory:
 
@@ -20,7 +20,7 @@ To execute the deployment with docker, run the below commands from within your l
 ```bash
 docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/[user].docker.local.json -d configs/hello.json
+    --entrypoint ruby deployer main.rb -c configs/[user].docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json
 ```
 
 ### Example output from the Demo Deployer
@@ -34,7 +34,7 @@ Execute the command below to run the deployer with the `hello.json` deploy confi
 ```bash
 > docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d configs/hello.json
+    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json
 [INFO] Executing Deployment
 [✔] Parsing and validating Deployment configuration success
 [✔] Provisioner success
@@ -79,6 +79,6 @@ For example:
 ```bash
 > docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d configs/hello.json -t
+    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json -t
 ...
 ```
