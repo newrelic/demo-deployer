@@ -8,15 +8,17 @@ require "./src/configuration_orchestrator"
 require "./src/context"
 require "./user_acceptance_tests/spoofers/deployment_directory_spoofer"
 require "./user_acceptance_tests/spoofers/test_spoofers"
+require "./user_acceptance_tests/file_finder"
 
 describe "UserAcceptanceTests::ContextProvider" do
   let(:command_line_arguments) { [] }
+  let(:user_config_filename) { "uatuser.json" }
   let(:context) { Context.new() }
   let(:orchestrator) { ConfigurationOrchestrator.new(context) }
   let(:spoofers) { UserAcceptanceTests::Spoofers::TestSpoofers.new([])}
 
   after do
-    spoofer = UserAcceptanceTests::Spoofers::DeploymentDirectorySpoofer.new("user.uat.json", "deploy.uat.json")
+    spoofer = UserAcceptanceTests::Spoofers::DeploymentDirectorySpoofer.new("uatuser.json", "deploy.uat.json")
     app_config_provider = context.get_app_config_provider()
     if (app_config_provider != nil)
       path = context.get_app_config_provider().get_execution_path()
@@ -94,20 +96,29 @@ describe "UserAcceptanceTests::ContextProvider" do
     end
   end
 
-  def given_partial_config()
+  def given_user_config()
     command_line_arguments.push("-c")
-    command_line_arguments.push("user_acceptance_tests/user.uat.json")
+    local_user_filename = "#{user_config_filename}.local"
+    local_user_filepath = UserAcceptanceTests::FileFinder.find_up(local_user_filename, __dir__)
+    if local_user_filepath != nil && File.exist?(local_user_filepath)
+      command_line_arguments.push(local_user_filepath)
+    else
+      command_line_arguments.push(user_config_filename)
+    end
+  end
+
+  def given_partial_config()
+    given_user_config()
     command_line_arguments.push("-l")
     command_line_arguments.push("error")
   end
 
   def given_template_config_files()
-    command_line_arguments.push("-c")
-    command_line_arguments.push("user_acceptance_tests/user.uat.json")
+    given_user_config()
     command_line_arguments.push("-d")
     command_line_arguments.push("#{__dir__}/deploy.uat.json")
     command_line_arguments.push("-l")
     command_line_arguments.push("error")
-    spoofers.add(UserAcceptanceTests::Spoofers::DeploymentDirectorySpoofer.new("user.uat.json", "deploy.uat.json"))
+    spoofers.add(UserAcceptanceTests::Spoofers::DeploymentDirectorySpoofer.new("uatuser.json", "deploy.uat.json"))
   end
 end

@@ -9,7 +9,7 @@ class DeploymentManager
   
   def initialize(config_filename, test_directory)
     @command_line_arguments = ["-l", "error"]
-    @user_config_filename = "uatuser.json"
+    @user_config_filename = "uat*.json"
     @context = Context.new()
     @orchestrator = Orchestrator.new(@context)
     @deploy_config_filename = config_filename

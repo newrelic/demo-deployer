@@ -7,8 +7,9 @@ module UserAcceptanceTests
         end
         while path.include?("user_acceptance_tests") && Dir.exist?(path)
             user_filepath = "#{path}/#{filename}"
-            if File.exist?(user_filepath)
-                return user_filepath
+            files = Dir["#{path}/#{filename}"]
+            if files.length > 0
+              return files[0]
             end
             path = File.expand_path("..", path)
         end

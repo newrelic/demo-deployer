@@ -10,6 +10,7 @@ require "./user_acceptance_tests/json_file_builder"
 require "./user_acceptance_tests/spoofers/file_spoofer"
 require "./user_acceptance_tests/spoofers/deployment_directory_spoofer"
 require "./user_acceptance_tests/spoofers/test_spoofers"
+require "./user_acceptance_tests/file_finder"
 
 describe "UserAcceptanceTests::Infrastructure" do
   describe "FailedValidation" do
@@ -17,7 +18,7 @@ describe "UserAcceptanceTests::Infrastructure" do
     let(:context) { Context.new() }
     let(:resources) { [] }
     let(:services) { [] }
-    let(:user_config_filename) { "user_acceptance_tests/user.uat.json" }
+    let(:user_config_filename) { "uatuser.json" }
     let(:deploy_config_filename) { UserAcceptanceTests::JsonFileBuilder.create_filename() }
     let(:deploy_config_jsonfilebuilder) { UserAcceptanceTests::JsonFileBuilder.new(deploy_config_filename) }
     let(:spoofers) { UserAcceptanceTests::Spoofers::TestSpoofers.new([
@@ -138,7 +139,13 @@ describe "UserAcceptanceTests::Infrastructure" do
 
     def given_user_config()
       arguments.push("-c")
-      arguments.push(user_config_filename)
+      local_user_filename = "#{user_config_filename}.local"
+      local_user_filepath = UserAcceptanceTests::FileFinder.find_up(local_user_filename, __dir__)
+      if local_user_filepath != nil && File.exist?(local_user_filepath)
+        arguments.push(local_user_filepath)
+      else
+        arguments.push(user_config_filename)
+      end
     end
 
   end
