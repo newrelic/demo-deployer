@@ -157,7 +157,6 @@ jobs:
           rm -f user_acceptance_tests/uat-ca.pem
           echo $AWS_PEM > user_acceptance_tests/uat-ca.pem
           sudo chmod 400 user_acceptance_tests/uat-ca.pem
-          ssh-keygen -l -f user_acceptance_tests/uat-ca.pem
       
       - name: Write UAT JSON to file
         env:
@@ -221,6 +220,7 @@ jobs:
           rm -f user_acceptance_tests/uat-ca.pem
           echo $AWS_PEM > user_acceptance_tests/uat-ca.pem
           sudo chmod 400 user_acceptance_tests/uat-ca.pem
+          ssh-keygen -l -f user_acceptance_tests/uat-ca.pem
       
       - name: Write UAT JSON to file
         env:
