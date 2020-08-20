@@ -88,7 +88,7 @@ rake
 ### Integration and UserAcceptanceTests
 
 We also use Rake to execute the integration and user acceptance tests (UATs). 
-To run those locally, you'll want to update the [UAT user config file](../../user_acceptance_tests/user.uat.json) with your own user credentials.
+To run those locally, you'll want to update the [UAT user config file](../../user_acceptance_tests/uatuser.json) with your own user credentials.
 Then you can run any of the below commands to run the associated tests:
 
 ```
