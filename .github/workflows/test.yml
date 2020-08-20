@@ -61,6 +61,7 @@ jobs:
       
   test-integration:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -99,6 +100,7 @@ jobs:
 
   test-cloudprovider-azure:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -162,6 +164,7 @@ jobs:
 
   test-cloudprovider-aws:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
