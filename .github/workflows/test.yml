@@ -61,6 +61,7 @@ jobs:
       
   test-integration:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -99,6 +100,7 @@ jobs:
 
   test-cloudprovider-azure:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -129,7 +131,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/test.yml') }}
+          key: ${{ runner.os }}-azure-pip-${{ hashFiles('**/test.yml') }}
           restore-keys: ${{ runner.os }}-pip-
 
       - name: Install Python Packages
@@ -155,13 +157,14 @@ jobs:
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > user_acceptance_tests/azure/uatuser.json.local
+          echo $UAT_JSON > user_acceptance_tests/azure/${{ github.run_id }}uatuser.json.local
 
       - name: Cloud Provider Tests (Azure)
         run: bundle exec rake test:uat:azure
 
   test-cloudprovider-aws:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -191,7 +194,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/test.yml') }}
+          key: ${{ runner.os }}-aws-pip-${{ hashFiles('**/test.yml') }}
           restore-keys: ${{ runner.os }}-pip-
 
       - name: Install Python Packages
@@ -217,7 +220,7 @@ jobs:
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > user_acceptance_tests/aws/uatuser.json.local
+          echo $UAT_JSON > user_acceptance_tests/aws/${{ github.run_id }}uatuser.json.local
   
       - name: Cloud Provider Tests (AWS)
         run: bundle exec rake test:uat:aws
