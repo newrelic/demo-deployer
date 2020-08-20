@@ -10,7 +10,7 @@ The user is your typical user name on your local machine.
 
 For example, on a MacOS machine your local user home path is written as `/Users/jsmith` if your user name is `jsmith`.
 
-## Step 0 - Install pre-requesite
+## Step 0 - Install pre-reqs & create configs
 
 The easiest way to use the deployer, is to run it through docker.
 Once docker is installed, the next step will be to create your local user config.
