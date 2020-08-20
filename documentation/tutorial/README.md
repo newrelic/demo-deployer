@@ -19,7 +19,7 @@ Proceed with the instructions below, read them all once before executing each st
 ### Install Git, Docker & Build the Deployer
 * Ensure Git is installed locally on your machine by running `git version` in a shell command. If you don't see an output like `git version 2.17.1`, download and install Git from [https://git-scm.com/downloads](https://git-scm.com/downloads).
 * Clone the deployer repository locally and place it into your local home user folder:
-`git clone git@github.com:newrelic/demo-deployer.git $HOME/deployer`
+`git clone https://github.com/newrelic/demo-deployer.git $HOME/deployer`
 * Create a `/configs` directory in your home folder. You'll be storing your own configuration files in this folder and those will be exposed to the docker process running the deployer. `mkdir $HOME/configs`
 * Install docker by following the steps documented at [Install Docker](../docker/install/README.md)
 * Build the docker image with:
