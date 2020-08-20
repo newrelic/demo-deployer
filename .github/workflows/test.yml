@@ -93,6 +93,12 @@ jobs:
           rm -f user_acceptance_tests/aws/uat-ca.pem
           echo $AWS_PEM > user_acceptance_tests/aws/uat-ca.pem
           sudo chmod 400 user_acceptance_tests/aws/uat-ca.pem
+      
+      - name: Write UAT JSON to file
+        env:
+          UAT_JSON: ${{ secrets.USER_UAT_JSON }}
+        run: |
+          echo $UAT_JSON > user_acceptance_tests/azure/uatuser.json
 
       - name: Integration Tests 
         run: bundle exec rake test:uat:integration
