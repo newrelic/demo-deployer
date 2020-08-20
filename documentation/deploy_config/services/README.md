@@ -10,7 +10,7 @@ A `service` definition has the possible elements below. Some of those elements a
             "id": "my_service_id",
             "display_name": "My Service",
             "local_source_path": "/home/user/demo-nodetron",
-            "source_repository": "-b main git@github.com:newrelic/demo-nodetron.git",
+            "source_repository": "-b main https://github.com/newrelic/demo-nodetron.git",
             "deploy_script_path": "deploy/linux/roles",
             "port": 5001,
             "destinations": ["resource_id_1"],
