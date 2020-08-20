@@ -10,17 +10,24 @@ The user is your typical user name on your local machine.
 
 For example, on a MacOS machine your local user home path is written as `/Users/jsmith` if your user name is `jsmith`.
 
-## Step 0 - Install pre-requesite
+## Step 0 - Install pre-reqs & create configs
 
 The easiest way to use the deployer, is to run it through docker.
 Once docker is installed, the next step will be to create your local user config.
 Proceed with the instructions below, read them all once before executing each steps.
 
+### Install Git, Docker & Build the Deployer
 * Ensure Git is installed locally on your machine by running `git version` in a shell command. If you don't see an output like `git version 2.17.1`, download and install Git from [https://git-scm.com/downloads](https://git-scm.com/downloads).
 * Clone the deployer repository locally and place it into your local home user folder:
 `git clone git@github.com:newrelic/demo-deployer.git $HOME/deployer`
 * Create a `/configs` directory in your home folder. You'll be storing your own configuration files in this folder and those will be exposed to the docker process running the deployer. `mkdir $HOME/configs`
 * Install docker by following the steps documented at [Install Docker](../docker/install/README.md)
+* Build the docker image with:
+```bash 
+docker build -t deployer .
+``` 
+
+### Create your configuration files
 * Create your local user config file by following the steps at [User Config](../user_config/README.md). You'll want to create your AWS credentials, NewRelic and a Git access token. 
 * Important, for the AWS credentials, you'll need a .pem key file. Name this file in the format `[user][region].pem`. The `region` will be the region you chose while setting up your .pem key, for example `UsWest2` is an AWS region. Store your .pem key file in `$HOME/configs/[user][region].pem`
 * Store your local user config file at `$HOME/configs/[user].docker.local.json`. You'll use that file when running the deployer
