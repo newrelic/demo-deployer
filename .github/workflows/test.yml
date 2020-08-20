@@ -91,14 +91,14 @@ jobs:
           AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
         run: |
           rm -f user_acceptance_tests/uat-ca.pem
-          echo $AWS_PEM > user_acceptance_tests/uat-ca.pem
+          echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
           sudo chmod 400 user_acceptance_tests/uat-ca.pem
       
       - name: Write UAT JSON to file
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > user_acceptance_tests/uatuser.json.local
+          echo "$UAT_JSON" > user_acceptance_tests/uatuser.json.local
 
       - name: Integration Tests 
         run: bundle exec rake test:uat:integration
@@ -162,7 +162,7 @@ jobs:
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > user_acceptance_tests/azure/uat${{ github.run_id }}.json.local
+          echo "$UAT_JSON" > user_acceptance_tests/azure/uat${{ github.run_id }}.json.local
 
       - name: Cloud Provider Tests (Azure)
         run: bundle exec rake test:uat:azure
@@ -225,7 +225,7 @@ jobs:
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo $UAT_JSON > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
+          echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
   
       - name: Cloud Provider Tests (AWS)
         run: bundle exec rake test:uat:aws
