@@ -19,8 +19,9 @@
       "id": "configuat3",
       "display_name": "UAT App3",
       "source_repository": "https://github.com/newrelic/demo-nodetron.git",
-      "deploy_script_path": "deploy/lambda/roles",
-      "destinations": ["configlambda1"]
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5556,
+      "destinations": ["confighost1"]
     }
   ],
 
@@ -46,14 +47,6 @@
       "tags": {
         "OpsTeam": "OpsUat",
         "BillingCode": "2"
-      }
-    },{
-      "id": "configlambda1",
-      "provider": "aws",
-      "type": "lambda",
-      "tags": {
-        "OpsTeam": "OpsUat",
-        "BillingCode": "3"
       }
     }
   ]
