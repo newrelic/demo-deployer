@@ -302,7 +302,7 @@ jobs:
                         "*Result:*",
                         `• ${ ${{ needs.lint.result == 'success' }} === true ? '✅' : '❌' } Lint: ${{ needs.lint.result }}`,
                         `• ${ ${{ needs.test-unit.result == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ needs.test-unit.result }}`,
-                        `• ${ ${{ steps.test-integration.result == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ needs.test-integration.result }}`,
+                        `• ${ ${{ needs.test-integration.result == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ needs.test-integration.result }}`,
                         `• ${ ${{ needs.test-cloudprovider-aws.result == 'success' }} === true ? '✅' : '❌' } AWS cloud provider test: ${{ needs.test-cloudprovider-aws.result }}`,
                         `• ${ ${{ needs.test-cloudprovider-azure.result == 'success' }} === true ? '✅' : '❌' } Azure cloud provider test: ${{ needs.test-cloudprovider-azure.result }}`
                       ].join('\n')
