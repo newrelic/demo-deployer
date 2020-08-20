@@ -16,10 +16,6 @@ The deploy config file [hello.json](hello.json) is provided for this user story.
 
 To execute the deployment with docker, run the below commands from within your local deployer directory:
 
-* Build the docker image with:
-```bash 
-docker build -t deployer .
-``` 
 * Execute the deployer with the syntax below. This command will take several minutes.
 ```bash
 docker run -it\
