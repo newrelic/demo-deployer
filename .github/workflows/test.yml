@@ -12,7 +12,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5.1'
+          ruby-version: '2.4'
 
       - name: Ruby Gem Cache
         uses: actions/cache@v1
@@ -41,7 +41,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5.1'
+          ruby-version: '2.4'
 
       - name: Ruby Gem Cache
         uses: actions/cache@v1
@@ -68,7 +68,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5.1'
+          ruby-version: '2.4'
 
       - name: Ruby Gem Cache
         uses: actions/cache@v1
@@ -113,7 +113,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5.1'
+          ruby-version: '2.4'
 
       - name: Ruby Gem Cache
         uses: actions/cache@v1
@@ -177,7 +177,7 @@ jobs:
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.5.1'
+          ruby-version: '2.4'
 
       - name: Ruby Gem Cache
         uses: actions/cache@v1
