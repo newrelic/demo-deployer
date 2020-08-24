@@ -38,8 +38,7 @@ module Infrastructure
 
     private
     def get_validator()
-      app_config_provider = @context.get_app_config_provider()
-     return @validator ||= Infrastructure::Validator.new(app_config_provider)
+     return @validator ||= Infrastructure::Validator.new(@context)
     end
 
   end

@@ -8,10 +8,12 @@ module Infrastructure
     def initialize(app_config_provider)
       @app_config_provider = app_config_provider
       super(
-        { "aws" => Aws::Validator,
-          "azure" => Azure::Validator },
-        lambda {|resource| return resource['provider']},
-        lambda {|validator_type| return validator_type.new(@app_config_provider)}
+        {
+          "aws" => Aws::Validator,
+          "azure" => Azure::Validator
+        },
+        lambda { |resource| return resource['provider'] },
+        lambda { |validator_type| return validator_type.new(@app_config_provider) }
       )
     end
 
