@@ -34,7 +34,7 @@ describe "UserAcceptanceTests::Deployment" do
       ])}
     let(:orchestrator) { ConfigurationOrchestrator.new(context) }
 
-    before do 
+    before do
       FileUtils.stubs(:cp_r)
     end
 
@@ -78,9 +78,11 @@ describe "UserAcceptanceTests::Deployment" do
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        orchestrator.execute(arguments)
-      end        
-      error.message.must_include("secretKeyPath")
+        mock_pem_key_permissions() do
+          orchestrator.execute(arguments)
+        end
+      end
+      error.message.must_include("secret_key_path")
     end
 
     it "should fail on missing region" do
@@ -89,7 +91,7 @@ describe "UserAcceptanceTests::Deployment" do
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
+      end
       error.message.must_include("region")
     end
 
@@ -99,7 +101,9 @@ describe "UserAcceptanceTests::Deployment" do
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        orchestrator.execute(arguments)
+        mock_pem_key_permissions() do
+          orchestrator.execute(arguments)
+        end
       end
       error.message.must_include("missing_host_99")
       error.message.must_include("hosts that do not exist")
@@ -111,7 +115,9 @@ describe "UserAcceptanceTests::Deployment" do
       given_service("app2", 1443, ["host1"], "this is not a directory path")
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        orchestrator.execute(arguments)
+        mock_pem_key_permissions() do
+          orchestrator.execute(arguments)
+        end
       end
       error.message.must_include("source path for the following services do not exist")
     end
@@ -186,6 +192,14 @@ describe "UserAcceptanceTests::Deployment" do
       arguments.push(filename)
       user_config_jsonfilebuilder.with("credentials", credentials)
       user_config_jsonfilebuilder.build()
+    end
+
+    def mock_pem_key_permissions()
+        @mock_file = Minitest::Mock.new
+        @mock_file.expect(:mode, "100400".to_i(8))
+        File.stub :stat, @mock_file do
+          yield
+        end
     end
 
   end
