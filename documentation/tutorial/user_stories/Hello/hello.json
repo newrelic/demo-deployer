@@ -40,9 +40,9 @@
   ],
 
   "global_tags": {
-    "dxOwningTeam": "DEMO",
+    "dxOwningTeam": "DemoX",
     "dxEnvironment": "development",
-    "dxDepartment": "product",
+    "dxDepartment": "Area51",
     "dxProduct": "Hello"
   },
 
