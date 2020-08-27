@@ -56,24 +56,11 @@ module Common
         processes.each do |process|
           processs_output = process.wait_to_completion()
           exit_code = processs_output.get_exit_code()
-          succeeded = processs_output.succeeded?
           play = process.get_context()
           on_executed_handlers = play.get_on_executed_handlers()
           script_path = play.get_script_path()
           output_content = File.read(play.get_output_file_path())
-          if output_content.length()>0
-            if output_content.include?(" failed=0 ")
-              if succeeded == false
-                Common::Logger::LoggerFactory.get_logger().info("output has no failed for path #{script_path}, assuming success")
-                succeeded = true
-              end
-            else
-              if succeeded == true
-                Common::Logger::LoggerFactory.get_logger().info("output has a number of failed that is not zero for path #{script_path}, assuming failure")
-                succeeded = false
-              end
-            end
-          end
+          succeeded = has_ansible_succeeded(process_output, output_content)
           if succeeded == true
             (on_executed_handlers || []).each do |handler|
               handler.call()
@@ -86,6 +73,29 @@ module Common
 
         end
         return errors.compact()
+      end
+
+      private
+      def has_ansible_succeeded?(process_output, output_content)
+        process_succeeded = processs_output.succeeded?
+        if output_content.length()>0
+          if / unreachable=[^1-9]/.match(output_content) && process_succeeded == true
+            Common::Logger::LoggerFactory.get_logger().info("output has at least 1 unreachable status for path #{script_path}, assuming failure. Make sure the credential to access the resources are correct.")
+            return false
+          end
+
+          if / failed=[^1-9]/.match(output_content) && process_succeeded == true
+            Common::Logger::LoggerFactory.get_logger().info("output has at least 1 failed status for path #{script_path}, assuming failure")
+            return false
+          end
+
+          if / failed=0 /.match(output_content) && process_succeeded == false
+            Common::Logger::LoggerFactory.get_logger().info("output has no failed for path #{script_path}, assuming success")
+            return true
+          end
+
+        end
+        return process_succeeded
       end
     end
   end
