@@ -60,3 +60,9 @@ build-iPhoneSimulator/
 
 .idea/
 
+# Terraform
+.terraform
+crash.log
+*.tfstate
+*.tfstate.backup
+*.tfplan
