@@ -17,17 +17,21 @@ module UserConfig
       end
 
       def get_secret_key_name()
-        return File.basename(get_secret_key_path(), ".*")
+        secrect_key_path = get_secret_key_path()
+        unless secrect_key_path.nil?
+          return File.basename(secrect_key_path, ".*")
+        end
+        return nil
       end
 
       def get_secret_key_path()
         return @user_config_query_lambda.call("secretKeyPath")
-      end        
+      end
 
       def get_region()
         return @user_config_query_lambda.call("region")
       end
-      
+
       def to_h()
         return {
           "api_key": get_api_key(),

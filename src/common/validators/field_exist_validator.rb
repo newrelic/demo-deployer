@@ -11,7 +11,7 @@ module Common
       def execute(items)
         missing = []
         (items || []).each do |item|
-          value = item[@field_name]
+          value = item[@field_name.to_s] || item[@field_name.to_sym]
           if value.nil? || value.empty?
             missing.push(JSON.generate(item))
           end
@@ -22,7 +22,7 @@ module Common
         end
         return nil
       end
-      
+
     end
   end
 end

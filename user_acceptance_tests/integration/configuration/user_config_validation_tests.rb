@@ -54,7 +54,7 @@ describe "UserAcceptanceTests::UserConfig" do
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
+      end
       error.message.must_include("Configuration file is missing credentials section")
     end
 
@@ -64,17 +64,17 @@ describe "UserAcceptanceTests::UserConfig" do
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
+      end
       error.message.must_include("apiKey")
     end
-    
+
     it "should fail on missing secret key" do
       given_credential("aws", api_key, nil, secret_key_path, region)
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
+      end
       error.message.must_include("secretKey")
     end
 
@@ -84,22 +84,22 @@ describe "UserAcceptanceTests::UserConfig" do
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
-      error.message.must_include("secretKeyPath")
+      end
+      error.message.must_include("secret_key_path")
     end
-    
+
     it "should fail on missing region" do
       given_credential("aws", api_key, secret_key, secret_key_path, nil)
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
         orchestrator.execute(arguments)
-      end        
+      end
       error.message.must_include("region")
     end
-    
+
   end
-  
+
   def create_resource(id, provider = nil, type = nil, size = nil)
     resource = {id: id}
     unless provider.nil?
@@ -151,13 +151,13 @@ describe "UserAcceptanceTests::UserConfig" do
     user_config_jsonfilebuilder.with("credentials", credentials)
     user_config_jsonfilebuilder.build()
   end
-  
+
   def given_user_config_with_no_credentials()
     arguments.push("-c")
     arguments.push(user_config_filename)
     user_config_jsonfilebuilder.build()
   end
-  
+
   def given_deploy_config(resources = [], services = [])
     arguments.push("-d")
     arguments.push(deploy_config_filename)

@@ -4,8 +4,8 @@ module Infrastructure
   module Aws
     class Validator
 
-      def initialize(app_config_provider, type_validator_factory = nil)
-        @app_config_provider = app_config_provider
+      def initialize(context, type_validator_factory = nil)
+        @context = context
         @type_validator_factory = type_validator_factory
       end
 
@@ -25,7 +25,7 @@ module Infrastructure
       end
 
       def get_type_validator_factory()
-        return @type_validator_factory ||= TypeValidatorFactory.new(@app_config_provider)
+        return @type_validator_factory ||= TypeValidatorFactory.new(@context)
       end
 
     end

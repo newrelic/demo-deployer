@@ -15,6 +15,6 @@ module CommandLine
       validator = Common::Validators::Validator.new(validators)
       return validator.execute()
     end
-    
+
   end
 end
