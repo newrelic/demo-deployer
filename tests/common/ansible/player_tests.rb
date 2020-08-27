@@ -12,6 +12,10 @@ describe "Common::Ansible::Player" do
         player.has_ansible_succeeded?(true, " something is unreachable=1 for sure", "/path1").must_equal(false)
     end
 
+    it "should fail when unreachable and process failed" do
+        player.has_ansible_succeeded?(false, " something is unreachable=1 for sure", "/path1").must_equal(false)
+    end
+
     it "should NOT fail when NOT unreachable" do
         player.has_ansible_succeeded?(true, " something is good and unreachable=0 .", "/path1").must_equal(true)
     end
