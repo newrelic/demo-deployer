@@ -15,7 +15,7 @@ module Common
         @plays.push(play)
       end
 
-      def execute( isAsync = true)
+      def execute(isAsync = true)
         processes = []
         @plays.each do |play|
           script_path = play.get_script_path()
@@ -60,7 +60,7 @@ module Common
           on_executed_handlers = play.get_on_executed_handlers()
           script_path = play.get_script_path()
           output_content = File.read(play.get_output_file_path())
-          succeeded = has_ansible_succeeded?(process_output, output_content, script_path)
+          succeeded = has_ansible_succeeded?(process_output.process_succeeded?, output_content, script_path)
           if succeeded == true
             (on_executed_handlers || []).each do |handler|
               handler.call()
@@ -75,9 +75,7 @@ module Common
         return errors.compact()
       end
 
-      private
-      def has_ansible_succeeded?(process_output, output_content, script_path)
-        process_succeeded = process_output.succeeded?
+      def has_ansible_succeeded?(process_succeeded, output_content, script_path)
         if output_content.length()>0
           if / unreachable=[1-9]/.match(output_content) && process_succeeded == true
             Common::Logger::LoggerFactory.get_logger().info("output has at least 1 unreachable status for path #{script_path}, assuming failure. Make sure the credential to access the resources are correct.")
