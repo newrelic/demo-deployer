@@ -78,7 +78,7 @@ describe "UserAcceptanceTests::Deployment" do
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        mock_pem_key_permissions() do
+        mock_valid_pem_key_file_permission() do
           orchestrator.execute(arguments)
         end
       end
@@ -101,7 +101,7 @@ describe "UserAcceptanceTests::Deployment" do
       given_user_config(credentials)
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        mock_pem_key_permissions() do
+        mock_valid_pem_key_file_permission() do
           orchestrator.execute(arguments)
         end
       end
@@ -115,7 +115,7 @@ describe "UserAcceptanceTests::Deployment" do
       given_service("app2", 1443, ["host1"], "this is not a directory path")
       given_deploy_config(resources, services)
       error = assert_raises Common::ValidationError do
-        mock_pem_key_permissions() do
+        mock_valid_pem_key_file_permission() do
           orchestrator.execute(arguments)
         end
       end
@@ -194,10 +194,10 @@ describe "UserAcceptanceTests::Deployment" do
       user_config_jsonfilebuilder.build()
     end
 
-    def mock_pem_key_permissions()
-        @mock_file = Minitest::Mock.new
-        @mock_file.expect(:mode, "100400".to_i(8))
-        File.stub :stat, @mock_file do
+    def mock_valid_pem_key_file_permission()
+        @mock_pem_file = Minitest::Mock.new
+        @mock_pem_file.expect(:mode, "100400".to_i(8))
+        File.stub :stat, @mock_pem_file do
           yield
         end
     end

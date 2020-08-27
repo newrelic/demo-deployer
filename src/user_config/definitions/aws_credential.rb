@@ -18,7 +18,7 @@ module UserConfig
 
       def get_secret_key_name()
         secrect_key_path = get_secret_key_path()
-        if secrect_key_path.nil? == false
+        unless secrect_key_path.nil?
           return File.basename(secrect_key_path, ".*")
         end
         return nil
