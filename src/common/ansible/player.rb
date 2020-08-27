@@ -54,8 +54,8 @@ module Common
 
         errors = []
         processes.each do |process|
-          processs_output = process.wait_to_completion()
-          exit_code = processs_output.get_exit_code()
+          process_output = process.wait_to_completion()
+          exit_code = process_output.get_exit_code()
           play = process.get_context()
           on_executed_handlers = play.get_on_executed_handlers()
           script_path = play.get_script_path()
