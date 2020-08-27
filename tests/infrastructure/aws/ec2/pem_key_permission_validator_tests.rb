@@ -10,7 +10,7 @@ describe "Infrastructure::Aws::Ec2::PemKeyPermissionValidator" do
     .user_config().with_aws()
     .build() }
   let(:pem_key_path) { "/pem/key/path/pem.pem" }
-  let(:validator) { Infrastructure::Aws::EC2::PemKeyPermissionValidator.new(context) }
+  let(:validator) { Infrastructure::Aws::Ec2::PemKeyPermissionValidator.new(context) }
 
   let(:valid_pem_base_8_permission)   { "100400".to_i(8) }
   let(:invalid_pem_base_8_permission) { "100401".to_i(8) }

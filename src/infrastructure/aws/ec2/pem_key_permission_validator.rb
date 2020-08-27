@@ -1,7 +1,7 @@
 
 module Infrastructure
   module Aws
-    module EC2
+    module Ec2
       class PemKeyPermissionValidator
         # regex to confirm the file permission is 400,500,600,700
         # which are all valid permissions for a AWS pem key

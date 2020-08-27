@@ -5,7 +5,7 @@ require "./src/infrastructure/aws/ec2/pem_key_permission_validator"
 
 module Infrastructure
   module Aws
-    module EC2
+    module Ec2
       class PemKeyValidator
 
         def initialize(context,
@@ -20,7 +20,7 @@ module Infrastructure
 
         def execute()
           validators = [
-            lambda { return get_secret_key_path_exisits_validator().execute([get_aws_credentials_as_hash()]) },
+            lambda { return get_secret_key_path_exisits_validator().execute([get_aws_credentials().to_h()]) },
             lambda { return secret_key_path_file_validator().execute(get_pem_key_path()) },
             lambda { return get_pemkey_permission_validator().execute() },
           ]
@@ -40,11 +40,11 @@ module Infrastructure
         end
 
         def get_pemkey_permission_validator()
-          return @pem_key_permission_validator ||= Infrastructure::Aws::EC2::PemKeyPermissionValidator.new(@context)
+          return @pem_key_permission_validator ||= Infrastructure::Aws::Ec2::PemKeyPermissionValidator.new(@context)
         end
 
-        def get_aws_credentials_as_hash()
-          return @context.get_user_config_provider().get_aws_credential().to_h()
+        def get_aws_credentials()
+          return @context.get_user_config_provider().get_aws_credential()
         end
 
         def get_pem_key_path()

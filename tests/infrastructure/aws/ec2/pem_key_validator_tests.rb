@@ -14,7 +14,7 @@ describe "Infrastructure::Aws::Ec2::PemKeyValidator" do
   let(:secret_key_path_file_validator) { m = mock(); m.stubs(:execute); m }
   let(:pem_key_permission_validator) { m = mock(); m.stubs(:execute); m }
 
-  let(:validator) { Infrastructure::Aws::EC2::PemKeyValidator.new(context,secret_key_path_exisits_validator,secret_key_path_file_validator,pem_key_permission_validator) }
+  let(:validator) { Infrastructure::Aws::Ec2::PemKeyValidator.new(context,secret_key_path_exisits_validator,secret_key_path_file_validator,pem_key_permission_validator) }
 
   it "should create validator" do
     _(validator).wont_be_nil()

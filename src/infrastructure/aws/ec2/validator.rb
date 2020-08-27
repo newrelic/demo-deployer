@@ -28,7 +28,7 @@ module Infrastructure
         end
 
         def get_pemkey_validator()
-          return @pem_key_validator ||= Infrastructure::Aws::EC2::PemKeyValidator.new(@context)
+          return @pem_key_validator ||= Infrastructure::Aws::Ec2::PemKeyValidator.new(@context)
         end
 
         def get_supported_sizes()
