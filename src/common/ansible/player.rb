@@ -60,7 +60,7 @@ module Common
           on_executed_handlers = play.get_on_executed_handlers()
           script_path = play.get_script_path()
           output_content = File.read(play.get_output_file_path())
-          succeeded = has_ansible_succeeded?(process_output.process_succeeded?, output_content, script_path)
+          succeeded = has_ansible_succeeded?(process_output.succeeded?, output_content, script_path)
           if succeeded == true
             (on_executed_handlers || []).each do |handler|
               handler.call()
