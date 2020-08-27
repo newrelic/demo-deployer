@@ -79,12 +79,12 @@ module Common
       def has_ansible_succeeded?(process_output, output_content, script_path)
         process_succeeded = process_output.succeeded?
         if output_content.length()>0
-          if / unreachable=[^1-9]/.match(output_content) && process_succeeded == true
+          if / unreachable=[1-9]/.match(output_content) && process_succeeded == true
             Common::Logger::LoggerFactory.get_logger().info("output has at least 1 unreachable status for path #{script_path}, assuming failure. Make sure the credential to access the resources are correct.")
             return false
           end
 
-          if / failed=[^1-9]/.match(output_content) && process_succeeded == true
+          if / failed=[1-9]/.match(output_content) && process_succeeded == true
             Common::Logger::LoggerFactory.get_logger().info("output has at least 1 failed status for path #{script_path}, assuming failure")
             return false
           end
