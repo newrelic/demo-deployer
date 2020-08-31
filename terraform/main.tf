@@ -258,3 +258,28 @@ resource "newrelic_infra_alert_condition" "high_cpu" {
     time_function = "all"
   }
 }
+
+##
+# Notification channel (email)
+#
+# https://registry.terraform.io/providers/newrelic/newrelic/latest/docs/resources/alert_channel
+##
+resource "newrelic_alert_channel" "email_notification_channel" {
+  name = "Email Notification Channel - ${var.app_name}"
+  type = "email"
+
+  config {
+    recipients              = "example@yourdomain.com"
+    include_json_attachment = "1" # 0 or 1 (true or false)
+  }
+}
+
+##
+# Adds notification channel(s) to an alert policy.
+#
+# https://registry.terraform.io/providers/newrelic/newrelic/latest/docs/resources/alert_policy_channel
+##
+resource "newrelic_alert_policy_channel" "golden_signal_policy_pagerduty" {
+  policy_id  = newrelic_alert_policy.hello_app.id
+  channel_ids = [newrelic_alert_channel.email_notification_channel.id]
+}
