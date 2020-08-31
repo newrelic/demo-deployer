@@ -23,7 +23,5 @@
       "region": "AZURE_REGION",
       "sshPublicKeyPath": "/home/runner/.ssh/id_rsa.pub"
     }
-  },
-  "globalTags": {
   }
 }
