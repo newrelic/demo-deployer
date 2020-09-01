@@ -13,8 +13,9 @@ terraform {
 #
 ##
 provider "newrelic" {
-  api_key    = var.api_key
-  account_id = var.account_id
+  api_key       = var.api_key
+  admin_api_key = var.admin_api_key
+  account_id    = var.account_id
 }
 
 ##
@@ -280,6 +281,6 @@ resource "newrelic_alert_channel" "email_notification_channel" {
 # https://registry.terraform.io/providers/newrelic/newrelic/latest/docs/resources/alert_policy_channel
 ##
 resource "newrelic_alert_policy_channel" "golden_signal_policy_pagerduty" {
-  policy_id  = newrelic_alert_policy.hello_app.id
+  policy_id   = newrelic_alert_policy.hello_app.id
   channel_ids = [newrelic_alert_channel.email_notification_channel.id]
 }

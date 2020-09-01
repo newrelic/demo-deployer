@@ -2,6 +2,10 @@ variable "api_key" {
   default = ""
 }
 
+variable "admin_api_key" {
+  default = ""
+}
+
 variable "account_id" {
   default = ""
 }
