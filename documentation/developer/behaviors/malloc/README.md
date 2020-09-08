@@ -4,7 +4,7 @@ The `MALLOC` behavior trigger a memory allocation behavior on the tron, and this
 
 ## Value format
 
-The value for the compute behavior has the following format: `[MIN,MAX]`
+The value for the malloc behavior has the following format: `[MIN,MAX]`
 
 The `MIN` is an integer value representing the number of killobytes to allocate at the minimum.
 The `MAX` is an integer value representing the number of killobytes to allocate at the maximum.
@@ -20,7 +20,7 @@ curl -i "http://localhost:8081/api/inventory/2" -H "x-demo-malloc-pre-javatron1,
 
 This causes a memory leak on all trons for about `50KB` (interval of `40KB` and `60KB`)
 ```bash
-curl -i "http://localhost:8081/api/inventory/2" -H "x-demo-compute-post-javatron1, [40,60]"
+curl -i "http://localhost:8081/api/inventory/2" -H "x-demo-malloc-post-javatron1, [40,60]"
 ```
 
 ## Note
