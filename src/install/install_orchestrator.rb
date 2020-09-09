@@ -55,7 +55,9 @@ module Install
         .queue_step("upload")
         .queue_step("instrument", true)
         .queue_step("configure", true)
+        .queue_step("onbeforestart", true)
         .queue_step("start")
+        .queue_step("onafterstart", true)
       return @installer
     end
 
