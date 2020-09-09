@@ -20,6 +20,14 @@ module UserConfig
           return @user_config_query_lambda.call("licenseKey")
         end
 
+        def get_api_key()
+          return @user_config_query_lambda.call("nrApiKey")
+        end
+
+        def get_admin_api_key()
+          return @user_config_query_lambda.call("nrAdminApiKey")
+        end
+
         def get_insights_api_key()
           return @user_config_query_lambda.call("insightsInsertApiKey")
         end
@@ -67,6 +75,8 @@ module UserConfig
         def to_h()
           items = {}
           add_if_exist(items, "license_key", get_license_key())
+          add_if_exist(items, "nr_api_key", get_api_key())
+          add_if_exist(items, "nr_admin_api_key", get_admin_api_key())
           add_if_exist(items, "insights_insert_api_key", get_insights_api_key())
           add_if_exist(items, "account_id", get_account_id())
           add_if_exist(items, "account_root_id", get_account_root_id())

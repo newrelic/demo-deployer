@@ -8,6 +8,8 @@ The newrelic user configuration has the following schema:
 
     "newrelic": {
       "licenseKey": "my_license_key",
+      "nrApiKey": "my_api_key",
+      "nrAdminApiKey": "my_admin_api_key",
       "insightsInsertApiKey": "my_insigths_insert_api_key",
       "accountId": "my_account_id",
       "accountRootId": "my_account_root_id"
@@ -24,6 +26,27 @@ To set any of the value referenced above, follow the steps below. Note, some of 
 * Login to NewRelic
 * On the NR1 view, expand the user name drop down on the top right corner, and click on `Account settings`
 * Notice the `License Key` text and write down the associated value in your user config credentials for newrelic licenseKey
+
+### nrApiKey
+
+This key is typically used to invoke the newrelic REST APIs.
+
+* Login to NewRelic
+* On the NR1 view, expand the user name drop down on the top right corner, and click on `Account settings`
+* On the left, click on `API keys`
+* Notice the `Key:(Show Key)` link, click on it to show the key
+* Write down the associated value in your user config credentials for newrelic nrApiKey
+
+### nrAdminApiKey
+
+This key is typically used to invoke the newrelic REST APIs for creating or altering entities. 
+
+* Login to NewRelic
+* On the NR1 view, expand the user name drop down on the top right corner, and click on `Account settings`
+* On the left, click on `API keys`
+* Lower on the page, notice the table listing all users Admin API keys
+* Find your user in the table, and click the `(Show Key)` link in the `Admin's API Key` column
+* Write down the associated value in your user config credentials for newrelic nrAdminApiKey
 
 ### insightsInsertApiKey
 
