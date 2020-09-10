@@ -30,15 +30,17 @@ To set any of the value referenced above, follow the steps below. Note, some of 
 
 ### nrApiKey
 
-This key is typically used to invoke the newrelic REST APIs.
+This key is typically used to invoke the newrelic REST APIs. More info can be found at https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#personal-api-key
 
 * Login to NewRelic
 * On the NR1 view, expand the user name drop down on the top right corner, and click on `Account settings`
-* On the left, click on `API keys`
-* Notice the `Key:(Show Key)` link, click on it to show the key
-* Write down the associated value in your user config credentials for newrelic nrApiKey
+* On the left, click on `Users and roles`
+* Find your user in the table, and click on that row
+* Click on the `API Keys` column
+* Click on the `New API Key` button
+* Notice the entry starting with `NRAK-`. Write down this value in your user config credentials for newrelic nrApiKey
 
-Please note the formatting for the <b>Personal API Key</b> has a prefix `NRAK-`. If you do not see this prefix, regenerate a new personal key.
+Please note the formatting for the <b>Personal API Key</b> has a prefix `NRAK-`.
 
 ### nrAdminApiKey
 
