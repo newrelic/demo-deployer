@@ -64,6 +64,10 @@ module Install
         unless (credential.nil?)
           vars = vars.merge(credential.to_h())
         end
+        credential = get_instrumentor_provider_credential(instrumentor)
+        unless (credential.nil?)
+          vars = vars.merge(credential.to_h())
+        end
         credential = get_service_credential(service)
         unless (credential.nil?)
           vars = vars.merge(credential.to_h())

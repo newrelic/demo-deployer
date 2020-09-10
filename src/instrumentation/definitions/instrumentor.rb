@@ -12,6 +12,7 @@ module Instrumentation
         @deploy_script_path = deploy_script_path
         @source_path = source_path
         @params = Common::Install::Params.new()
+        @provider_credential = nil
       end
 
       def get_id()
@@ -44,6 +45,13 @@ module Instrumentation
 
       def get_params()
         return @params
+      end
+
+      def get_provider_credential()
+        return @provider_credential
+      end
+      def set_provider_credential(credential)
+        @provider_credential = credential
       end
 
       protected

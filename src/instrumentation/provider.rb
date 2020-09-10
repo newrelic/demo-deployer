@@ -64,6 +64,10 @@ module Instrumentation
               (params || {}).each do |k, v|
                 instrumentor.get_params().add(k, v)
               end
+              provider_credential = parsed_instrumentor['provider_credential']
+              unless provider_credential.nil?
+                instrumentor.set_provider_credential(provider_credential)
+              end
             else
               raise "Instrumentation error, could not find item with id: #{key}"
             end
