@@ -37,6 +37,8 @@ This key is typically used to invoke the newrelic REST APIs.
 * Notice the `Key:(Show Key)` link, click on it to show the key
 * Write down the associated value in your user config credentials for newrelic nrApiKey
 
+Please note the formatting for the <b>Personal API Key</b> has a prefix `NRAK-`. If you do not see this prefix, regenerate a new personal key.
+
 ### nrAdminApiKey
 
 This key is typically used to invoke the newrelic REST APIs for creating or altering entities. 
@@ -47,6 +49,8 @@ This key is typically used to invoke the newrelic REST APIs for creating or alte
 * Lower on the page, notice the table listing all users Admin API keys
 * Find your user in the table, and click the `(Show Key)` link in the `Admin's API Key` column
 * Write down the associated value in your user config credentials for newrelic nrAdminApiKey
+
+Please note the formatting for the <b>Admin API Key</b> has a prefix `NRAA-`. If you do not see this prefix, regenerate a new admin key.
 
 ### insightsInsertApiKey
 
