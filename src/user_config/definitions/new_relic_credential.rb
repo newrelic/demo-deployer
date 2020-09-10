@@ -40,6 +40,10 @@ module UserConfig
           return @user_config_query_lambda.call("accountRootId")
         end
 
+        def get_region()
+          return @user_config_query_lambda.call("nrRegion")
+        end
+
         def get_collector_url()
           return @user_config_query_lambda.call("urls.collector")
         end
@@ -80,6 +84,7 @@ module UserConfig
           add_if_exist(items, "insights_insert_api_key", get_insights_api_key())
           add_if_exist(items, "account_id", get_account_id())
           add_if_exist(items, "account_root_id", get_account_root_id())
+          add_if_exist(items, "nr_region", get_region())
           add_if_exist(items, "nr_collector_url", get_collector_url())
           add_if_exist(items, "nr_api_url", get_api_url())
           add_if_exist(items, "nr_infra_collector_url", get_infra_collector_url())

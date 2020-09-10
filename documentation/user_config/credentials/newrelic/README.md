@@ -12,7 +12,8 @@ The newrelic user configuration has the following schema:
       "nrAdminApiKey": "my_admin_api_key",
       "insightsInsertApiKey": "my_insigths_insert_api_key",
       "accountId": "my_account_id",
-      "accountRootId": "my_account_root_id"
+      "accountRootId": "my_account_root_id",
+      "nrRegion": "US"
     }
 
   }
@@ -79,3 +80,12 @@ This accountRootId is optional. It's used for the handling of agent data coming 
 * If your account is a sub-account, you should see a specific text `Sub-account information for [account name]`, with a smaller text below `This account belongs to [root account name]` and `[root accout name]` is a link. Click the `[root account name]` link
 * Once on the root account, notice the integer after the `/accounts/` part, that integer is your accountRootId. Write it down in your user config credentials for newrelic accountRootId
 * Alternatively, if you didn't see a link `[root account name]`, this means your account is the root account. Use the same integer value as the accountId for the accountRootId and write it down in your user config credentials for newrelic accountRootId.
+
+### nrRegion
+
+Typically the newrelic region is `US`. If you know your account is in a specific region, use that region value instead.
+All possible regions are listed below:
+
+* `US`
+* `EU`
+* `AP`
