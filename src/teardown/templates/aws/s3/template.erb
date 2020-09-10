@@ -1,0 +1,27 @@
+---
+- name: Provision an S3 bucket
+  hosts: localhost
+  gather_facts: True
+
+  vars:
+    access_key: <%= s3[:aws_access_key] %>
+    secret_key: <%= s3[:aws_secret_key] %>
+    region: <%= s3[:region] %>
+
+    resource_id: <%= s3[:resource_id] %>
+    resource_name: <%= s3[:resource_name] %>
+    artifact_path: <%= s3[:artifact_file_path] %>
+    tags: <%= s3[:tags] %>
+
+  tasks:
+
+    - name: Provision AWS S3 bucket - "{{ resource_id }}"
+      s3_bucket:
+         aws_access_key: "{{ access_key }}"
+         aws_secret_key: "{{ secret_key }}"
+         region: "{{ region }}"
+         name: "{{ resource_name }}"
+         tags: "{{ tags }}"
+         state: absent
+         force: yes
+      register: s3

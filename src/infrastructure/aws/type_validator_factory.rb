@@ -3,6 +3,7 @@ require_relative "ec2/validator"
 require_relative "elb/validator"
 require_relative "lambda/validator"
 require_relative "r53ip/validator"
+require_relative "s3/validator"
 
 module Infrastructure
   module Aws
@@ -15,7 +16,8 @@ module Infrastructure
             "ec2" => Ec2::Validator.new(@context),
             "elb" => Elb::Validator.new(get_aws_elb_max_listeners()),
             "lambda" => Lambda::Validator.new(),
-            "r53ip" => R53Ip::Validator.new()
+            "r53ip" => R53Ip::Validator.new(),
+            "s3" => S3::Validator.new()
           },
           lambda {|resource| return resource['type']},
           lambda {|validator| return validator}

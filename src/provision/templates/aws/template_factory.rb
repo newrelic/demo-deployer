@@ -4,6 +4,7 @@ require "./src/provision/templates/aws/ec2/ec2_template_builder"
 require "./src/provision/templates/aws/elb/elb_template_builder"
 require "./src/provision/templates/aws/lambda/lambda_template_builder"
 require "./src/provision/templates/aws/r53ip/r53ip_template_builder"
+require "./src/provision/templates/aws/s3/s3_template_builder"
 
 module Provision
   module Templates
@@ -44,7 +45,8 @@ module Provision
             "ec2" => Provision::Templates::Aws::Ec2::Ec2TemplateBuilder,
             "elb" => Provision::Templates::Aws::Elb::ElbTemplateBuilder,
             "lambda" => Provision::Templates::Aws::Lambda::LambdaTemplateBuilder,
-            "r53ip" => Provision::Templates::Aws::R53Ip::R53IpTemplateBuilder
+            "r53ip" => Provision::Templates::Aws::R53Ip::R53IpTemplateBuilder,
+            "s3" => Provision::Templates::Aws::S3::S3TemplateBuilder
           }
         end
 

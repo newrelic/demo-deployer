@@ -2,6 +2,7 @@ require  "./src/infrastructure/definitions/aws/ec2_resource"
 require  "./src/infrastructure/definitions/aws/elb_resource"
 require  "./src/infrastructure/definitions/aws/lambda_resource"
 require  "./src/infrastructure/definitions/aws/r53ip_resource"
+require  "./src/infrastructure/definitions/aws/s3_resource"
 
 module Infrastructure
   module Definitions
@@ -35,6 +36,10 @@ module Infrastructure
               listeners = config_resource["listeners"]
               reference_id = config_resource["reference_id"]
               return R53IpResource.new(resource_id, credential, domain, listeners, reference_id)
+
+            when "s3"
+              bucket_name = config_resource["bucket_name"]
+              return S3Resource.new(resource_id, credential, bucket_name)
           end
 
           return nil
