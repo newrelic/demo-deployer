@@ -18,6 +18,7 @@ module Common
 
       def self.create(context)
         instance = GlobalFieldMergerBuilder.new()
+        instance.with_deployment_name(context)
         return instance.build()
       end
 

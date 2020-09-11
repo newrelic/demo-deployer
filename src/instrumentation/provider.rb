@@ -40,7 +40,6 @@ module Instrumentation
 
     def create_instrumentors(key, enum_key, items, type)
       instrumentors = []
-
       if @parsed_instrumentors.key?(key)
         @parsed_instrumentors[key].each do |parsed_instrumentor|
           merged_instrumentor = get_merged_instrumentor(parsed_instrumentor)
