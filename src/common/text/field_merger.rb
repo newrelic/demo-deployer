@@ -18,7 +18,7 @@ module Common
 
       def merge_values(dictionary)
         result = {}
-        dictionary.each do |key,value|
+        (dictionary || {}).each do |key,value|
           result[key] = merge(value)
         end
         return result

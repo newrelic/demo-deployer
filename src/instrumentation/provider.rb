@@ -64,6 +64,7 @@ module Instrumentation
                 source_path)
                 instrumentors.push(instrumentor)
               params = merged_instrumentor["params"]
+              params = get_field_merger().merge_values(params)
               (params || {}).each do |k, v|
                 instrumentor.get_params().add(k, v)
               end
@@ -99,8 +100,11 @@ module Instrumentation
     end
 
     def get_merged_instrumentor(parsed_instrumentor)
-      merger = Common::Text::GlobalFieldMergerBuilder.create(@context)
-      return merger.merge_values(parsed_instrumentor)
+      return get_field_merger().merge_values(parsed_instrumentor)
+    end
+
+    def get_field_merger()
+      return @field_merger ||= Common::Text::GlobalFieldMergerBuilder.create(@context)
     end
 
   end
