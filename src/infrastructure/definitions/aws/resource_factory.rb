@@ -39,7 +39,7 @@ module Infrastructure
 
             when "s3"
               bucket_name = config_resource["bucket_name"]
-              return S3Resource.new(resource_id, credential, bucket_name)
+              return S3Resource.new(resource_id, credential, bucket_name, tags)
           end
 
           return nil

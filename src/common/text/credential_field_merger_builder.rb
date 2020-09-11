@@ -1,6 +1,7 @@
 require "./src/common/logger/logger_factory"
 require_relative "field_merger_builder"
 require_relative "field_merger_finder"
+require_relative "global_field_merger_builder"
 
 module Common
   module Text
@@ -23,6 +24,12 @@ module Common
         return self
       end
 
+      def with_global(context)
+        merger = GlobalFieldMergerBuilder.create(context)
+        @field_merger_builder.append_definitions(merger.get_definitions())
+        return self
+      end
+
       def build()
         return @field_merger_builder.build()
       end
@@ -31,6 +38,7 @@ module Common
         instance = CredentialFieldMergerBuilder.new()
         credentials = context.get_user_config_provider().get_git_credentials()
         instance.with_git(credentials)
+        instance.with_global(context)
         merger = instance.build()
         finder = FieldMergerFinder.new("credential", "git", "*")
         merger.add_finder(finder)
