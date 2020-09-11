@@ -15,7 +15,7 @@
 
   tasks:
 
-    - name: Provision AWS S3 bucket - "{{ resource_id }}"
+    - name: Provision AWS S3 bucket - "{{ bucket_name }}"
       s3_bucket:
          aws_access_key: "{{ access_key }}"
          aws_secret_key: "{{ secret_key }}"
