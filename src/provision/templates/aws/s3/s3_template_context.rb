@@ -24,7 +24,7 @@ module Provision
 
             parse_credential(template_context, get_resource().get_credential())
             template_context[:artifact_file_path] = get_output_file_path()
-            template_context[:resource_name] = get_resource_name()
+            template_context[:bucket_name] = get_resource().get_bucket_name()
             parse_infrastructure_resource(template_context)
 
             template_binding.local_variable_set("s3", template_context)
