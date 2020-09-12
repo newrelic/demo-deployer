@@ -1,0 +1,45 @@
+---
+
+- name: Delete GCP Compute
+  hosts: localhost
+  connection: local
+
+  vars:
+    auth_kind: <%= gcp[:auth_kind] %>
+    project: <%= gcp[:project] %>
+    service_account_file: <%= gcp[:service_account_file] %>
+    region: <%= gcp[:region] %>
+    vnet_name: <%= gcp[:vnet_name] %>
+    resource_group: <%= gcp[:resource_group] %>
+
+    resource_id: <%= compute[:resource_id] %>
+    resource_name: <%= compute[:resource_name] %>
+    disk_name: <%= compute[:disk_name] %>
+    address_name: <%= compute[:address_name] %>
+
+  tasks:
+    - name: delete a instance
+      gcp_compute_instance:
+        name: "{{ resource_name }}"
+        zone: "{{ region }}-a"
+        project: "{{ gcp_project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+
+    - name: delete an address
+      gcp_compute_address:
+        name: "{{ address_name }}"
+        region: "{{ region }}"
+        project: "{{ gcp_project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+
+    - name: Delete a network
+      gcp_compute_network:
+        name: "{{ vnet_name }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent

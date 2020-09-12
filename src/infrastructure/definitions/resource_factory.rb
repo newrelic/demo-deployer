@@ -1,6 +1,7 @@
 require  "./src/infrastructure/definitions/resource_data"
 require  "./src/infrastructure/definitions/aws/resource_factory"
 require  "./src/infrastructure/definitions/azure/resource_factory"
+require  "./src/infrastructure/definitions/gcp/resource_factory"
 require  "./src/common/type_repository"
 
 
@@ -43,7 +44,8 @@ module Infrastructure
       def get_supported_types()
         return @supported_types ||= {
           "aws" => Infrastructure::Definitions::Aws::ResourceFactory,
-          "azure" => Infrastructure::Definitions::Azure::ResourceFactory
+          "azure" => Infrastructure::Definitions::Azure::ResourceFactory,
+          "gcp" => Infrastructure::Definitions::Gcp::ResourceFactory
         }
       end
 

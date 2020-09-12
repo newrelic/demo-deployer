@@ -2,6 +2,7 @@ require "./src/common/type_repository"
 require "./src/user_config/definitions/new_relic_credential"
 require "./src/user_config/definitions/aws_credential"
 require "./src/user_config/definitions/azure_credential"
+require "./src/user_config/definitions/gcp_credential"
 require "./src/user_config/definitions/git_credential"
 
 module UserConfig
@@ -42,6 +43,7 @@ module UserConfig
         "newrelic" => UserConfig::Definitions::NewRelicCredential,
         "aws" => UserConfig::Definitions::AwsCredential,
         "azure" => UserConfig::Definitions::AzureCredential,
+        "gcp" => UserConfig::Definitions::GcpCredential,
         "git" => UserConfig::Definitions::GitCredential
       }
     end

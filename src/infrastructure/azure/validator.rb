@@ -4,8 +4,8 @@ module Infrastructure
   module Azure
     class Validator
 
-      def initialize(app_config_provider, type_validator_factory = nil)
-        @app_config_provider = app_config_provider
+      def initialize(context, type_validator_factory = nil)
+        @context = context
         @type_validator_factory = type_validator_factory
       end
 
@@ -24,8 +24,12 @@ module Infrastructure
         return get_type_validator_factory().create_validators(resources)
       end
 
+      def get_app_config_provider()
+        return @context.get_app_config_provider()
+      end
+
       def get_type_validator_factory()
-        return @type_validator_factory ||= TypeValidatorFactory.new(@app_config_provider)
+        return @type_validator_factory ||= TypeValidatorFactory.new(get_app_config_provider())
       end
 
     end

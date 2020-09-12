@@ -1,0 +1,113 @@
+---
+
+# doc foc creating azure AD profile
+# https://docs.ansible.com/ansible/latest/modules/gcp_compute_instance_module.html
+
+- name: Create GCP Compute
+  hosts: localhost
+  connection: local
+
+  vars:
+    auth_kind: <%= gcp[:auth_kind] %>
+    project: <%= gcp[:project] %>
+    service_account_file: <%= gcp[:service_account_file] %>
+    region: <%= gcp[:region] %>
+    vnet_name: <%= gcp[:vnet_name] %>
+    resource_group: <%= gcp[:resource_group] %>
+    ports: <%= gcp[:ports] %>
+    range_ports: <%= gcp[:range_ports] %>
+    
+    instance_size: <%= compute[:instance_size] %>
+    resource_id: <%= compute[:resource_id] %>
+    tags: <%= compute[:tags] %>
+    source_image: <%= compute[:source_image] %>
+    resource_name: <%= compute[:resource_name] %>
+    disk_name: <%= compute[:disk_name] %>
+    address_name: <%= compute[:address_name] %>
+
+    artifact_path: <%= compute[:artifact_file_path] %>
+
+  tasks:
+# TODO
+#    - include_tasks: vnet.yml
+# For now, network creation inline
+    - block:
+      - name: Create a network
+        gcp_compute_network:
+          name: "{{ vnet_name }}"
+          project: "{{ project }}"
+          auth_kind: "{{ auth_kind }}"
+          service_account_file: "{{ service_account_file }}"
+          state: present
+        register: network
+
+      - name: create a disk
+        gcp_compute_disk:
+          name: "{{ disk_name }}"
+          size_gb: 50
+          source_image: "{{ source_image }}"
+          zone: "{{ region }}-a"
+          project: "{{ gcp_project }}"
+          auth_kind: "{{ auth_kind }}"
+          service_account_file: "{{ service_account_file }}"
+          state: present
+        register: disk
+
+      - name: create an address
+        gcp_compute_address:
+          name: "{{ address_name }}"
+          region: "{{ region }}"
+          project: "{{ gcp_project }}"
+          auth_kind: "{{ auth_kind }}"
+          service_account_file: "{{ service_account_file }}"
+          state: present
+        register: address
+
+      - name: create a instance
+        gcp_compute_instance:
+          name: "{{ resource_name }}"
+          machine_type: "{{ instance_size }}"
+          disks:
+          - auto_delete: 'true'
+            boot: 'true'
+            source: "{{ disk }}"
+          labels: "{{ tags }}"
+          network_interfaces:
+          - network: "{{ network }}"
+            access_configs:
+            - name: External NAT
+              nat_ip: "{{ address }}"
+              type: ONE_TO_ONE_NAT
+          zone: "{{ region }}-a"
+          project: "{{ gcp_project }}"
+          auth_kind: "{{ auth_kind }}"
+          service_account_file: "{{ service_account_file }}"
+          state: present
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) | combine({
+            'resource_id': resource_id,
+            'params': {
+                'ip': item
+            }
+            })
+          }}"
+        with_items: "{{ address }}"
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost
