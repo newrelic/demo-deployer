@@ -47,7 +47,7 @@
           size_gb: 50
           source_image: "{{ source_image }}"
           zone: "{{ region }}-a"
-          project: "{{ gcp_project }}"
+          project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
           state: present
@@ -57,7 +57,7 @@
         gcp_compute_address:
           name: "{{ address_name }}"
           region: "{{ region }}"
-          project: "{{ gcp_project }}"
+          project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
           state: present
@@ -79,7 +79,7 @@
               nat_ip: "{{ address }}"
               type: ONE_TO_ONE_NAT
           zone: "{{ region }}-a"
-          project: "{{ gcp_project }}"
+          project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
           state: present

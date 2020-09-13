@@ -49,9 +49,25 @@ module Provision
           def get_resource_tags()
             service_ids = get_services_provider().aggregate_value(get_resource_id()) { |service| service.get_id() }
             tags = get_resource().get_tags()
-            tags[:Name] = get_resource_name()
-            tags[:Services] = service_ids.join('-')
+            tags["Name"] = get_resource_name()
+            tags["Services"] = service_ids.join('-')
+            tags = make_tags_compatible_gcp(tags)
             return tags
+          end
+
+          def make_tags_compatible_gcp(tags)
+            # GCP has silly requirements for tags, among them, tags must be lowercase (go figure...)
+            # https://cloud.google.com/compute/docs/labeling-resources
+            results = {}
+            tags.each do |key, value|
+              unless (key.include?(".") || value.include?("."))
+                # '.' are NOT supported for labels in GCP
+                compatibleKey = key.downcase()
+                compatibleValue = value.downcase()
+                results[compatibleKey] = compatibleValue
+              end
+            end
+            return results
           end
 
           def parse_deployment(compute_template_context)
