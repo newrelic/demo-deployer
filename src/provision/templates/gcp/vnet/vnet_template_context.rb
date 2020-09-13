@@ -6,9 +6,8 @@ module Provision
       module Vnet
         class VnetTemplateContext < TemplateContext
 
-          def initialize(output_file_path, template_file_path, deployment_name, services_provider, resource)
-            super(output_file_path, template_file_path, deployment_name, resource)
-            @services_provider = services_provider
+          def initialize(output_file_path, template_file_path, context, resource)
+            super(output_file_path, template_file_path, context, resource)
           end
 
           def get_template_input_file_path()
@@ -21,15 +20,15 @@ module Provision
 
           def get_template_binding()
             template_binding = Kernel.binding()
-            Provision::Templates::Gcp::Vnet::VnetTemplateContext.set_template_context(template_binding, get_deployment_name(), @services_provider, get_resource())
+            Provision::Templates::Gcp::Vnet::VnetTemplateContext.set_template_context(template_binding, get_context(), get_resource())
             return template_binding
           end
 
-          def self.set_template_context(template_binding, deployment_name, services_provider, resource)
+          def self.set_template_context(template_binding, context, resource)
             gcp_template_context = {}
             parse_credential(gcp_template_context, resource)
-            parse_resource_group(gcp_template_context, deployment_name)
-            parse_services_provider(gcp_template_context, services_provider, resource)
+            parse_resource_group(gcp_template_context, context, resource)
+            parse_services_provider(gcp_template_context, context, resource)
             template_binding.local_variable_set("gcp", gcp_template_context)
           end
 
@@ -42,12 +41,14 @@ module Provision
             template_context[:region] = credential.get_region()
           end
 
-          def self.parse_resource_group(template_context, deployment_name)
+          def self.parse_resource_group(template_context, context, resource)
+            deployment_name = context.get_command_line_provider().get_deployment_name()
             template_context[:resource_group] = "#{deployment_name}"
             template_context[:vnet_name] = "#{deployment_name}-vnet"
           end
 
-          def self.parse_services_provider(gcp_template_context, services_provider, resource)
+          def self.parse_services_provider(gcp_template_context, context, resource)
+            services_provider = context.get_services_provider()
             ports = []
             min_port = -1
             max_port = -1

@@ -8,9 +8,8 @@ module Provision
 
         class ComputeTemplateContext < TemplateContext
 
-          def initialize(output_file_path, template_file_path, deployment_name, services_provider, resource)
-            super(output_file_path, template_file_path, deployment_name, resource)
-            @services_provider = services_provider
+          def initialize(output_file_path, template_file_path, context, resource)
+            super(output_file_path, template_file_path, context, resource)
           end
 
           def get_template_input_file_path()
@@ -24,7 +23,7 @@ module Provision
           def get_template_binding()
             template_binding = Kernel.binding()
 
-            Provision::Templates::Gcp::Vnet::VnetTemplateContext.set_template_context(template_binding, get_deployment_name(), @services_provider, get_resource())
+            Provision::Templates::Gcp::Vnet::VnetTemplateContext.set_template_context(template_binding, get_context(), get_resource())
 
             compute_template_context = {}
             compute_template_context[:remote_user] = get_resource().get_user_name()
@@ -48,7 +47,7 @@ module Provision
           end
 
           def get_resource_tags()
-            service_ids = @services_provider.aggregate_value(get_resource().get_id()) { |service| service.get_id() }
+            service_ids = get_services_provider().aggregate_value(get_resource_id()) { |service| service.get_id() }
             tags = get_resource().get_tags()
             tags[:Name] = get_resource_name()
             tags[:Services] = service_ids.join('-')
@@ -56,16 +55,21 @@ module Provision
           end
 
           def parse_deployment(compute_template_context)
-            deployment_name = get_deployment_name()
-            resource_id = get_resource_id()
-            compute_template_context[:resource_name] = "#{deployment_name}-#{resource_id}"
-            compute_template_context[:disk_name] = "#{deployment_name}-#{resource_id}-disk"
-            compute_template_context[:address_name] = "#{deployment_name}-#{resource_id}-address"
+            resource_name = get_resource_name()
+            compute_template_context[:resource_name] = resource_name
+            compute_template_context[:disk_name] = "#{resource_name}-disk"
+            compute_template_context[:address_name] = "#{resource_name}-address"
           end
 
-          def parse_services_provider(compute_template_context)
-            service_ports = @services_provider.aggregate_value(get_resource_id()) { |service| service.get_port() }
-            compute_template_context[:ports] = service_ports
+          def parse_services_provider(template_context)
+            service_ports = get_services_provider().aggregate_value(get_resource_id()) { |service| service.get_port() }
+            valid_ports = []
+            service_ports.each do |port|
+              if port != 9999
+                valid_ports.push(port)
+              end
+            end
+            template_context[:ports] = valid_ports
           end
 
         end
