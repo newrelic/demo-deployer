@@ -11,14 +11,20 @@ module Common
         return @field_merger_builder.build()
       end
 
-      def with_deployment_name(context)
+      def with_deployment_names(context)
         deployment_name = context.get_command_line_provider().get_deployment_name()
-        @field_merger_builder.create_definition(["deployment_name"], deployment_name)
+        @field_merger_builder.create_definition(["global","deployment_name"], deployment_name)
+
+        username = context.get_command_line_provider().get_user_config_name()
+        @field_merger_builder.create_definition(["global","user_name"], username)
+
+        deployname = context.get_command_line_provider().get_deploy_config_name()
+        @field_merger_builder.create_definition(["global","deploy_name"], deployname)
       end
 
       def self.create(context)
         instance = GlobalFieldMergerBuilder.new()
-        instance.with_deployment_name(context)
+        instance.with_deployment_names(context)
         return instance.build()
       end
 
