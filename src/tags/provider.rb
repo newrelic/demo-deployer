@@ -1,3 +1,5 @@
+require "./src/common/text/global_field_merger_builder"
+
 module Tags
   class Provider
 
@@ -13,6 +15,7 @@ module Tags
       tags = @global_tags.merge(resource_tags)
       deployment_name_tag = get_deployment_tags()
       tags = tags.merge(deployment_name_tag)
+      tags = get_merged_tags(tags)
       return tags
     end
 
@@ -21,21 +24,24 @@ module Tags
       tags = @global_tags.merge(service_tags)
       deployment_name_tag = get_deployment_tags()
       tags = tags.merge(deployment_name_tag)
+      tags = get_merged_tags(tags)
       return tags
     end
 
     private
     def get_deployment_tags()
-      command_line_provider = @context.get_command_line_provider()
-      deployment_name = command_line_provider.get_deployment_name()
-      username = command_line_provider.get_user_config_name()
       tags = { 
-        "dxDeploymentName" => deployment_name,
+        "dxDeploymentName" => "[global:deployment_name]",
         "dxDeploymentDate" => Date.today.to_s,
         "dxDeployerVersion" => "3.0.0",
-        "dxDeployedBy" => username
+        "dxDeployedBy" => "[global:user_name]"
       }
       return tags
+    end
+
+    def get_merged_tags(tags)
+      merger = Common::Text::GlobalFieldMergerBuilder.create(@context)
+      return merger.merge_values(tags)
     end
 
   end

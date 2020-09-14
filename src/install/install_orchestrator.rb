@@ -48,16 +48,18 @@ module Install
     end
 
     def get_installer()
+      serial = true
+      parallel = false
       @installer = Common::Install::Installer.new(get_temporary_directory_service())
       @installer
-        .queue_step("stop")
-        .queue_step("prepare", true)
-        .queue_step("upload")
-        .queue_step("instrument", true)
-        .queue_step("configure", true)
-        .queue_step("onbeforestart", true)
-        .queue_step("start")
-        .queue_step("onafterstart", true)
+        .queue_step("stop", parallel)
+        .queue_step("prepare", serial)
+        .queue_step("upload", parallel)
+        .queue_step("instrument", serial)
+        .queue_step("configure", serial)
+        .queue_step("onbeforestart", serial)
+        .queue_step("start", parallel)
+        .queue_step("onafterstart", serial)
       return @installer
     end
 
