@@ -10,7 +10,7 @@
 
     "newrelic": {
       "licenseKey": "NR_LICENSE_KEY",
-      "nrApiKey": "NR_API_KEY",
+      "nrPersonalApiKey": "NR_PERSONAL_API_KEY",
       "nrAdminApiKey": "NR_ADMIN_API_KEY",
       "insightsInsertApiKey": "NR_INSIGHTS_INSERT_API_KEY",
       "accountId": "NR_ACCOUNT_ID",

@@ -8,7 +8,7 @@ The newrelic user configuration has the following schema:
 
     "newrelic": {
       "licenseKey": "my_license_key",
-      "nrApiKey": "my_api_key",
+      "nrPersonalApiKey": "my_personal_api_key",
       "nrAdminApiKey": "my_admin_api_key",
       "insightsInsertApiKey": "my_insigths_insert_api_key",
       "accountId": "my_account_id",
@@ -28,7 +28,7 @@ To set any of the value referenced above, follow the steps below. Note, some of 
 * On the NR1 view, expand the user name drop down on the top right corner, and click on `Account settings`
 * Notice the `License Key` text and write down the associated value in your user config credentials for newrelic licenseKey
 
-### nrApiKey
+### nrPersonalApiKey
 
 This key is typically used to invoke the newrelic REST APIs. More info can be found at https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#personal-api-key
 
@@ -38,7 +38,7 @@ This key is typically used to invoke the newrelic REST APIs. More info can be fo
 * Find your user in the table, and click on that row
 * Click on the `API Keys` column
 * Click on the `New API Key` button
-* Notice the entry starting with `NRAK-`. Write down this value in your user config credentials for newrelic nrApiKey
+* Notice the entry starting with `NRAK-`. Write down this value in your user config credentials for newrelic nrPersonalApiKey
 
 Please note the formatting for the <b>Personal API Key</b> has a prefix `NRAK-`.
 

@@ -8,20 +8,12 @@ module UserConfig
           @user_config_query_lambda = user_config_query_lambda
         end
 
-        # def get_account_api_key()
-        #   return @user_config_query_lambda.call("credentials.newRelic.apiKeys.account")
-        # end
-
-        # def get_admin_api_key()
-        #   return @user_config_query_lambda.call("credentials.newRelic.apiKeys.admin")
-        # end
-
         def get_license_key()
           return @user_config_query_lambda.call("licenseKey")
         end
 
-        def get_api_key()
-          return @user_config_query_lambda.call("nrApiKey")
+        def get_personal_api_key()
+          return @user_config_query_lambda.call("nrPersonalApiKey")
         end
 
         def get_admin_api_key()
@@ -79,7 +71,7 @@ module UserConfig
         def to_h()
           items = {}
           add_if_exist(items, "license_key", get_license_key())
-          add_if_exist(items, "nr_api_key", get_api_key())
+          add_if_exist(items, "nr_personal_api_key", get_personal_api_key())
           add_if_exist(items, "nr_admin_api_key", get_admin_api_key())
           add_if_exist(items, "insights_insert_api_key", get_insights_api_key())
           add_if_exist(items, "account_id", get_account_id())
