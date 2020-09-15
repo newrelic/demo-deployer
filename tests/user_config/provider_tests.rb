@@ -32,13 +32,13 @@ describe "UserConfig" do
     end
     
     describe "aws" do
-      let(:aws_api_key) {"fddsffdfg"}
-      let(:user_config) {{ "credentials"=>{"aws"=>{"apiKey"=>aws_api_key }} }}
+      let(:aws_access_key) {"fddsffdfg"}
+      let(:user_config) {{ "credentials"=>{"aws"=>{"apiKey"=>aws_access_key }} }}
 
       it "should return aws credential api key" do
         credential = provider.get_aws_credential()
         credential.wont_be_nil()
-        credential.get_api_key().must_equal(aws_api_key)
+        credential.get_access_key().must_equal(aws_access_key)
       end
     end
 
