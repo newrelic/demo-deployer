@@ -1,31 +1,33 @@
+require_relative 'credential'
+
 module UserConfig
   module Definitions
-    class GitCredential
+    class GitCredential < Credential
 
-      def initialize (user_config_query_lambda)
-        @user_config_query_lambda = user_config_query_lambda
+      def initialize (provider, user_config_query_lambda)
+        super(provider, user_config_query_lambda)
       end
 
       def get_personal_access_token(username)
-        return @user_config_query_lambda.call(username)
+        return query(username)
       end
 
       def get_usernames()
         usernames = []
-        all = @user_config_query_lambda.call("")
+        all = query("")
         (all || {}).each do |key, value|
           usernames.push(key)
         end
         return usernames
       end
-      
+
       def to_h()
-        output = {}
+        items = {}
         usernames = get_usernames()
         usernames.each do |username|
-          output[username] = "****protected****"
+          items[username] = "****protected****"
         end
-        return output
+        return items
       end
 
     end

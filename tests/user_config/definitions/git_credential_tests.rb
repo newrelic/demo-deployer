@@ -14,7 +14,7 @@ describe "UserConfig::Definitions::GitCredential" do
             "myusername" => my_personal_access_token,
             "anotherusername" => another_personal_access_token
             } }
-        let(:credential) { UserConfig::Definitions::GitCredential.new(UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
+        let(:credential) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
 
         it "should return access token value" do
             credential.get_personal_access_token("myusername").must_equal(my_personal_access_token)

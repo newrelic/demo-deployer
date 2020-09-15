@@ -36,7 +36,7 @@ module Provision
 
           private
           def parse_credential(template_context, credential)
-            template_context[:aws_access_key] = credential.get_api_key()
+            template_context[:aws_access_key] = credential.get_access_key()
             template_context[:aws_secret_key] = credential.get_secret_key()
             template_context[:secret_key_name] = credential.get_secret_key_name()
             template_context[:region] = credential.get_region()
