@@ -42,7 +42,7 @@ module Common
         def get_api_gateway_client()
           @apigateway ||= ::Aws::APIGateway::Client.new(
             region: @credential.get_region(),
-            credentials: ::Aws::Credentials.new(@credential.get_api_key(), @credential.get_secret_key())
+            credentials: ::Aws::Credentials.new(@credential.get_access_key(), @credential.get_secret_key())
           )
           return @apigateway
         end

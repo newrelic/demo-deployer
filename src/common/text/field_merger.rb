@@ -12,11 +12,23 @@ module Common
         @finders.push(finder)
       end
 
+      def get_definitions()
+        return @definitions.merge({})
+      end
+
+      def merge_values(dictionary)
+        result = {}
+        (dictionary || {}).each do |key,value|
+          result[key] = merge(value)
+        end
+        return result
+      end
+
       def merge(text)
         @matches = {}
         unless text.nil?
           @definitions.each do |key, value|
-            if text.include?(key)
+            if text.kind_of?(String) && text.include?(key)
               addMatch(key, value)
               text = text.gsub(key, value)
             end

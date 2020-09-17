@@ -43,7 +43,15 @@ module Tests
         end
         return @parent_builder
       end
-      
+
+      def s3(id, bucket_name)
+        resource = create_new_resource(id)
+        resource["provider"] = "aws"
+        resource["type"] = "s3"
+        resource["bucket_name"] = bucket_name
+        return @parent_builder
+      end
+
       def r53ip_reference(id, domain, reference_id)
         resource = create_new_resource(id)
         resource["provider"] = "aws"

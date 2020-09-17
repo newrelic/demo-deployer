@@ -9,6 +9,7 @@ require "./src/infrastructure/definitions/resource_data"
 
 describe "Instrumentation::Provider" do
 
+  let(:context){ Tests::ContextBuilder.new().build() }
   let(:empty_json) { {} }
   let(:services) { [] }
   let(:resources) { [] }
@@ -130,7 +131,7 @@ describe "Instrumentation::Provider" do
   end
 
   def given_provider(json)
-    return Instrumentation::Provider.new(json, "/tmp", resources, services, git_proxy)
+    return Instrumentation::Provider.new(context, json, "/tmp", resources, services, git_proxy)
   end
 
   def given_resource(id)

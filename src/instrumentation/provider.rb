@@ -1,10 +1,12 @@
 require "./src/instrumentation/definitions/resource_instrumentor"
 require "./src/instrumentation/definitions/service_instrumentor"
+require "./src/common/text/global_field_merger_builder"
 
 module Instrumentation
   class Provider
 
-    def initialize(parsed_instrumentors, destination_path, resources, services, git_proxy)
+    def initialize(context, parsed_instrumentors, destination_path, resources, services, git_proxy)
+      @context = context
       @parsed_instrumentors = parsed_instrumentors
       @destination_path = destination_path
       @resource_instrumentors = nil
@@ -38,19 +40,19 @@ module Instrumentation
 
     def create_instrumentors(key, enum_key, items, type)
       instrumentors = []
-
       if @parsed_instrumentors.key?(key)
         @parsed_instrumentors[key].each do |parsed_instrumentor|
-          keys = parsed_instrumentor[enum_key]
+          merged_instrumentor = get_merged_instrumentor(parsed_instrumentor)
+          keys = merged_instrumentor[enum_key]
           keys.each do |key|
             found = (items || []).find {|item| item.get_id() == key}
             unless found.nil?
-              id = parsed_instrumentor["id"]
-              provider = parsed_instrumentor["provider"]
-              version = parsed_instrumentor["version"]
-              deploy_script_path = parsed_instrumentor["deploy_script_path"]
-              local_source_path = parsed_instrumentor["local_source_path"]
-              source_repository = parsed_instrumentor["source_repository"]
+              id = merged_instrumentor["id"]
+              provider = merged_instrumentor["provider"]
+              version = merged_instrumentor["version"]
+              deploy_script_path = merged_instrumentor["deploy_script_path"]
+              local_source_path = merged_instrumentor["local_source_path"]
+              source_repository = merged_instrumentor["source_repository"]
               source_path = get_source_path(local_source_path, source_repository, id)
               instrumentor = type.new(
                 id,
@@ -60,9 +62,14 @@ module Instrumentation
                 deploy_script_path,
                 source_path)
                 instrumentors.push(instrumentor)
-              params = parsed_instrumentor["params"]
+              params = merged_instrumentor["params"]
+              params = get_field_merger().merge_values(params)
               (params || {}).each do |k, v|
                 instrumentor.get_params().add(k, v)
+              end
+              provider_credential = merged_instrumentor['provider_credential']
+              unless provider_credential.nil?
+                instrumentor.set_provider_credential(provider_credential)
               end
             else
               raise "Instrumentation error, could not find item with id: #{key}"
@@ -89,6 +96,14 @@ module Instrumentation
 
     def get_git_proxy()
       return @git_proxy
+    end
+
+    def get_merged_instrumentor(parsed_instrumentor)
+      return get_field_merger().merge_values(parsed_instrumentor)
+    end
+
+    def get_field_merger()
+      return @field_merger ||= Common::Text::GlobalFieldMergerBuilder.create(@context)
     end
 
   end

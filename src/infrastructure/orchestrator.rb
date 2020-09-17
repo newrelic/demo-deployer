@@ -19,7 +19,6 @@ module Infrastructure
 
     def execute(deploy_config_content = nil)
       command_line_provider = @context.get_command_line_provider()
-      tags_provider = @context.get_tags_provider()
       if deploy_config_content.nil?
         deploy_config_content = command_line_provider.get_deployment_config_content()
       end
@@ -30,8 +29,7 @@ module Infrastructure
           raise Common::ValidationError.new("Infrastructure validation has failed", validation_errors)
         end
       end
-      user_config_provider = @context.get_user_config_provider()
-      provider = Infrastructure::Provider.new(parsed_resources, user_config_provider, tags_provider)
+      provider = Infrastructure::Provider.new(@context, parsed_resources)
       @context.set_infrastructure_provider(provider)
       return provider
     end

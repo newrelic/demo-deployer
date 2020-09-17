@@ -41,6 +41,7 @@ The list below is the list of all supported resource types. Follow the link for 
 * [Lambda](aws/lambda/README.md)
 * [ELB](aws/elb/README.md)
 * [Route53](aws/route53/README.md)
+* [S3](aws/s3/README.md)
 
 ## Azure
 

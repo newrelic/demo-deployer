@@ -10,13 +10,8 @@ module Instrumentation
       def execute(parsed_instrumentors)
         missing = []
         (parsed_instrumentors || []).each do |parsed_instrumentor|
-          provider = parsed_instrumentor["provider"]
-          unless provider.nil?()
-            credential = get_user_config_provider().get_credential(provider)
-            if credential.nil?()
-              missing.push("'#{provider}'")
-            end
-          end
+          evaluate(parsed_instrumentor, "provider", missing)
+          evaluate(parsed_instrumentor, "provider_credential", missing)
         end
 
         if missing.length>0
@@ -28,6 +23,16 @@ module Instrumentation
       end
 
       private
+
+      def evaluate(parsed_instrumentor, field_name, missing)
+        provider = parsed_instrumentor[field_name]
+        unless provider.nil?()
+          credential = get_user_config_provider().get_credential(provider)
+          if credential.nil?()
+            missing.push("#{field_name}:'#{provider}'")
+          end
+        end
+      end
 
       def get_user_config_provider()
         return @user_config_provider

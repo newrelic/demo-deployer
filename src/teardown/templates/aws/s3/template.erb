@@ -1,0 +1,27 @@
+---
+- name: Delete an S3 bucket
+  hosts: localhost
+  gather_facts: True
+
+  vars:
+    access_key: <%= s3[:aws_access_key] %>
+    secret_key: <%= s3[:aws_secret_key] %>
+    region: <%= s3[:region] %>
+
+    resource_id: <%= s3[:resource_id] %>
+    bucket_name: <%= s3[:bucket_name] %>
+    artifact_path: <%= s3[:artifact_file_path] %>
+    tags: <%= s3[:tags] %>
+
+  tasks:
+
+    - name: Delete AWS S3 bucket - "{{ bucket_name }}"
+      s3_bucket:
+         aws_access_key: "{{ access_key }}"
+         aws_secret_key: "{{ secret_key }}"
+         region: "{{ region }}"
+         name: "{{ bucket_name }}"
+         tags: "{{ tags }}"
+         state: absent
+         force: yes
+      register: s3

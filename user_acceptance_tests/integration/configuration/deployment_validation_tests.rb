@@ -122,8 +122,28 @@ describe "UserAcceptanceTests::Deployment" do
       error.message.must_include("source path for the following services do not exist")
     end
 
+    it "should fail on invalid S3 bucket name" do
+      given_aws_credential("aws", api_key, secret_key, secret_key_path, region)
+      given_user_config(credentials)
+      given_s3_bucket("bucket1", "NOT A VALID BUCKET NAME")
+      given_deploy_config(resources, services)
+      error = assert_raises do
+        orchestrator.execute(arguments)
+      end
+      error.message.must_include("S3 Bucket name syntax error")
+      error.message.must_include("can consist only of lowercase letters")
+    end
+
     def given_resource(id, provider = nil, type = nil, size = nil)
       resource = create_resource(id, provider, type, size)
+      resources.push(resource)
+    end
+
+    def given_s3_bucket(id, name)
+      resource = {id: id}
+      resource[:provider] = "aws"
+      resource[:type] = "s3"
+      resource[:bucket_name] = name
       resources.push(resource)
     end
 

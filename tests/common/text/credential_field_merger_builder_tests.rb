@@ -12,7 +12,7 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
   let(:my_personal_access_token) { "my access token"}
   let(:another_personal_access_token) { "another access token"}
   let(:no_token_credential_stub) { m = mock(); m.stubs(:get_personal_access_token); m.stubs(:get_usernames).returns(usernames); m }
-  let(:credentials) { UserConfig::Definitions::GitCredential.new(UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
+  let(:credentials) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
   let(:builder)  { Common::Text::CredentialFieldMergerBuilder.new() }
 
   it "should build empty" do

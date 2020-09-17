@@ -1,15 +1,16 @@
 require "./src/infrastructure/definitions/resource_factory"
+require "./src/common/text/global_field_merger_builder"
 
 module Infrastructure
   class Provider
 
     def initialize(
+        context,
         parsed_resources,
-        user_config_provider,
-        tag_provider,
-        resource_factory = Infrastructure::Definitions::ResourceFactory.new(user_config_provider, tag_provider))
-      @parsed_resources = parsed_resources
-      @resource_factory = resource_factory
+        resource_factory = nil)
+        @context = context
+        @parsed_resources = parsed_resources
+        @resource_factory = resource_factory
     end
 
     def get_by_id(id)
@@ -38,10 +39,28 @@ module Infrastructure
     def create()
       resources = []
       @parsed_resources.each do |parsed_resource|
-        resource = @resource_factory.create(parsed_resource)
+        merged_resource = get_merged_resource(parsed_resource)
+        resource = get_resource_factory().create(merged_resource)
         resources.push(resource)
       end
       return resources.compact()
+    end
+
+    def get_merged_resource(parsed_resource)
+      merger = Common::Text::GlobalFieldMergerBuilder.create(@context)
+      return merger.merge_values(parsed_resource)
+    end
+
+    def get_tags_provider()
+      return @context.get_tags_provider()
+    end
+
+    def get_user_config_provider()
+      return @context.get_user_config_provider()
+    end
+
+    def get_resource_factory()
+      return @resource_factory ||= Infrastructure::Definitions::ResourceFactory.new(get_user_config_provider(), get_tags_provider())
     end
 
   end

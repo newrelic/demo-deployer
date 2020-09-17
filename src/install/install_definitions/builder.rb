@@ -44,6 +44,15 @@ module Install
         return credential
       end
 
+      def get_instrumentor_provider_credential(instrumentor)
+        credential = nil
+        provider = instrumentor.get_provider_credential()
+        unless (provider.nil?)
+          credential = get_user_config_provider().get_credential(provider)
+        end
+        return credential
+      end
+
       def collect_params(resource_ids)
         params = {}
         resource_ids.each do |resource_id|

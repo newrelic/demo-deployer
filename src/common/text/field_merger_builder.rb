@@ -15,6 +15,12 @@ module Common
         return self
       end
 
+      def append_definitions(definitions)
+        definitions.each do |key, value|
+          @definitions[key] = value
+        end
+      end
+
       def build()
         return (@merger ||= FieldMerger.new(@definitions))
       end
