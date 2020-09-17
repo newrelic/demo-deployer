@@ -21,10 +21,10 @@ jobs:
       env:
         USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_DOCKER }}
       run: |
-        echo "$USER_JSON" > git_stg_dkr.json.local
+        echo "$USER_JSON" > gitstgdkr.json.local
 
     - name: Build the tagged Docker image
       run: docker build -t deployer .
 
     - name: Run deployer
-      run: docker run -i --entrypoint ruby deployer main.rb -c git_stg_dkr.json.local -d documentation/tutorial/user_stories/Hello/hello.json -l debug
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d documentation/tutorial/user_stories/Hello/hello.json -l debug
