@@ -27,6 +27,7 @@ module Provision
             template_context[:ami_name] = get_resource().get_ami_name()
             template_context[:artifact_file_path] = get_output_file_path()
             template_context[:resource_name] = get_resource_name()
+            template_context[:cpu_credit_specification] = get_resource().get_cpu_credit_specification()
             parse_infrastructure_resource(template_context)
             parse_services_provider(template_context)
 

@@ -22,7 +22,7 @@
       register: ec2_facts
 
     - name: Terminate instances that were previously launched
-      ec2:
+      ec2_instance:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"
