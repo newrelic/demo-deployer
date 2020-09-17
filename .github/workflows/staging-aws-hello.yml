@@ -27,4 +27,4 @@ jobs:
         echo "$USER_JSON" > git_stg_dkr.json.local
 
     - name: Build the tagged Docker image
-      run: docker run -it --entrypoint ruby deployer main.rb -c git_stg_dkr.json.local -d documentation/tutorial/user_stories/Hello/hello.json -l debug
+      run: docker run -i --entrypoint ruby deployer main.rb -c git_stg_dkr.json.local -d documentation/tutorial/user_stories/Hello/hello.json -l debug
