@@ -6,11 +6,11 @@ module Deployment
       class S3NameSyntaxListValidator
         
         def initialize(
-          key,
+          key_lambda,
           error_message = nil,
           syntax_validator = S3NameSyntaxValidator.new())
 
-          @key = key
+          @key_lambda = key_lambda
           @error_message = error_message || "Null or Empty"
           @syntax_validator = syntax_validator
         end
@@ -19,7 +19,7 @@ module Deployment
           missing = []
 
           (items || []).each do |item|
-            value = item[@key]
+            value = @key_lambda.call(item)
             error = @syntax_validator.execute(value)
             unless error.nil?
               missing.push(error)
