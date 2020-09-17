@@ -9,9 +9,6 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v2
 
-    - name: Build the tagged Docker image
-      run: docker build -t deployer .
-
     - name: Write AWS Certificate to File
       env:
         AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
@@ -27,4 +24,7 @@ jobs:
         echo "$USER_JSON" > git_stg_dkr.json.local
 
     - name: Build the tagged Docker image
+      run: docker build -t deployer .
+
+    - name: Run deployer
       run: docker run -i --entrypoint ruby deployer main.rb -c git_stg_dkr.json.local -d documentation/tutorial/user_stories/Hello/hello.json -l debug
