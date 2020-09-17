@@ -22,7 +22,7 @@ module Infrastructure
 
           case config_resource["type"]
             when "ec2"
-              return Ec2Resource.new(resource_id, credential, config_resource["size"], user_name, tags)
+              return Ec2Resource.new(resource_id, credential, config_resource["size"], user_name, tags, config_resource["cpu_credit_specification"])
 
             when "elb"
               return ElbResource.new(resource_id, credential, config_resource["listeners"], user_name, tags)
