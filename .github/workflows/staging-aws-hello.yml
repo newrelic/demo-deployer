@@ -1,4 +1,4 @@
-name: Deploy Hello for NewRelic Staging on AWS
+name: Hello - newrelic staging aws
 
 on: [workflow_dispatch]
 
