@@ -19,6 +19,7 @@ RUN python3 -m pip install ansible
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
+RUN python3 -m pip install ansible[azure]
 
 # Others
 RUN apt-get install git rsync -y
