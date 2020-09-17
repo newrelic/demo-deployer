@@ -1,4 +1,4 @@
-name: Hello - newrelic staging aws
+name: Hello - newrelic staging azure
 
 on: [workflow_dispatch]
 
