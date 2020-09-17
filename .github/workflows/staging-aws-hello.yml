@@ -1,0 +1,14 @@
+name: Staging AWS Hello
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy_hello:
+    runs-on: ubuntu-latest
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Build the tagged Docker image
+      run: docker build -t deployer .
