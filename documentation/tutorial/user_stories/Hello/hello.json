@@ -41,7 +41,7 @@
         "content": [
           {
             "frequency": "* * * * *",
-            "job": "for ((i=1;i<=30;i++)); do curl 'http://[service:app1]/'; curl 'http://[service:app1]/api/inventory'; sleep 1; done"
+            "job": "for ((i=1;i<=30;i++)); do curl '[service:app1:url]/'; curl '[service:app1:url]/api/inventory'; sleep 1; done"
           }
         ]
       }
