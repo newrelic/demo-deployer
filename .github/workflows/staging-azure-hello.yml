@@ -1,0 +1,28 @@
+name: Hello - newrelic staging aws
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy_hello:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Generate Default SSH Keypair
+      run: ssh-keygen -m PEM -t rsa -b 4096 -f id_rsa -q -N ""
+
+    - name: Write UAT JSON to file
+      env:
+        USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_AZURE_DOCKER }}
+      run: |
+        echo "$USER_JSON" > gitstgazdkr.local.json
+
+    - name: Build the tagged Docker image
+      run: docker build -t deployer .
+
+    - name: Teardown any previous deployment
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgazdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.json -t
+
+    - name: Run deployer
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgazdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.json
