@@ -36,11 +36,6 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
 RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bionic main"
 RUN apt-get update && apt-get install terraform -y
 
-# Required for Azure SSH
-RUN mkdir -p /home/vm-user/.ssh
-RUN touch /home/vm-user/.ssh/known_hosts
-RUN touch /home/vm-user/.ssh/authorized_keys
-
 RUN mkdir /mnt/deployer
 ADD . /mnt/deployer
 WORKDIR /mnt/deployer

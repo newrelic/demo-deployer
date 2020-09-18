@@ -26,11 +26,11 @@ jobs:
       run: |
         echo "$USER_JSON" > gitstgazdkr.local.json
 
-    - name: Build the tagged Docker image
+    - name: Build the docker image
       run: docker build -t deployer .
 
     - name: Teardown any previous deployment
-      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgazdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.azure.json -t -l debug
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgazdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.azure.json -t
 
     - name: Run deployer
       run: docker run -i --entrypoint ruby deployer main.rb -c gitstgazdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.azure.json

@@ -23,7 +23,7 @@ jobs:
       run: |
         echo "$USER_JSON" > gitstgdkr.json.local
 
-    - name: Build the tagged Docker image
+    - name: Build the docker image
       run: docker build -t deployer .
 
     - name: Teardown any previous deployment
