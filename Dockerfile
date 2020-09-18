@@ -22,7 +22,9 @@ RUN python3 -m pip install boto
 RUN python3 -m pip install ansible[azure]
 
 # Others
-RUN apt-get install git rsync -y
+RUN apt-get update
+RUN apt-get install git -y
+RUN apt-get install rsync -y
 
 # Ansible galaxy plugins
 RUN ansible-galaxy install newrelic.newrelic_java_agent

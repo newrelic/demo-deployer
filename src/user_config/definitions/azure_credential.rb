@@ -35,12 +35,12 @@ module UserConfig
       end
 
       def get_secret_key_name()
-        return File.basename(get_secret_key_path(), ".*")
+        return File.basename(get_secret_key_path())
       end
 
       def get_secret_key_path()
-        return query("secretKeyPath")
-      end        
+        return get_ssh_public_key_path().gsub(/\.pub/i, '')
+      end
 
       def get_region()
         return query("region")
