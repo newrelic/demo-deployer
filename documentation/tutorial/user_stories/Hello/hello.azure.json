@@ -3,7 +3,7 @@
     {
       "id": "app1",
       "display_name": "Hello-App1",
-      "source_repository": "-b main https://github.com/newrelic/demo-nodetron.git",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
       "deploy_script_path": "deploy/linux/roles",
       "port": 5001,
       "destinations": ["host1"],
@@ -70,9 +70,9 @@
         "id": "nr_infra",
         "resource_ids": ["host1"],
         "provider": "newrelic",
-        "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
-        "version": "1.12.1"
+        "version": "1.12.4"
       }
     ],
     "services": [
@@ -80,9 +80,9 @@
         "id": "nr_node_agent",
         "service_ids": ["app1"],
         "provider": "newrelic",
-        "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
-        "version": "6.11.0"
+        "version": "6.13.0"
       }
     ]
   }
