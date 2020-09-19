@@ -35,7 +35,7 @@ module UserConfig
       end
 
       def get_secret_key_path()
-        return nil
+        return query("secretKeyPath")
       end
       
       def to_h()
@@ -45,6 +45,7 @@ module UserConfig
         add_if_exist(items, "service_account_file", get_service_account_file())
         add_if_exist(items, "project", get_project())
         add_if_exist(items, "scopes", get_scopes())
+        add_if_exist(items, "secret_key_path", get_secret_key_path())
         add_if_exist(items, "region", get_region())
         return items
       end

@@ -24,6 +24,16 @@ The structure of the user config is a list of credentials, for example:
       "sshPublicKeyPath": "/path/to/my/id_rsa.pub"
     },
 
+    "gcp": {
+      "auth_kind": "serviceaccount",
+      "service_account_email": "<sa_name>@<project_id>.iam.gserviceaccount.com",
+      "service_account_file": "<path/to/service/account.json>",
+      "project": "<project_id",
+      "scopes": ["https://www.googleapis.com/auth/compute"],
+      "secretKeyPath": "/path/to/my/secretkey.pem",
+      "region": "us-west1"
+    },
+
     "newrelic": {
       "licenseKey": "my_new_relic_license_key",
       "insightsInsertApiKey": "my_new_relic_insights_api_key",
@@ -45,5 +55,6 @@ Proceed with any of the section below depending on your needs. Typically the tut
 
 * [Azure](credentials/azure/README.md)
 * [Aws](credentials/aws/README.md)
+* [Gcp](credentials/gcp/README.md)
 * [Git](credentials/git/README.md)
 * [NewRelic](credentials/newrelic/README.md)

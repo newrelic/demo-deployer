@@ -110,14 +110,6 @@
           service_account_file: "{{ service_account_file }}"
         register: instance_facts
 
-      - name: Output
-        debug:
-          msg: "instance_facts:{{instance_facts}}"
-
-      - name: Stop here
-        fail:
-          msg: "Stop here for now"
-
     - block:
       - name: Create artifact file
         file:
@@ -134,14 +126,14 @@
           artifact_json: "{{ temp_json | default([]) | combine({
             'resource_id': resource_id,
             'params': {
-                'ip': item
+                'ip': address.address
             }
             })
           }}"
-        with_items: "{{ address }}"
 
       - name: write var to file
         copy:
           content: "{{ artifact_json | to_nice_json }}"
           dest: "{{ artifact_path }}/artifact.json"
       delegate_to: localhost
+
