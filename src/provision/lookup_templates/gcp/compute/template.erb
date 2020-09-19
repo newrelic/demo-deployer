@@ -1,1 +1,67 @@
 ---
+
+- name: Create GCP Compute
+  hosts: localhost
+  connection: local
+
+  vars:
+    auth_kind: <%= gcp[:auth_kind] %>
+    project: <%= gcp[:project] %>
+    service_account_file: <%= gcp[:service_account_file] %>
+    region: <%= gcp[:region] %>
+    vnet_name: <%= gcp[:vnet_name] %>
+    resource_group: <%= gcp[:resource_group] %>
+
+    resource_id: <%= compute[:resource_id] %>
+    resource_name: <%= compute[:resource_name] %>
+
+    artifact_path: <%= compute[:artifact_file_path] %>
+
+  tasks:
+# TODO
+#    - include_tasks: vnet.yml
+# For now, network creation inline
+    - block:
+      - name: get info on an instance
+        gcp_compute_instance_info:
+          filters:
+          - name = "{{ resource_name }}"
+          zone: "{{ region }}-a"
+          project: "{{ project }}"
+          auth_kind: "{{ auth_kind }}"
+          auth_kind: serviceaccount
+          service_account_file: "{{ service_account_file }}"
+        register: instance_facts
+      - debug:
+        msg: "instance_facts:{{instance_facts}}"
+
+      - fail:
+        msg: "Stop here for now"
+
+    - block:
+      - name: Create artifact file
+        file:
+          path: /tmp/var.json
+          state: touch
+
+      - name: load var from file
+        include_vars:
+          file: /tmp/var.json
+          name: temp_json
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ temp_json | default([]) | combine({
+            'resource_id': resource_id,
+            'params': {
+                'ip': item
+            }
+            })
+          }}"
+        with_items: "{{ instance_facts }}"
+
+      - name: write var to file
+        copy:
+          content: "{{ artifact_json | to_nice_json }}"
+          dest: "{{ artifact_path }}/artifact.json"
+      delegate_to: localhost

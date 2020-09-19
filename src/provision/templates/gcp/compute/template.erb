@@ -35,11 +35,26 @@
       - name: Create a network
         gcp_compute_network:
           name: "{{ vnet_name }}"
+          auto_create_subnetworks: "true"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
           state: present
         register: network
+
+      - name: create a firewall
+        gcp_compute_firewall:
+          name: "firewall-{{vnet_name}}"
+          allowed:
+          - ip_protocol: tcp
+            ports:
+            - '22'
+          target_tags:
+          - "{{ vnet_name }}"
+          project: "{{ project }}"
+          auth_kind: "{{ auth_kind }}"
+          service_account_file: "{{ service_account_file }}"
+          state: present
 
       - name: create a disk
         gcp_compute_disk:
@@ -83,6 +98,25 @@
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
           state: present
+
+      - name: get info on an instance
+        gcp_compute_instance_info:
+          filters:
+          - name = "{{ resource_name }}"
+          zone: "{{ region }}-a"
+          project: "{{ project }}"
+          auth_kind: "{{ auth_kind }}"
+          auth_kind: serviceaccount
+          service_account_file: "{{ service_account_file }}"
+        register: instance_facts
+
+      - name: Output
+        debug:
+          msg: "instance_facts:{{instance_facts}}"
+
+      - name: Stop here
+        fail:
+          msg: "Stop here for now"
 
     - block:
       - name: Create artifact file
