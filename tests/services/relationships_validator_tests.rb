@@ -10,7 +10,7 @@ describe "Services::RelationshipsValidator" do
   let(:resources) { [] }
   let(:aws_credential) {
     m = mock();
-    m.stubs(:get_api_key);
+    m.stubs(:get_access_key);
     m.stubs(:get_secret_key);
     m.stubs(:get_region);
     m}

@@ -76,7 +76,7 @@ describe "UserAcceptanceTests::ContextProvider" do
       given_template_config_files()
       orchestrator.execute(command_line_arguments)
       user_provider = context.get_user_config_provider()
-      user_provider.get_aws_credential().get_api_key().wont_be_empty
+      user_provider.get_aws_credential().get_access_key().wont_be_empty
     end
 
     it "should get secret key path" do

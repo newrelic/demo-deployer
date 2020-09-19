@@ -9,9 +9,8 @@ require "./src/infrastructure/definitions/aws/aws_resource"
 
 describe "Infrastructure::Provider" do
 
+  let(:context){ Tests::ContextBuilder.new().build() }
   let(:resource_factory) { m = mock(); m.stubs(:create).returns("anything..."); m }
-  let(:user_config_provider) { m = mock(); m }
-  let(:tag_provider) { m = mock(); m }
   let(:empty_json_resource) { [] }
   let(:single_json_resource) { JSON.parse([{"id":"host1", "provider":"aws", "type":"ec2", "size":"t2.micro", "tags":{}}].to_json) }
   let(:double_json_resource) { JSON.parse([
@@ -80,7 +79,7 @@ describe "Infrastructure::Provider" do
     end
 
     def given_provider(json)
-      return Infrastructure::Provider.new(json, user_config_provider, tag_provider, resource_factory)
+      return Infrastructure::Provider.new(context, json, resource_factory)
     end
 
     def given_elb_resource(id, listeners, provider="aws", type="elb", user_name="username")

@@ -1,0 +1,33 @@
+name: TelcoLite - newrelic staging aws
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy_telco_lite:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Write AWS Certificate to File
+      env:
+        AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
+      run: |
+        rm -f uat-ca.pem
+        echo "$AWS_PEM" > uat-ca.pem
+        sudo chmod 400 uat-ca.pem
+
+    - name: Write UAT JSON to file
+      env:
+        USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_DOCKER }}
+      run: |
+        echo "$USER_JSON" > gitstgdkr.json.local
+
+    - name: Build the docker image
+      run: docker build -t deployer .
+
+    - name: Teardown any previous deployment
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json -t
+
+    - name: Run deployer
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json

@@ -20,7 +20,7 @@ module UserConfig
       repository = get_repository()
       type = repository.get(credential_key)
       unless type.nil?
-        return type.new(CredentialFactory.get_credential_query_lambda(config_credential))
+        return type.new(credential_key, CredentialFactory.get_credential_query_lambda(config_credential))
       end
       return nil
     end

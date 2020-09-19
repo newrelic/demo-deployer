@@ -27,6 +27,7 @@ module Provision
             template_context[:ami_name] = get_resource().get_ami_name()
             template_context[:artifact_file_path] = get_output_file_path()
             template_context[:resource_name] = get_resource_name()
+            template_context[:cpu_credit_specification] = get_resource().get_cpu_credit_specification()
             parse_infrastructure_resource(template_context)
             parse_services_provider(template_context)
 
@@ -36,7 +37,7 @@ module Provision
 
           private
           def parse_credential(template_context, credential)
-            template_context[:aws_access_key] = credential.get_api_key()
+            template_context[:aws_access_key] = credential.get_access_key()
             template_context[:aws_secret_key] = credential.get_secret_key()
             template_context[:secret_key_name] = credential.get_secret_key_name()
             template_context[:region] = credential.get_region()

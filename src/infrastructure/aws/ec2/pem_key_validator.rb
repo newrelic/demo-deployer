@@ -31,7 +31,7 @@ module Infrastructure
         private
 
         def get_secret_key_path_exisits_validator()
-          return @secret_key_path_exisits_validator ||= Common::Validators::FieldExistValidator.new("secret_key_path", "secret_key_path is missing for aws credential:")
+          return @secret_key_path_exisits_validator ||= Common::Validators::FieldExistValidator.new("aws_secret_key_path", "aws_secret_key_path is missing for aws credential:")
         end
 
 

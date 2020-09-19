@@ -45,7 +45,7 @@ module Instrumentation
       destination_path = "#{execution_path}/#{deployment_name}"
 
       git_proxy = get_git_proxy()
-      provider = Instrumentation::Provider.new(parsed_instrumentors, destination_path, resources, services, git_proxy)
+      provider = Instrumentation::Provider.new(@context, parsed_instrumentors, destination_path, resources, services, git_proxy)
       @context.set_instrumentation_provider(provider)
       return provider
     end

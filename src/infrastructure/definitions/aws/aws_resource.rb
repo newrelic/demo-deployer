@@ -7,6 +7,7 @@ module Infrastructure
 
         EC2_GROUP_ID = 1
         LAMBDA_GROUP_ID = 1
+        S3_GROUP_ID = 1
         ELB_GROUP_ID = 2
         R53_GROUP_ID = 3
 

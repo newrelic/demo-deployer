@@ -9,7 +9,8 @@ To define an EC2 resource type, the following field are required:
             "id": "host1",
             "provider": "aws",
             "type": "ec2",
-            "size": "t3.micro"
+            "size": "t3.micro",
+            "cpu_credit_specification": "standard"
         }
     ]
 }
@@ -33,3 +34,7 @@ For example, if you've run the deployer with a command `ruby main.rb -c jsmith.l
 
 This field specify which size to use for the EC2 instance. All the possible values are configured in the [`/src/config/app_config.yml`](/src/config/app_config.yml) for the element `awsEc2SupportedSizes`.
 For example `t3.micro` is a possible instance size.
+
+### cpu_credit_specification
+
+This field is **optional**, it specifies if T2 instances should buy more CPU credits when they runs out. The available values are "standard" and "unlimited".

@@ -52,6 +52,10 @@ module Install
         unless (credential.nil?)
           vars = vars.merge(credential.to_h())
         end
+        credential = get_instrumentor_provider_credential(instrumentor)
+        unless (credential.nil?)
+          vars = vars.merge(credential.to_h())
+        end
         vars = vars.merge(params)
         instrumentor_params = instrumentor.get_params().get_all()
         vars = vars.merge(instrumentor_params)

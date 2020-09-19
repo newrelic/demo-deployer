@@ -8,6 +8,8 @@
     },
     "newrelic": {
       "licenseKey": "NR_LICENSE_KEY",
+      "nrPersonalApiKey": "NR_API_KEY",
+      "nrAdminApiKey": "NR_ADMIN_API_KEY",
       "insightsInsertApiKey": "NR_INSIGHTS_INSERT_API_KEY",
       "accountId": "NR_ACCOUNT_ID",
       "accountRootId": "NR_ACCOUNT_ROOT_ID",

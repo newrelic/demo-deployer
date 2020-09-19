@@ -1,19 +1,20 @@
 require "fileutils"
+require_relative 'credential'
 
 module UserConfig
   module Definitions
-    class AwsCredential
+    class AwsCredential < Credential
 
-      def initialize (user_config_query_lambda)
-        @user_config_query_lambda = user_config_query_lambda
+      def initialize (provider, user_config_query_lambda)
+        super(provider, user_config_query_lambda)
       end
 
-      def get_api_key()
-        return @user_config_query_lambda.call("apiKey")
+      def get_access_key()
+        return query("apiKey")
       end
 
       def get_secret_key()
-        return @user_config_query_lambda.call("secretKey")
+        return query("secretKey")
       end
 
       def get_secret_key_name()
@@ -25,21 +26,21 @@ module UserConfig
       end
 
       def get_secret_key_path()
-        return @user_config_query_lambda.call("secretKeyPath")
+        return query("secretKeyPath")
       end
 
       def get_region()
-        return @user_config_query_lambda.call("region")
+        return query("region")
       end
 
       def to_h()
-        return {
-          "api_key": get_api_key(),
-          "secret_key": get_secret_key(),
-          "secret_key_name": get_secret_key_name(),
-          "secret_key_path": get_secret_key_path(),
-          "region": get_region()
-        }
+        items = {}
+        add_if_exist(items, "access_key", get_access_key())
+        add_if_exist(items, "secret_key", get_secret_key())
+        add_if_exist(items, "secret_key_name", get_secret_key_name())
+        add_if_exist(items, "secret_key_path", get_secret_key_path())
+        add_if_exist(items, "region", get_region())
+        return items
       end
 
     end

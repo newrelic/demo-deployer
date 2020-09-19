@@ -19,12 +19,22 @@ RUN python3 -m pip install ansible
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
+RUN python3 -m pip install ansible[azure]
 
 # Others
-RUN apt-get install git rsync -y
+RUN apt-get update
+RUN apt-get install git -y
+RUN apt-get install rsync -y
 
 # Ansible galaxy plugins
 RUN ansible-galaxy install newrelic.newrelic_java_agent
+
+# Install Terraform (used in newrelic instrumentations for alerts)
+RUN apt-get update
+RUN apt-get install software-properties-common curl -y
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bionic main"
+RUN apt-get update && apt-get install terraform -y
 
 RUN mkdir /mnt/deployer
 ADD . /mnt/deployer
