@@ -14,16 +14,17 @@
     region: <%= gcp[:region] %>
     vnet_name: <%= gcp[:vnet_name] %>
     resource_group: <%= gcp[:resource_group] %>
-    ports: <%= gcp[:ports] %>
+    firewall_name: <%= gcp[:firewall_name] %>
     range_ports: <%= gcp[:range_ports] %>
-    
+
     instance_size: <%= compute[:instance_size] %>
     resource_id: <%= compute[:resource_id] %>
-    tags: <%= compute[:tags] %>
     source_image: <%= compute[:source_image] %>
     resource_name: <%= compute[:resource_name] %>
     disk_name: <%= compute[:disk_name] %>
     address_name: <%= compute[:address_name] %>
+    tags: <%= compute[:tags] %>
+    network_tags: <%= gcp[:network_tags] %>
 
     artifact_path: <%= compute[:artifact_file_path] %>
 
@@ -44,13 +45,15 @@
 
       - name: create a firewall
         gcp_compute_firewall:
-          name: "firewall-{{vnet_name}}"
+          name: "{{ firewall_name }}"
           allowed:
           - ip_protocol: tcp
             ports:
-            - '22'
+            - 22
+            - "{{ range_ports }}"
           target_tags:
           - "{{ vnet_name }}"
+          network: "{'selfLink': 'global/networks/{{ vnet_name }}'}"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
@@ -93,6 +96,7 @@
             - name: External NAT
               nat_ip: "{{ address }}"
               type: ONE_TO_ONE_NAT
+          tags: "{{ network_tags }}"
           zone: "{{ region }}-a"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"

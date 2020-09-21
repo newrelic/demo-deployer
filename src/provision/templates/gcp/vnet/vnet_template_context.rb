@@ -1,4 +1,5 @@
 require "./src/provision/templates/template_context.rb"
+require 'digest'
 
 module Provision
   module Templates
@@ -43,8 +44,13 @@ module Provision
 
           def self.parse_resource_group(template_context, context, resource)
             deployment_name = context.get_command_line_provider().get_deployment_name()
+            vnet_name = "#{deployment_name}-vnet"
             template_context[:resource_group] = "#{deployment_name}"
-            template_context[:vnet_name] = "#{deployment_name}-vnet"
+            template_context[:vnet_name] = vnet_name
+            template_context[:firewall_name] = "#{deployment_name}-firewall"
+            package = {}
+            package[:items] = [vnet_name]
+            template_context[:network_tags] = package.to_json()
           end
 
           def self.parse_services_provider(gcp_template_context, context, resource)
