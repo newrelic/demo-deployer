@@ -18,7 +18,7 @@ module Infrastructure
 
       private
       def get_supported_sizes()
-        return ["e2-micro", "e2-small", "e2-medium"]
+        return @app_config_provider.get_gcp_compute_supported_sizes()
       end
 
     end

@@ -1,1 +1,27 @@
 ---
+- block:
+    - name: Create a network
+      gcp_compute_network:
+        name: "{{ vnet_name }}"
+        auto_create_subnetworks: "true"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: present
+      register: network
+
+    - name: create a firewall
+      gcp_compute_firewall:
+        name: "{{ firewall_name }}"
+        allowed:
+        - ip_protocol: tcp
+          ports:
+          - 22
+          - "{{ range_ports }}"
+        target_tags:
+          - "{{ vnet_name }}"
+        network: "{'selfLink': 'global/networks/{{ vnet_name }}'}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: present

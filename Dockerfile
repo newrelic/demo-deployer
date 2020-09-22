@@ -20,6 +20,7 @@ RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
 RUN python3 -m pip install ansible[azure]
+RUN python3 -m pip install requests google-auth
 
 # Others
 RUN apt-get update

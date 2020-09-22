@@ -47,6 +47,10 @@ The list below is the list of all supported resource types. Follow the link for 
 
 * [VM](azure/vm/README.md)
 
+## GCP
+
+* [Compute](gcp/compute/README.md)
+
 ## tags
 
 All resources can have an optional `tags` element, which can contain a list of key/value pair. Those tags are additive to the potential `global_tags` defined at the root of the deploy config, and would eventually replace them in the context of that resource (overriden for that resource).

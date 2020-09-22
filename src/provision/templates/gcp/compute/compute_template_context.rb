@@ -56,16 +56,14 @@ module Provision
           end
 
           def make_tags_compatible_gcp(tags)
-            # GCP has silly requirements for tags, among them, tags must be lowercase (go figure...)
-            # https://cloud.google.com/compute/docs/labeling-resources
+            # GCP has different tags requirement than other cloud providers
+            # Tags key and values must be lowercase, and '.' is not allowed in either key or value.
+            # https://cloud.google.com/compute/docs/labeling-resources#label_format
             results = {}
             tags.each do |key, value|
-              unless (key.include?(".") || value.include?("."))
-                # '.' are NOT supported for labels in GCP
-                compatibleKey = key.downcase()
-                compatibleValue = value.downcase()
-                results[compatibleKey] = compatibleValue
-              end
+              compatibleKey = key.downcase()
+              compatibleValue = value.downcase().gsub(/\./,"")
+              results[compatibleKey] = compatibleValue
             end
             return results
           end
