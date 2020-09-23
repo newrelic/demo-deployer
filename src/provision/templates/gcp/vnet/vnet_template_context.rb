@@ -60,20 +60,17 @@ module Provision
             max_port = -1
             resource_id = resource.get_id()
             services_provider.get_services().each do |service| 
-              resource_is_included = service.get_destinations().any? { |destination| destination == resource_id }
-              if resource_is_included
-                port = service.get_port()
-                if port != 9999
-                  if min_port == -1 && max_port == -1
+              port = service.get_port()
+              if port != 9999
+                if min_port == -1 && max_port == -1
+                  min_port = port
+                  max_port = port
+                else
+                  if port < min_port
                     min_port = port
+                  end
+                  if port > max_port
                     max_port = port
-                  else
-                    if port < min_port
-                      min_port = port
-                    end
-                    if port > max_port
-                      max_port = port
-                    end
                   end
                 end
               end

@@ -31,7 +31,6 @@ module Provision
 
             parse_infrastructure_resource(compute_template_context)
             parse_deployment(compute_template_context)
-            parse_services_provider(compute_template_context)
 
             template_binding.local_variable_set("compute", compute_template_context)
 
@@ -73,17 +72,6 @@ module Provision
             compute_template_context[:resource_name] = resource_name
             compute_template_context[:disk_name] = "#{resource_name}-disk"
             compute_template_context[:address_name] = "#{resource_name}-address"
-          end
-
-          def parse_services_provider(template_context)
-            service_ports = get_services_provider().aggregate_value(get_resource_id()) { |service| service.get_port() }
-            valid_ports = []
-            service_ports.each do |port|
-              if port != 9999
-                valid_ports.push(port)
-              end
-            end
-            template_context[:ports] = valid_ports
           end
 
         end
