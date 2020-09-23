@@ -23,7 +23,7 @@ module Deployment
         else
           ansible_version = possible_ansible_version[0].to_f
           if ansible_version < @ansible_min_version
-              errors << ("Your current version of Ansible is below #{@ansible_min_version}, the currently supported version")
+              errors << ("Your current version of Ansible #{ansible_version} is below #{@ansible_min_version}, the currently supported version")
           end
         end
       else
