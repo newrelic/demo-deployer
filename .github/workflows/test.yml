@@ -142,7 +142,7 @@ jobs:
 
       - name: Install Python Packages
         run: |
-          python3 -m pip install ansible
+          python3 -m pip install ansible==2.9.10
           python -m pip install --upgrade pip setuptools
           python3 -m pip install 'ansible[azure]' packaging
 
@@ -206,7 +206,7 @@ jobs:
 
       - name: Install Python Packages
         run: |
-          python3 -m pip install ansible
+          python3 -m pip install ansible==2.9.10
           python -m pip install --upgrade pip setuptools
           python3 -m pip install ansible boto3 botocore boto
 
