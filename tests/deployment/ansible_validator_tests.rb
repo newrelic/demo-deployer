@@ -17,6 +17,14 @@ describe "Deployment::AnsibleValidator" do
     errors.must_be_nil
   end
 
+  it "should pass validation without trim" do
+    process_output = Common::Tasks::ProcessOutput.new(0, '2.10', '', '')
+    Common::Tasks::ProcessTask.any_instance.stubs(:wait_to_completion).returns(process_output)
+
+    errors = validator.execute(execution_path)
+    errors.must_be_nil
+  end
+
   it "should not pass validation with non zero exit code" do
     process_output = Common::Tasks::ProcessOutput.new(1, '2.8', '', '')
     Common::Tasks::ProcessTask.any_instance.stubs(:wait_to_completion).returns(process_output)

@@ -26,7 +26,7 @@ To run the deployer locally, you'll want to install the dependencies below. Note
 * Python3
 * Ansible v2.8 or above. See the ansible installation steps below.
 * Cloud provider account and credentials, more info can be found at [UserConfig](../user_config/README.md)
-* For Azure, ```pip install ansible[azure] --user```
+* For Azure, ```pip install 'ansible[azure]' packaging msrestazure```
 * For NewRelic, ```ansible-galaxy install newrelic.newrelic_java_agent```
 
 ## Ansible installation
