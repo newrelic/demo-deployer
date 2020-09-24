@@ -144,7 +144,7 @@ jobs:
         run: |
           python3 -m pip install ansible==2.9.10
           python -m pip install --upgrade pip setuptools
-          python3 -m pip install 'ansible[azure]' packaging
+          python3 -m pip install 'ansible[azure]' packaging msrestazure
 
       - name: Install Ansible Galaxy Plugins
         run: ansible-galaxy install newrelic.newrelic_java_agent

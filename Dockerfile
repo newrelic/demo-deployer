@@ -15,11 +15,12 @@ RUN apt-get install -y python3-pip python3-dev \
 RUN python3 -m pip install --upgrade setuptools
 
 # Install Ansible
-RUN python3 -m pip install ansible==2.9.10
+RUN python3 -m pip install ansible
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
 RUN python3 -m pip install ansible[azure]
+RUN python3 -m pip install msrestazure
 RUN python3 -m pip install requests google-auth
 
 # Others
