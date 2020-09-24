@@ -37,6 +37,8 @@ module Install
           port = port.to_s()
         end
         @field_merger_builder.create_definition(["service", id, "port"], port)
+        display_name = service.get_display_name()
+        @field_merger_builder.create_definition(["service", id, "display_name"], display_name)
       end
 
       return self
