@@ -5,7 +5,7 @@ module Deployment
     def initialize(command = "ansible --version",
                    ansible_min_version = 2.8)
       @command = command
-      @ansible_min_version = ansible_min_version
+      @ansible_min_version = Gem::Version.new(ansible_min_version)
     end
 
     def execute(execution_path)
@@ -16,14 +16,14 @@ module Deployment
 
       if processs_output.succeeded?
         command_output = processs_output.get_stdout()
-        possible_ansible_version = command_output.match(/(\d\.\d)/)
+        possible_ansible_version = command_output.match(/(\d+\.\d+)/)
 
         if possible_ansible_version.nil?
           errors << "Command '#{@command}'' didn't find an Ansible version with output: #{command_output.to_s}"
         else
-          ansible_version = possible_ansible_version[0].to_f
+          ansible_version = Gem::Version.new(possible_ansible_version[0])
           if ansible_version < @ansible_min_version
-              errors << ("Your current version of Ansible is below #{@ansible_min_version}, the currently supported version")
+              errors << ("Your current version of Ansible #{ansible_version} is below the currently supported minimum version of #{@ansible_min_version}")
           end
         end
       else
