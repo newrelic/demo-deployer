@@ -15,7 +15,8 @@ describe "Instrumentation::Definitions::ResourceInstrumentor" do
   let(:resource) { m = mock(); m.stubs(:get_id).returns(resource_id); m }
 
   it "should create resource instrumentor" do
-    instrumentor = Instrumentation::Definitions::ResourceInstrumentor.new(id, resource, provider, version, deploy_script_path, source_path)
+    instrumentor = Instrumentation::Definitions::ResourceInstrumentor.new(id, provider, version, deploy_script_path, source_path)
+    instrumentor.set_item(resource)
     instrumentor.to_s().must_include("ResourceInstrumentor")
     instrumentor.get_id().must_equal(id)
     instrumentor.get_item_id().must_equal(resource_id)

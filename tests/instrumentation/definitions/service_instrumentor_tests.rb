@@ -15,7 +15,8 @@ describe "Instrumentation::Definitions::ServiceInstrumentor" do
   let(:service) { m = mock(); m.stubs(:get_id).returns(service_id); m }
 
   it "should create service instrumentor" do
-    instrumentor = Instrumentation::Definitions::ServiceInstrumentor.new(id, service, provider, version, deploy_script_path, source_path)
+    instrumentor = Instrumentation::Definitions::ServiceInstrumentor.new(id, provider, version, deploy_script_path, source_path)
+    instrumentor.set_item(service)
     instrumentor.to_s().must_include("ServiceInstrumentor")
     instrumentor.get_id().must_equal(id)
     instrumentor.get_item_id().must_equal(service_id)

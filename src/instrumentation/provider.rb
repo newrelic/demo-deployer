@@ -1,5 +1,6 @@
 require "./src/instrumentation/definitions/resource_instrumentor"
 require "./src/instrumentation/definitions/service_instrumentor"
+require "./src/instrumentation/definitions/global_instrumentor"
 require "./src/common/text/global_field_merger_builder"
 
 module Instrumentation
@@ -30,6 +31,10 @@ module Instrumentation
       return @all_service_instrumentors ||= create_instrumentors("services", "service_ids", @services, Instrumentation::Definitions::ServiceInstrumentor)
     end
 
+    def get_all_global_instrumentors()
+      return []
+    end
+
     private
     def create_all_instrumentors()
       instrumentors = []
@@ -47,38 +52,42 @@ module Instrumentation
           keys.each do |key|
             found = (items || []).find {|item| item.get_id() == key}
             unless found.nil?
-              id = merged_instrumentor["id"]
-              provider = merged_instrumentor["provider"]
-              version = merged_instrumentor["version"]
-              deploy_script_path = merged_instrumentor["deploy_script_path"]
-              local_source_path = merged_instrumentor["local_source_path"]
-              source_repository = merged_instrumentor["source_repository"]
-              source_path = get_source_path(local_source_path, source_repository, id)
-              instrumentor = type.new(
-                id,
-                found,
-                provider,
-                version,
-                deploy_script_path,
-                source_path)
-                instrumentors.push(instrumentor)
-              params = merged_instrumentor["params"]
-              params = get_field_merger().merge_values(params)
-              (params || {}).each do |k, v|
-                instrumentor.get_params().add(k, v)
-              end
-              provider_credential = merged_instrumentor['provider_credential']
-              unless provider_credential.nil?
-                instrumentor.set_provider_credential(provider_credential)
-              end
+              instrumentor = create(merged_instrumentor, type)
+              instrumentor.set_item(found)
+              instrumentors.push(instrumentor)
             else
               raise "Instrumentation error, could not find item with id: #{key}"
             end
           end
         end
       end
-
       return instrumentors.compact()
+    end
+
+    def create(merged_instrumentor, type)
+      id = merged_instrumentor["id"]
+      provider = merged_instrumentor["provider"]
+      version = merged_instrumentor["version"]
+      deploy_script_path = merged_instrumentor["deploy_script_path"]
+      local_source_path = merged_instrumentor["local_source_path"]
+      source_repository = merged_instrumentor["source_repository"]
+      source_path = get_source_path(local_source_path, source_repository, id)
+      instrumentor = type.new(
+        id,
+        provider,
+        version,
+        deploy_script_path,
+        source_path)
+      params = merged_instrumentor["params"]
+      params = get_field_merger().merge_values(params)
+      (params || {}).each do |k, v|
+        instrumentor.get_params().add(k, v)
+      end
+      provider_credential = merged_instrumentor['provider_credential']
+      unless provider_credential.nil?
+        instrumentor.set_provider_credential(provider_credential)
+      end
+      return instrumentor
     end
 
     def get_repository_local_source_paths(source_repository, id)

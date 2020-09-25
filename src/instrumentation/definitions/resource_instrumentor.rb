@@ -4,13 +4,17 @@ module Instrumentation
   module Definitions
     class ResourceInstrumentor < Instrumentation::Definitions::Instrumentor
 
-      def initialize (id, resource, provider, version, deploy_script_path, source_path)
+      def initialize (id, provider, version, deploy_script_path, source_path)
         super(id, provider, version, deploy_script_path, source_path)
-        @resource = resource
+        @resource = nil
       end
 
       def get_resource()
         return @resource
+      end
+
+      def set_item(resource)
+        @resource = resource
       end
 
       def get_identity()
