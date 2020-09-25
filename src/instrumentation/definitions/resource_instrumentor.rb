@@ -5,7 +5,7 @@ module Instrumentation
     class ResourceInstrumentor < Instrumentation::Definitions::Instrumentor
 
       def initialize (id, resource, provider, version, deploy_script_path, source_path)
-        super(id, resource.get_id(), provider, version, deploy_script_path, source_path)
+        super(id, provider, version, deploy_script_path, source_path)
         @resource = resource
       end
 
@@ -15,6 +15,10 @@ module Instrumentation
 
       def get_identity()
         return "ri-#{get_id()}"
+      end
+
+      def get_item_id()
+        return @resource.get_id()
       end
 
       def ==(other)
