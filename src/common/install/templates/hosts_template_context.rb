@@ -23,7 +23,7 @@ module Common
         end
 
         def host_exist?()
-          if @provisioned_resource.get_ip() != nil
+          if @provisioned_resource != nil && @provisioned_resource.get_ip() != nil
             return true
           else
             return false
@@ -34,17 +34,19 @@ module Common
           destination = {}
 
           destination[:action_name] = @action_name
+          destination_ip = "localhost"
+          destination_remote_user = ""
 
-          destination_remote_user = @provisioned_resource.get_user_name()
+          unless @provisioned_resource.nil
+            destination_remote_user = @provisioned_resource.get_user_name()
+            destination_ip = @provisioned_resource.get_ip()
+          end
+
           destination[:remote_user] = destination_remote_user
-
-          destination_ip = @provisioned_resource.get_ip()
           destination[:ip] = destination_ip
-
           if ['localhost','127.0.0.1', '0.0.0.0'].include?(destination_ip)
             destination[:force_local_connection] = 'ansible_connection=local'
           end
-
           template_binding = Kernel.binding()
           template_binding.local_variable_set('destination', destination)
 

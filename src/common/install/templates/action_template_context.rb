@@ -29,7 +29,10 @@ module Common
           template_binding.local_variable_set('output_path', get_execution_path())
           template_binding.local_variable_set('action_name', @action_name)
           template_binding.local_variable_set('action_vars', @action_vars)
-          params = @provisioned_resource.get_params().get_all()
+          params = {}
+          unless @provisioned_resource.nil?
+            @provisioned_resource.get_params().get_all()
+          end
           template_binding.local_variable_set('params', params)
           return template_binding
         end
