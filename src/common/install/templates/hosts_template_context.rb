@@ -19,7 +19,10 @@ module Common
         end
 
         def get_id()
-          return @provisioned_resource.get_id()
+          unless @provisioned_resource.nil?
+            return @provisioned_resource.get_id()
+          end
+          return ""
         end
 
         def host_exist?()
