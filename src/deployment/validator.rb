@@ -10,6 +10,7 @@ require "./src/common/validators/directory_exist_list_validator"
 require "./src/common/validators/validator"
 require "./src/common/validators/alpha_numeric"
 require "./src/common/validators/json_file_exist"
+require_relative "instrumentor_item_exist_validator"
 
 require_relative "provider_validator_factory"
 
