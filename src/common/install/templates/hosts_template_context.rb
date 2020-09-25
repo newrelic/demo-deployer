@@ -37,7 +37,7 @@ module Common
           destination_ip = "localhost"
           destination_remote_user = ""
 
-          unless @provisioned_resource.nil
+          unless @provisioned_resource.nil?
             destination_remote_user = @provisioned_resource.get_user_name()
             destination_ip = @provisioned_resource.get_ip()
           end
