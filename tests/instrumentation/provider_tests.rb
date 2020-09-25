@@ -130,6 +130,40 @@ describe "Instrumentation::Provider" do
     provider.get_all_service_instrumentors().length().must_equal(4)
   end
 
+  it "should create global instrumentor" do
+     provider = given_provider(JSON.parse(
+        {
+          "global": [
+            {
+              "id": "global-agent"
+            }
+          ]
+        }
+      .to_json()))
+    provider.get_all_global_instrumentors().length().must_equal(1)
+  end
+
+  it "should create multiple global instrumentors" do 
+    provider = given_provider(JSON.parse(
+        {
+          "global": [
+            {
+              "id": "global-agent-1"
+            },
+            {
+              "id": "global-agent-2"
+            }
+          ]
+        }
+      .to_json()))
+    provider.get_all_global_instrumentors().length().must_equal(2)
+  end
+
+  it "should not create any intrumentors" do
+    provider = given_provider(JSON.parse({}.to_json()))
+    provider.get_all().length().must_equal(0)
+  end
+
   def given_provider(json)
     return Instrumentation::Provider.new(context, json, "/tmp", resources, services, git_proxy)
   end

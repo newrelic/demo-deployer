@@ -14,6 +14,7 @@ module Instrumentation
       @service_instrumentors = nil
       @all_resource_instrumentors = nil
       @all_service_instrumentors = nil
+      @all_global_instrumentors = nil
       @resources = resources
       @services = services
       @git_proxy = git_proxy
@@ -32,7 +33,7 @@ module Instrumentation
     end
 
     def get_all_global_instrumentors()
-      return []
+      return @all_global_instrumentors ||= create_global_instrumentors("global", Instrumentation::Definitions::GlobalInstrumentor)
     end
 
     private
@@ -40,6 +41,7 @@ module Instrumentation
       instrumentors = []
       instrumentors.concat(get_all_resource_instrumentors())
       instrumentors.concat(get_all_service_instrumentors())
+      instrumentors.concat(get_all_global_instrumentors())
       return instrumentors
     end
 
@@ -59,6 +61,18 @@ module Instrumentation
               raise "Instrumentation error, could not find item with id: #{key}"
             end
           end
+        end
+      end
+      return instrumentors.compact()
+    end
+
+    def create_global_instrumentors(key, type) 
+      instrumentors = []
+      if @parsed_instrumentors.key?(key)
+        @parsed_instrumentors[key].each do |parsed_instrumentor|
+          merged_instrumentor = get_merged_instrumentor(parsed_instrumentor)
+          instrumentor = create(merged_instrumentor, type)
+          instrumentors.push(instrumentor)
         end
       end
       return instrumentors.compact()
