@@ -57,7 +57,11 @@ module Install
     def self.create(context)
       instance = ServiceFieldMergerBuilder.new()
       services = context.get_services_provider().get_all()
-      provisioned_resources = context.get_provision_provider().get_all()
+      provisioned_resources = []
+      provision_provider = context.get_provision_provider()
+      unless provision_provider.nil?
+        provisiprovisioned_resourcesoned_resources = provision_provider.get_all()
+      end
       instance.with_services(services, provisioned_resources)
       instance.with_global(context)
       return instance.build()

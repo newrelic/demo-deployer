@@ -1,7 +1,7 @@
 require "./src/instrumentation/definitions/resource_instrumentor"
 require "./src/instrumentation/definitions/service_instrumentor"
 require "./src/instrumentation/definitions/global_instrumentor"
-require "./src/common/text/global_field_merger_builder"
+require "./src/install/service_field_merger_builder"
 
 module Instrumentation
   class Provider
@@ -12,6 +12,7 @@ module Instrumentation
       @destination_path = destination_path
       @resource_instrumentors = nil
       @service_instrumentors = nil
+      @all_instrumentors = nil
       @all_resource_instrumentors = nil
       @all_service_instrumentors = nil
       @all_global_instrumentors = nil
@@ -20,28 +21,44 @@ module Instrumentation
       @git_proxy = git_proxy
     end
 
-    def get_all()
-      return @all_instrumentors ||= create_all_instrumentors()
+    def get_all(is_cache_enabled = true)
+      create_lambda = lambda { return create_all_instrumentors(is_cache_enabled) }
+      if is_cache_enabled
+        return @all_instrumentors ||= create_lambda.call()
+      end
+      return create_lambda.call()
     end
 
-    def get_all_resource_instrumentors()
-      return @all_resource_instrumentors ||= create_instrumentors("resources", "resource_ids", @resources, Instrumentation::Definitions::ResourceInstrumentor)
+    def get_all_resource_instrumentors(is_cache_enabled = true)
+      create_lambda = lambda { return create_instrumentors("resources", "resource_ids", @resources, Instrumentation::Definitions::ResourceInstrumentor) }
+      if is_cache_enabled
+        return @all_resource_instrumentors ||= create_lambda.call()
+      end
+      return create_lambda.call()
     end
 
-    def get_all_service_instrumentors()
-      return @all_service_instrumentors ||= create_instrumentors("services", "service_ids", @services, Instrumentation::Definitions::ServiceInstrumentor)
+    def get_all_service_instrumentors(is_cache_enabled = true)
+      create_lambda = lambda { return create_instrumentors("services", "service_ids", @services, Instrumentation::Definitions::ServiceInstrumentor) }
+      if is_cache_enabled
+        return @all_service_instrumentors ||= create_lambda.call()
+      end
+      return create_lambda.call()
     end
 
-    def get_all_global_instrumentors()
-      return @all_global_instrumentors ||= create_global_instrumentors("global", Instrumentation::Definitions::GlobalInstrumentor)
+    def get_all_global_instrumentors(is_cache_enabled = true)
+      create_lambda = lambda { return create_global_instrumentors("global", Instrumentation::Definitions::GlobalInstrumentor) }
+      if is_cache_enabled
+        return @all_global_instrumentors ||= create_lambda.call()
+      end
+      return create_lambda.call()
     end
 
     private
-    def create_all_instrumentors()
+    def create_all_instrumentors(is_cache_enabled = true)
       instrumentors = []
-      instrumentors.concat(get_all_resource_instrumentors())
-      instrumentors.concat(get_all_service_instrumentors())
-      instrumentors.concat(get_all_global_instrumentors())
+      instrumentors.concat(get_all_resource_instrumentors(is_cache_enabled))
+      instrumentors.concat(get_all_service_instrumentors(is_cache_enabled))
+      instrumentors.concat(get_all_global_instrumentors(is_cache_enabled))
       return instrumentors
     end
 
@@ -126,7 +143,7 @@ module Instrumentation
     end
 
     def get_field_merger()
-      return @field_merger ||= Common::Text::GlobalFieldMergerBuilder.create(@context)
+      return @field_merger ||= Install::ServiceFieldMergerBuilder.create(@context)
     end
 
   end
