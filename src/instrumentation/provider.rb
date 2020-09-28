@@ -10,55 +10,33 @@ module Instrumentation
       @context = context
       @parsed_instrumentors = parsed_instrumentors
       @destination_path = destination_path
-      @resource_instrumentors = nil
-      @service_instrumentors = nil
-      @all_instrumentors = nil
-      @all_resource_instrumentors = nil
-      @all_service_instrumentors = nil
-      @all_global_instrumentors = nil
       @resources = resources
       @services = services
       @git_proxy = git_proxy
     end
 
-    def get_all(is_cache_enabled = true)
-      create_lambda = lambda { return create_all_instrumentors(is_cache_enabled) }
-      if is_cache_enabled
-        return @all_instrumentors ||= create_lambda.call()
-      end
-      return create_lambda.call()
+    def get_all()
+      return create_all_instrumentors()
     end
 
-    def get_all_resource_instrumentors(is_cache_enabled = true)
-      create_lambda = lambda { return create_instrumentors("resources", "resource_ids", @resources, Instrumentation::Definitions::ResourceInstrumentor) }
-      if is_cache_enabled
-        return @all_resource_instrumentors ||= create_lambda.call()
-      end
-      return create_lambda.call()
+    def get_all_resource_instrumentors()
+      return create_instrumentors("resources", "resource_ids", @resources, Instrumentation::Definitions::ResourceInstrumentor)
     end
 
-    def get_all_service_instrumentors(is_cache_enabled = true)
-      create_lambda = lambda { return create_instrumentors("services", "service_ids", @services, Instrumentation::Definitions::ServiceInstrumentor) }
-      if is_cache_enabled
-        return @all_service_instrumentors ||= create_lambda.call()
-      end
-      return create_lambda.call()
+    def get_all_service_instrumentors()
+      return create_instrumentors("services", "service_ids", @services, Instrumentation::Definitions::ServiceInstrumentor)
     end
 
-    def get_all_global_instrumentors(is_cache_enabled = true)
-      create_lambda = lambda { return create_global_instrumentors("global", Instrumentation::Definitions::GlobalInstrumentor) }
-      if is_cache_enabled
-        return @all_global_instrumentors ||= create_lambda.call()
-      end
-      return create_lambda.call()
+    def get_all_global_instrumentors()
+      return create_global_instrumentors("global", Instrumentation::Definitions::GlobalInstrumentor)
     end
 
     private
-    def create_all_instrumentors(is_cache_enabled = true)
+    def create_all_instrumentors()
       instrumentors = []
-      instrumentors.concat(get_all_resource_instrumentors(is_cache_enabled))
-      instrumentors.concat(get_all_service_instrumentors(is_cache_enabled))
-      instrumentors.concat(get_all_global_instrumentors(is_cache_enabled))
+      instrumentors.concat(get_all_resource_instrumentors())
+      instrumentors.concat(get_all_service_instrumentors())
+      instrumentors.concat(get_all_global_instrumentors())
       return instrumentors
     end
 

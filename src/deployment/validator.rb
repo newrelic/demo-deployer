@@ -58,7 +58,6 @@ module Deployment
     end
 
     def execute(context)
-      no_cache = false
       command_line_provider = context.get_command_line_provider()
       infrastructure_provider = context.get_infrastructure_provider()
       instrumentation_provider = context.get_instrumentation_provider()
@@ -71,9 +70,9 @@ module Deployment
       resources = infrastructure_provider.get_all()
       resource_ids = infrastructure_provider.get_all_resource_ids()
       provider_names = infrastructure_provider.get_provider_names()
-      instrumentors = instrumentation_provider.get_all(no_cache)
-      resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors(no_cache)
-      service_instrumentors = instrumentation_provider.get_all_service_instrumentors(no_cache)
+      instrumentors = instrumentation_provider.get_all()
+      resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors()
+      service_instrumentors = instrumentation_provider.get_all_service_instrumentors()
       services = services_provider.get_services()
 
       validators = [
