@@ -6,7 +6,7 @@ module Summary
     def execute(provisioned_resources, installed_services, resource_instrumentors, service_instrumentors, global_instrumentors)
       summary = ""
 
-      summary += get_global_summary(global_instrumentors) unless global_instrumentors.nil?
+      summary += get_global_summary(global_instrumentors) unless global_instrumentors.nil? || global_instrumentors.empty?
       summary += "\n"
 
       summary += get_resource_summary(installed_services, provisioned_resources, resource_instrumentors) unless provisioned_resources.nil?
@@ -23,9 +23,9 @@ module Summary
     def get_global_summary(global_instrumentors)
       output = "Global Instrumentation:\n\n"
       global_instrumentors.each do |global_instrumentor|
-        idenity = global_instrumentor.get_id()
+        identity = global_instrumentor.get_id()
         provider = global_instrumentor.get_provider()
-        output += "  #{idenity} (#{provider})\n"
+        output += "  #{identity} (#{provider})\n"
         output += "\n"
       end
       return output

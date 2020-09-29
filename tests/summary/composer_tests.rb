@@ -56,19 +56,36 @@ describe "Summary::Composure" do
 
 
   let(:global_instrumentors) { [] }
-  let(:global1) { Instrumentation::Definitions::GlobalInstrumentor.new('id', 'provider', 'version', 'deploy_script_path', 'source_path') }
+  let(:global1) { Instrumentation::Definitions::GlobalInstrumentor.new('id', instrumentation_provider, 'version', 'deploy_script_path', 'source_path') }
+  let(:global2) { Instrumentation::Definitions::GlobalInstrumentor.new('id2', instrumentation_provider, 'version2', 'deploy_script_path', 'source_path') }
 
   it "should verify composer execute returns global" do
     given_service(service1)
     given_provisioned_resource(host_resource)
-    given_global_instrumentor()
+    given_global_instrumentor(global1)
     summary = composer.execute(provisioned_resources, services, resource_instrumentors, service_instrumentors, global_instrumentors)
 
-p summary
-
-    summary.must_include("id (provider)")
+    summary.must_include("id (#{instrumentation_provider})")
   end
 
+  it "should verify composer execute does not return global if it is not provided" do
+    given_service(service1)
+    given_provisioned_resource(host_resource)
+    summary = composer.execute(provisioned_resources, services, resource_instrumentors, service_instrumentors, global_instrumentors)
+
+    summary.wont_include("Global Instrumentation:")
+  end
+
+  it "should verify composer execute returns more than one global" do
+    given_service(service1)
+    given_provisioned_resource(host_resource)
+    given_global_instrumentor(global1)
+    given_global_instrumentor(global2)
+    summary = composer.execute(provisioned_resources, services, resource_instrumentors, service_instrumentors, global_instrumentors)
+
+    summary.must_include("id (#{instrumentation_provider})")
+    summary.must_include("id2 (#{instrumentation_provider})")
+  end
 
   let(:composer) { Summary::Composer.new() }
 
@@ -142,8 +159,8 @@ p summary
     service_instrumentors.push(instrumented_service)
   end
 
-  def given_global_instrumentor()
-    global_instrumentors.push(global1)
+  def given_global_instrumentor(global_instrumentation)
+    global_instrumentors.push(global_instrumentation)
   end
 
 end
