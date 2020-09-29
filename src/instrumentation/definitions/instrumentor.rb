@@ -4,9 +4,8 @@ module Instrumentation
   module Definitions
     class Instrumentor
 
-      def initialize (id, item_id, provider, version, deploy_script_path, source_path)
+      def initialize (id, provider, version, deploy_script_path, source_path)
         @id = id
-        @item_id = item_id
         @provider = provider
         @version = version
         @deploy_script_path = deploy_script_path
@@ -17,10 +16,6 @@ module Instrumentation
 
       def get_id()
         return @id
-      end
-
-      def get_item_id()
-        return @item_id
       end
 
       def get_provider()

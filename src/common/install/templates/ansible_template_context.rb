@@ -3,11 +3,11 @@ module Common
     module Templates
       class AnsibleTemplateContext
 
-        def initialize(erb_input_path, yaml_output_path, roles_path, credential)
+        def initialize(erb_input_path, yaml_output_path, roles_path, key_path_lambda)
           @erb_input_path = erb_input_path
           @yaml_output_path = yaml_output_path
           @roles_path = roles_path
-          @credential = credential
+          @key_path_lambda = key_path_lambda
         end
 
         def get_template_input_file_path()
@@ -21,7 +21,7 @@ module Common
         def get_template_binding()
           key = {}
 
-          key_path = @credential.get_secret_key_path()
+          key_path = @key_path_lambda.call()
           unless key_path.nil?
             key[:secret_file_path] = File.absolute_path(key_path)
           end

@@ -16,7 +16,7 @@ module Tests
         return @provider ||= createInstance(context)
       end
 
-      def service(id, port, local_source_path, deploy_script_path, reference_ids = nil)
+      def service(id, port, local_source_path, deploy_script_path, reference_ids = nil, display_name = nil)
         service = create_new_service(id)
         service["port"] = port
         service["local_source_path"] = local_source_path
@@ -26,6 +26,9 @@ module Tests
           (reference_ids || []).compact().each do |reference_id|
             destinations.push(reference_id)
           end
+        end
+        unless display_name.nil?
+          service["display_name"] = display_name
         end
         return @parent_builder
       end

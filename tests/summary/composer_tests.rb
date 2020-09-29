@@ -42,8 +42,16 @@ describe "Summary::Composure" do
   let(:resource_instrumentors) { [] }
   let(:service_instrumentors) { [] }
   let(:instrumentation_provider) { "newrelictesting" }
-  let(:instrumented_resource) { Instrumentation::Definitions::ResourceInstrumentor.new("resource_instrumentor_id", host_resource_instance, instrumentation_provider, "1.86", "/path/to/service/source", "/deploy") }
-  let(:instrumented_service) { Instrumentation::Definitions::ServiceInstrumentor.new("service_instrumentor_id", service1, instrumentation_provider, "3.4", "/path/to/service/source", "/deploy") }
+  let(:instrumented_resource) { 
+    instrumentor = Instrumentation::Definitions::ResourceInstrumentor.new("resource_instrumentor_id", instrumentation_provider, "1.86", "/path/to/service/source", "/deploy");
+    instrumentor.set_item(host_resource_instance);
+    instrumentor
+  }
+  let(:instrumented_service) {
+    instrumentor = Instrumentation::Definitions::ServiceInstrumentor.new("service_instrumentor_id", instrumentation_provider, "3.4", "/path/to/service/source", "/deploy");
+    instrumentor.set_item(service1);
+    instrumentor
+  }
 
   let(:composer) { Summary::Composer.new() }
 

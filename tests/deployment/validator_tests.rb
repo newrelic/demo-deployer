@@ -30,6 +30,8 @@ describe "Deployment::Validator" do
   let(:service_resource_same_type_validator) { m = mock(); m.stubs(:execute); m }
   let(:provider_validator_factory) { m = mock(); m.stubs(:create_validators).returns([]); m }
   let(:deploy_config_validator) { m = mock(); m.stubs(:execute); m }
+  let(:service_instrumentor_item_validator) { m = mock(); m.stubs(:execute); m }
+  let(:resource_instrumentor_item_validator) { m = mock(); m.stubs(:execute); m }  
   let(:validator) { Deployment::Validator.new(
     service_host_exist_validator,
     username_validator,
@@ -46,7 +48,9 @@ describe "Deployment::Validator" do
     instrumentor_deploy_script_path_exist_validator,
     service_resource_same_type_validator,
     provider_validator_factory,
-    deploy_config_validator)}
+    deploy_config_validator,
+    service_instrumentor_item_validator,
+    resource_instrumentor_item_validator)}
 
   let(:context){ Tests::ContextBuilder.new()
     .user_config().with_aws()
@@ -125,6 +129,16 @@ describe "Deployment::Validator" do
 
     it "should execute deploy_config_validator" do
       deploy_config_validator.expects(:execute)
+      validator.execute(context)
+    end
+
+    it "should execute service_instrumentor_item_validator" do
+      service_instrumentor_item_validator.expects(:execute)
+      validator.execute(context)
+    end
+
+    it "should execute resource_instrumentor_item_validator" do
+      resource_instrumentor_item_validator.expects(:execute)
       validator.execute(context)
     end
 

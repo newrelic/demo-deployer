@@ -1,6 +1,7 @@
 require "./src/install/install_definitions/on_host_instrumentation_builder"
 require "./src/install/install_definitions/service_builder"
 require "./src/install/install_definitions/service_instrumentation_builder"
+require "./src/install/install_definitions/global_instrumentation_builder"
 
 module Install
   class InstallDefinitionsBuilder
@@ -31,6 +32,13 @@ module Install
 
       def with_service_instrumentations()
         builder = Install::InstallDefinitions::ServiceInstrumentationBuilder.new(@context, @provisioned_resources)
+        definitions = builder.build()
+        @install_definitions.push(definitions)
+        return self
+      end
+
+      def with_global_instrumentations()
+        builder = Install::InstallDefinitions::GlobalInstrumentationBuilder.new(@context, @provisioned_resources)
         definitions = builder.build()
         @install_definitions.push(definitions)
         return self
