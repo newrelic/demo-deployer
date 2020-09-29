@@ -30,7 +30,7 @@ The maximum length for the value is 20 characters. This value is configured in t
 
 This field is optional and may be used when the resource is installed to display a user friendly name for that resource. In the absence of this field, the value for the resource_id will be used instead.
 
-## clout provider specifics
+## cloud provider specifics
 
 Depending of which cloud provider is used, different resource types are available, and more element may be required for those specific types.
 The list below is the list of all supported resource types. Follow the link for the resource types you're interested in deploying.
