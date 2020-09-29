@@ -1,7 +1,7 @@
 ---
 - block:
     - name: Create a network
-      gcp_compute_network:
+      google.cloud.gcp_compute_network:
         name: "{{ vnet_name }}"
         auto_create_subnetworks: "true"
         project: "{{ project }}"
@@ -11,7 +11,7 @@
       register: network
 
     - name: create a firewall
-      gcp_compute_firewall:
+      google.cloud.gcp_compute_firewall:
         name: "{{ firewall_name }}"
         allowed:
         - ip_protocol: tcp

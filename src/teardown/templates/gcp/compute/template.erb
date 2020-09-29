@@ -20,7 +20,7 @@
 
   tasks:
     - name: delete instance
-      gcp_compute_instance:
+      google.cloud.gcp_compute_instance:
         name: "{{ resource_name }}"
         zone: "{{ region }}-a"
         project: "{{ project }}"
@@ -29,7 +29,7 @@
         state: absent
 
     - name: delete address
-      gcp_compute_address:
+      google.cloud.gcp_compute_address:
         name: "{{ address_name }}"
         region: "{{ region }}"
         project: "{{ project }}"
@@ -38,7 +38,7 @@
         state: absent
 
     - name: delete the firewall
-      gcp_compute_firewall:
+      google.cloud.gcp_compute_firewall:
         name: "{{ firewall_name }}"
         project: "{{ project }}"
         auth_kind: "{{ auth_kind }}"
@@ -47,7 +47,7 @@
       ignore_errors: yes
 
     - name: delete the network
-      gcp_compute_network:
+      google.cloud.gcp_compute_network:
         name: "{{ vnet_name }}"
         project: "{{ project }}"
         auth_kind: "{{ auth_kind }}"

@@ -19,7 +19,7 @@
     - block:
 
       - name: get info on an instance
-        gcp_compute_instance_info:
+        google.cloud.gcp_compute_instance_info:
           filters:
           - name = "{{ resource_name }}"
           zone: "{{ region }}-a"

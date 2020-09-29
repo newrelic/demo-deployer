@@ -30,7 +30,7 @@
 
     - block:
       - name: create a disk
-        gcp_compute_disk:
+        google.cloud.gcp_compute_disk:
           name: "{{ disk_name }}"
           size_gb: 50
           source_image: "{{ source_image }}"
@@ -42,7 +42,7 @@
         register: disk
 
       - name: create an address
-        gcp_compute_address:
+        google.cloud.gcp_compute_address:
           name: "{{ address_name }}"
           region: "{{ region }}"
           project: "{{ project }}"
@@ -52,7 +52,7 @@
         register: address
 
       - name: create a instance
-        gcp_compute_instance:
+        google.cloud.gcp_compute_instance:
           name: "{{ resource_name }}"
           machine_type: "{{ instance_size }}"
           disks:
