@@ -8,7 +8,7 @@ module Summary
 
     def initialize(context)
       @context = context
-      @summary_composer = Summary::Composer.new()
+      @summary_composer = Summary::Composer.new(context)
       @summary_file_path = nil
     end
 
@@ -22,10 +22,7 @@ module Summary
     private
 
     def get_results()
-      install_service_provider= @context.get_install_provider()
-      provision_provider = @context.get_provision_provider()
-      instrumentation_provider = @context.get_instrumentation_provider()
-      composer_result = @summary_composer.execute(provision_provider.get_all(), install_service_provider.get_all(), instrumentation_provider.get_all_resource_instrumentors(), instrumentation_provider.get_all_service_instrumentors())
+      composer_result = @summary_composer.execute()
       summary = "Deployment successful!\n\n"
       summary += "#{composer_result}"
       return summary
