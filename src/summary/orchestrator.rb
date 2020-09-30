@@ -22,13 +22,13 @@ module Summary
     private
 
     def get_results()
-      instrumentation_provider = @context.get_instrumentation_provider()
+      provisioned_resources = @context.get_provision_provider().get_all()
+      installed_services = @context.get_install_provider().get_all()
 
-      provisioned_resources = @context.get_install_provider().get_all()
-      installed_services = @context.get_provision_provider().get_all()
+      instrumentation_provider = @context.get_instrumentation_provider()
       resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors()
       service_instrumentors = instrumentation_provider.get_all_service_instrumentors()
-      global_intrumentors = instrumentation_provider.get_all_global_instrumentors() 
+      global_intrumentors = instrumentation_provider.get_all_global_instrumentors()
 
       composer_result = @summary_composer.execute(provisioned_resources, installed_services, resource_instrumentors, service_instrumentors, global_intrumentors)
 
