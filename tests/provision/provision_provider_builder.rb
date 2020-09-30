@@ -20,8 +20,6 @@ module Tests
         output_param["id"] = id
         output_param["ip"] = ip
         @output_params.push(output_param)
-
-        return @parent_builder
       end
 
       def service_endpoint(id, url)
