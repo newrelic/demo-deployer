@@ -35,11 +35,6 @@ module Summary
       summary = "Deployment successful!\n\n"
       summary += "#{composer_result}"
       return summary
-
-      composer_result = @summary_composer.execute()
-      summary = "Deployment successful!\n\n"
-      summary += "#{composer_result}"
-      return summary
     end
 
     def write_console_message(summary)
