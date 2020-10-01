@@ -41,6 +41,28 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[service:app1:url]").must_equal("http://myelb.somewhere.com/api")
   end
 
+  it "should build service field merger with service and display_name" do
+    given_ec2_resource("host1")
+    given_provisioned_service_url("host1", "http://myelb.somewhere.com/api")
+    given_service("app1", ["host1"], 5001, "Service 1")
+    merger = given_builder()
+      .with_services(services(), provisioned_resources())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[service:app1:display_name]").must_equal("Service 1")
+  end
+
+  it "should build service field merger with service and defailt display_name" do
+    given_ec2_resource("host1")
+    given_provisioned_service_url("host1", "http://myelb.somewhere.com/api")
+    given_service("app1", ["host1"], 5001)
+    merger = given_builder()
+      .with_services(services(), provisioned_resources())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[service:app1:display_name]").must_equal("app1")
+  end
+
   it "should prefix with http when unspecified for provisioned resource url" do
     given_ec2_resource("host1")
     given_provisioned_service_url("host1", "myelb.somewhere.com/api")
@@ -53,10 +75,10 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[service:app1:url]").must_equal("http://myelb.somewhere.com/api")
   end
 
-  def given_service(service_id, destinations, port = 5000)
+  def given_service(service_id, destinations, port = 5000, display_name = nil)
     local_source_path = "src/path"
     deploy_script_path = "deploy"
-    context_builder.services().service(service_id, port, local_source_path, deploy_script_path, destinations)
+    context_builder.services().service(service_id, port, local_source_path, deploy_script_path, destinations, display_name)
   end
 
   def given_ec2_resource(id)

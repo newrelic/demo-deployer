@@ -27,6 +27,13 @@ module Tags
       tags = get_merged_tags(tags)
       return tags
     end
+  
+    def get_global_tags() 
+      tags = @global_tags.merge({})
+      tags = tags.merge(get_deployment_tags())
+      tags = get_merged_tags(tags)
+      return tags
+    end
 
     private
     def get_deployment_tags()

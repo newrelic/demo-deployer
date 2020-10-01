@@ -144,6 +144,9 @@ module Install
         return @resource_instrumentors ||= @context.get_instrumentation_provider().get_all_resource_instrumentors()
       end
 
+      def get_global_instrumentors()
+        return @global_instrumentors ||= @context.get_instrumentation_provider().get_all_global_instrumentors()
+      end
     end
   end
 end

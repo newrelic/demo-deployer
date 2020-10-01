@@ -22,10 +22,16 @@ module Summary
     private
 
     def get_results()
-      install_service_provider= @context.get_install_provider()
-      provision_provider = @context.get_provision_provider()
+      provisioned_resources = @context.get_provision_provider().get_all()
+      installed_services = @context.get_install_provider().get_all()
+
       instrumentation_provider = @context.get_instrumentation_provider()
-      composer_result = @summary_composer.execute(provision_provider.get_all(), install_service_provider.get_all(), instrumentation_provider.get_all_resource_instrumentors(), instrumentation_provider.get_all_service_instrumentors())
+      resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors()
+      service_instrumentors = instrumentation_provider.get_all_service_instrumentors()
+      global_intrumentors = instrumentation_provider.get_all_global_instrumentors()
+
+      composer_result = @summary_composer.execute(provisioned_resources, installed_services, resource_instrumentors, service_instrumentors, global_intrumentors)
+
       summary = "Deployment successful!\n\n"
       summary += "#{composer_result}"
       return summary

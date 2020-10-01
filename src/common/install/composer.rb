@@ -51,7 +51,7 @@ module Install
           host_template_context = Common::Install::Templates::HostsTemplateContext.new(action_name, erb_input_path, absolute_yaml_output_path, provisioned_resource)
           template_contexts.push(host_template_context)
 
-          ansible_template_context = Common::Install::Templates::AnsibleTemplateContext.new(erb_input_path, absolute_yaml_output_path, roles_path, provisioned_resource.get_credential())
+          ansible_template_context = Common::Install::Templates::AnsibleTemplateContext.new(erb_input_path, absolute_yaml_output_path, roles_path, get_key_path_lambda(provisioned_resource))
           template_contexts.push(ansible_template_context)
 
           action_context = Common::Install::Templates::ActionTemplateContext.new(action_name, erb_input_path, absolute_yaml_output_path, provisioned_resource, action_vars)
@@ -72,6 +72,13 @@ module Install
     end
 
     private
+    def get_key_path_lambda(provisioned_resource)
+      unless provisioned_resource.nil?
+        return lambda { return provisioned_resource.get_credential().get_secret_key_path() }
+      end
+      return lambda { return nil }
+    end
+
     def merge_templates(template_contexts)
       template_contexts.each do |template_context|
         @template_merger.merge_template_save_file(template_context)

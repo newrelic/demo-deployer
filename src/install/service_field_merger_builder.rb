@@ -37,6 +37,8 @@ module Install
           port = port.to_s()
         end
         @field_merger_builder.create_definition(["service", id, "port"], port)
+        display_name = service.get_display_name()
+        @field_merger_builder.create_definition(["service", id, "display_name"], display_name)
       end
 
       return self
@@ -55,7 +57,11 @@ module Install
     def self.create(context)
       instance = ServiceFieldMergerBuilder.new()
       services = context.get_services_provider().get_all()
-      provisioned_resources = context.get_provision_provider().get_all()
+      provisioned_resources = []
+      provision_provider = context.get_provision_provider()
+      unless provision_provider.nil?
+        provisiprovisioned_resourcesoned_resources = provision_provider.get_all()
+      end
       instance.with_services(services, provisioned_resources)
       instance.with_global(context)
       return instance.build()

@@ -4,17 +4,25 @@ module Instrumentation
   module Definitions
     class ServiceInstrumentor < Instrumentation::Definitions::Instrumentor
 
-      def initialize (id, service, provider, version, deploy_script_path, source_path)
-        super(id, service.get_id(), provider, version, deploy_script_path, source_path)
-        @service = service
+      def initialize (id, provider, version, deploy_script_path, source_path)
+        super(id, provider, version, deploy_script_path, source_path)
+        @service = nil
       end
 
       def get_service()
         return @service
       end
 
+      def set_item(service)
+        @service = service
+      end
+
       def get_identity()
         return "si-#{get_id()}"
+      end
+
+      def get_item_id()
+        return @service.get_id()
       end
 
       def ==(other)

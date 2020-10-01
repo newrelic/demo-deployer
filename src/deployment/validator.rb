@@ -10,6 +10,7 @@ require "./src/common/validators/directory_exist_list_validator"
 require "./src/common/validators/validator"
 require "./src/common/validators/alpha_numeric"
 require "./src/common/validators/json_file_exist"
+require_relative "instrumentor_item_exist_validator"
 
 require_relative "provider_validator_factory"
 
@@ -32,7 +33,9 @@ module Deployment
         instrumentor_deploy_script_path_exist_validator = Common::Validators::DirectoryExistListValidator.new(lambda { |instrumentor| return instrumentor.get_deploy_script_full_path() }, "The deploy script path for the following instrumentations do not exist, this should typically be a path ending with \"/deploy/linux/roles\" :"),
         service_resource_same_type_validator = ServiceResourceSameTypeValidator.new("Those services are using resources of different types:"),
         provider_validator_factory = nil,
-        deploy_config_validator = Common::Validators::JsonFileExist.new("No deploy config file defined")
+        deploy_config_validator = Common::Validators::JsonFileExist.new("No deploy config file defined"),
+        service_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those service instrumentors are missing an `item_id` service field:"),
+        resource_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those resource instrumentors are missing an `item_id` resource field:")
       )
       @service_host_exist_validator = service_host_exist_validator
       @username_validator = username_validator
@@ -50,6 +53,8 @@ module Deployment
       @service_resource_same_type_validator = service_resource_same_type_validator
       @provider_validator_factory = provider_validator_factory
       @deploy_config_validator = deploy_config_validator
+      @service_instrumentor_item_validator = service_instrumentor_item_validator
+      @resource_instrumentor_item_validator = resource_instrumentor_item_validator
     end
 
     def execute(context)
@@ -66,6 +71,8 @@ module Deployment
       resource_ids = infrastructure_provider.get_all_resource_ids()
       provider_names = infrastructure_provider.get_provider_names()
       instrumentors = instrumentation_provider.get_all()
+      resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors()
+      service_instrumentors = instrumentation_provider.get_all_service_instrumentors()
       services = services_provider.get_services()
 
       validators = [
@@ -83,7 +90,9 @@ module Deployment
         lambda { return @instrumentor_source_path_exist_validator.execute(instrumentors) },
         lambda { return @instrumentor_deploy_script_path_exist_validator.execute(instrumentors) },
         lambda { return @service_resource_same_type_validator.execute(resources, services) },
-        lambda { return @deploy_config_validator.execute(deploy_filepath) }
+        lambda { return @deploy_config_validator.execute(deploy_filepath) },
+        lambda { return @service_instrumentor_item_validator.execute(service_instrumentors) },
+        lambda { return @resource_instrumentor_item_validator.execute(resource_instrumentors) }
       ]
 
       provider_validators = get_provider_validators(resources, services, context)
