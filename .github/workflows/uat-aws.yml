@@ -1,10 +1,11 @@
-name: Test
+name: UatAws
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
-  lint:
+  test-cloudprovider-aws:
     runs-on: ubuntu-latest
+    if: always() && github.event_name == 'push'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
@@ -27,61 +28,24 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Lint
-        # Remove this line to allow this job to prevent PRs from merging
-        continue-on-error: true
-        run: bundle exec rubocop
+      - name: Setup Python
+        uses: actions/setup-python@v2
 
-  test-unit:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+      - name: Cache Python Packages
+        uses: actions/cache@v2
         with:
-          ruby-version: '2.4'
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-aws-pip-${{ hashFiles('**/test.yml') }}
+          restore-keys: ${{ runner.os }}-pip-
 
-      - name: Ruby Gem Cache
-        uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: Install Gems
+      - name: Install Python Packages
         run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          python -m pip install --upgrade pip setuptools
+          python3 -m pip install ansible==2.9.9
+          python3 -m pip install ansible boto3 botocore boto
 
-      - name: Unit Tests
-        run: bundle exec rake test:unit
-
-  test-integration:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
-
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '2.4'
-
-      - name: Ruby Gem Cache
-        uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: Install Gems
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+      - name: Install Ansible Galaxy Plugins
+        run: ansible-galaxy install newrelic.newrelic_java_agent
 
       - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
@@ -93,20 +57,19 @@ jobs:
           rm -f user_acceptance_tests/uat-ca.pem
           echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
           sudo chmod 400 user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/secret_file.pem
 
       - name: Write UAT JSON to file
         env:
           UAT_JSON: ${{ secrets.USER_UAT_JSON }}
         run: |
-          echo "$UAT_JSON" > user_acceptance_tests/uatuser.json.local
+          echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
 
-      - name: Integration Tests
-        run: bundle exec rake test:uat:integration
+      - name: Cloud Provider Tests (AWS)
+        run: bundle exec rake test:uat:aws
 
   slack-notify:
     runs-on: ubuntu-latest
-    needs: [lint, test-unit, test-integration]
+    needs: [test-cloudprovider-aws]
     if: always() && github.event_name == 'push'
     steps:
       - name: Build Result Slack Notification
@@ -121,9 +84,7 @@ jobs:
               icon_emoji: ":octocat:",
               attachments: [{
                 color: ${{
-                  needs.lint.result == 'success' &&
-                  needs.test-unit.result == 'success' &&
-                  needs.test-integration.result == 'success'
+                  needs.test-cloudprovider-aws.result == 'success'
                 }} === true ? '#43cc11' : '#e05d44',
                 blocks: [
                   {
@@ -172,9 +133,7 @@ jobs:
                       type: "mrkdwn",
                       text: [
                         "*Result:*",
-                        `• ${ ${{ needs.lint.result == 'success' }} === true ? '✅' : '❌' } Lint: ${{ needs.lint.result }}`,
-                        `• ${ ${{ needs.test-unit.result == 'success' }} === true ? '✅' : '❌' } Unit test: ${{ needs.test-unit.result }}`,
-                        `• ${ ${{ needs.test-integration.result == 'success' }} === true ? '✅' : '❌' } Integration test: ${{ needs.test-integration.result }}`
+                        `• ${ ${{ needs.test-cloudprovider-aws.result == 'success' }} === true ? '✅' : '❌' } AWS cloud provider test: ${{ needs.test-cloudprovider-aws.result }}`
                       ].join('\n')
                     }
                   },
