@@ -26,6 +26,7 @@ Your user config file must contain the following keys:
             "licenseKey": "your_license_key",
             "insightsInsertApiKey": "your_insights_insert_api_key",
             "nrPersonalApiKey": "your_personal_api_key",
+            "nrRegion": "your_region",
             "accountId": "your_account_id"
         },
     }

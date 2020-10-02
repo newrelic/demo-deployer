@@ -82,4 +82,4 @@ At the end of your investigation, you discovered:
 
 Now, as the developer behind the fulfillment service, you have enough information to debug the issue causing the CPU spikes. Congratulations!
 
-You can learn more about using New Relic by walking through [other stories](deployment.md#user-stories). If this is your last story, you can [tear down](deployment.md#tear-down-acme-telco-lite) all the Telco Lite services.
+You can learn more about using New Relic by walking through [other stories](deployment.md#user-stories). If this is your last story, you can [tear down](deployment.md#tear-down-telco-lite) all the Telco Lite services.

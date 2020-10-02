@@ -1,6 +1,6 @@
 # Acme Telco Lite
 
-Welcome to Acme Telco Lite a telecom business which has an eCommerce website for its customers. Telco Lite is powered by a microservice-like architecture. Compromising any of the services could lead to a business outtage.
+Welcome to Acme Telco Lite, a telecom business which has an eCommerce website for its customers. Telco Lite is powered by a microservice architecture.
 
 ## Application Design
 
