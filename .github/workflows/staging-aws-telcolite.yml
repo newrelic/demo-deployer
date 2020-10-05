@@ -27,7 +27,7 @@ jobs:
       run: docker build -t deployer .
 
     - name: Teardown any previous deployment
-      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json -t
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.aws.json -t
 
     - name: Run deployer
-      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.aws.json
