@@ -18,7 +18,7 @@ Now, you can run a docker container based on the image you've built and start th
 ```console
 $ docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/<username>.docker.local.json -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json
+    --entrypoint ruby deployer main.rb -c configs/<username>.docker.local.json -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.aws.json
 ```
 
 > **Note:** Don't forget to replace `<username>` with the same username you used when creating your credentials file.
@@ -144,7 +144,7 @@ When you're finished walking through the user stories, you can tear down all the
 ```console
 $ docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/<username>.docker.local.json -d https://s3-us-west-2.amazonaws.com/demo.newrelic.com/telcolite.json -t
+    --entrypoint ruby deployer main.rb -c configs/<username>.docker.local.json -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.aws.json -t
 [INFO] Executing Teardown
 [✔] Parsing and validating Teardown configuration success
 [✔] Provisioner success
