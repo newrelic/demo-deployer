@@ -98,6 +98,9 @@
         "source_repository": "https://github.com/newrelic/demo-javatron.git",
         "deploy_script_path": "deploy/linux/roles",
         "port": 7001,
+        "params": {
+          "delay_start_ms": 300000
+        },
         "destinations": [
           "authhost"
         ]
