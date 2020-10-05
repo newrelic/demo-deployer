@@ -1,6 +1,6 @@
 # User story: CPU spike
 
-You're a developer working on Telco Lite and you've been paged about high response times in the Warehouse Portal. It's time to open up New Relic, uncover the source of the problem, and save the day.
+You're a developer working on Telco Lite and you've been paged about high response times in the warehouse portal. It's time to open up New Relic, uncover the source of the problem, and save the day.
 
 ## Prerequisites
 
@@ -64,13 +64,31 @@ Scroll down on this view to familiarize yourself with the graphs it shows, such 
 
 ![Switch to the old UI](imgs/old-ui.png)
 
-## Examine infrastructure
+## Examine the infrastructure
 
 Now, you're looking at graphs in the infrastructure view for that service's host. Notice that the CPU % has a lot of high spikes. Click and drag on the graph from the start of a spike to the end of it to narrow the time scale to the period when CPU utilization goes up:
 
 ![CPU spike](imgs/cpu-spike.png)
 
 If you compare this graph to the fulfillment service's transaction graph you looked at earlier, you'll see that soon after `__main__:inventory_item` begins executing, the CPU utilization of the host sharply rises to 100%!
+
+## Observe the dependencies
+
+Now, you understand the problem causing slow response times in the warehouse portal, but you don't know the extent of the issue. Using service maps, you can see all your services that are dependent on the fullfillment service.
+
+Navigate to the service map under **APM > Telco-Fulfillment Service**:
+
+![Service map](imgs/service-map.png)
+
+This map shows you the fulfillment service's incoming and outgoing dependencies. Not only is **Telco-Warehouse Portal** dependent on the fullfillment service, but so is **Telco-Web Portal**!
+
+Select the web portal node to see that the fulfillment service also affects the web portal's response times:
+
+![Web portal dependency](imgs/web-portal-dep.png)
+
+> **Extra Credit:** Notice that the web portal's response times aren't nearly as high as those in the warehouse portal.
+>
+> Using the same steps you used to diagnose the issue in the warehouse portal, can you discover the difference between the two services?
 
 ## Conclusion
 
@@ -79,6 +97,7 @@ At the end of your investigation, you discovered:
 - **Telco-Warehouse Portal** is slow because it makes an external request to **Telco-Fulfillment Service**, which is slow
 - The fulfillment service's Python function contributes over 99% of the response time
 - Soon after the Python function starts executing, the host's CPU utilization spikes up to 100%
+- The fulfillment service also affects **Telco-Web Portal** response times
 
 Now, as the developer behind the fulfillment service, you have enough information to debug the issue causing the CPU spikes. Congratulations!
 
