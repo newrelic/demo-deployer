@@ -21,9 +21,7 @@ module Install
         id  = service.get_id()
         destination_id = service.get_destinations().sample()
         provisioned_resource = (provisioned_resources || []).find() {|provisioned_resource| provisioned_resource.match_by_id(destination_id)}
-        if provisioned_resource.nil?
-          Common::Logger::LoggerFactory.get_logger().info("Could not find destination with destination_id #{destination_id} for service #{id} while building service merge fields, ignoring this field.")
-        else
+        unless provisioned_resource.nil?
           url = build_url(service, provisioned_resource)
           if url.nil?
             Common::Logger::LoggerFactory.get_logger().info("Could not build a url for service #{id} while building service merge fields, ignoring this field.")
