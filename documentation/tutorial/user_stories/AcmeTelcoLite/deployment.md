@@ -4,9 +4,10 @@ In this step, you deploy the Telco Lite infrastructure in AWS and instrument its
 
 ## Deploy your services
 
-To begin, run `docker build` on the `demo-deployer` directory:
+To begin, run `docker build` in the `demo-deployer` directory:
 
 ```console
+$ cd demo-deployer
 $ docker build -t deployer .
 ...
 Successfully built bb4c573b380d
