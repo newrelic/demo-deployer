@@ -66,7 +66,7 @@ Scroll down on this view to familiarize yourself with the graphs it shows, such 
 
 ## Examine the infrastructure
 
-Now, you're looking at graphs in the infrastructure view for that service's host. Notice that the CPU % has a lot of high spikes. Click and drag on the graph from the start of a spike to the end of it to narrow the time scale to the period when CPU utilization goes up:
+Now, you're looking at graphs in the infrastructure view for that service's host. Notice that the CPU % has a lot of high spikes. Click and drag on the graph from the start of a spike to the end of it to narrow the time slice to the period when CPU utilization goes up:
 
 ![CPU spike](imgs/cpu-spike.png)
 
