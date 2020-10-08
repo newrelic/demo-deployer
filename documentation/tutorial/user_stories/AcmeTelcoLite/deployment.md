@@ -135,7 +135,7 @@ With your services running in AWS, log in to New Relic and select **APM** from t
 Yikes! The alerts, high response times, and red-colored indicators suggest things aren't well. Throughout [this story](story.md), you'll use New Relic to diagnose these issues, which are simultaneously affecting your services:
 
 - [Issue 1: The Warehouse Portal has abnormally high response times](high-response-times.md)
-- Issue 2: Multiple services are raising error alerts
+- [Issue 2: Multiple services are raising error alerts](error-alerts.md)
 
 > **Note:** If you don't see all the same alerts, don't worry. The simulated issues happen at regular intervals, so you should start seeing these problems in New Relic within 30 minutes to an hour.
 
