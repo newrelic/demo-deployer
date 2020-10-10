@@ -286,21 +286,13 @@
             "inventory",
             "plan",
             "fulfillment",
+            "billing",
+            "login",
             "warehouse"
           ],
           "provider": "newrelic",
           "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
           "deploy_script_path": "deploy/logging_in_context/roles"
-        },
-        {
-          "id": "nr_logging",
-          "service_ids": [
-            "billing",
-            "login"
-          ],
-          "provider": "newrelic",
-          "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
-          "deploy_script_path": "deploy/logging/roles"
         },
         {
           "id": "nr_alert_service",
