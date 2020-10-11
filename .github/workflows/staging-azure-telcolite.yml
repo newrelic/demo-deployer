@@ -1,0 +1,36 @@
+name: TelcoLite - newrelic staging azure
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy_telco_lite:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Write Azure keys files
+      env:
+        ID_RSA_PUB: ${{ secrets.UAT_AZURE_ID_RSA_PUB_FILE }}
+        ID_RSA: ${{ secrets.UAT_AZURE_ID_RSA_FILE }}
+      run: |
+        rm -f id_rsa.pub
+        echo "$ID_RSA_PUB" > id_rsa.pub
+        rm -f id_rsa
+        echo "$ID_RSA" > id_rsa
+        sudo chmod 400 id_rsa
+
+    - name: Write UAT JSON to file
+      env:
+        USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_AZURE_DOCKER }}
+      run: |
+        echo "$USER_JSON" > gitstgazdkr.local.json
+
+    - name: Build the docker image
+      run: docker build -t deployer .
+
+    - name: Teardown any previous deployment
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.azure.json -t
+
+    - name: Run deployer
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstgdkr.json.local -d documentation/tutorial/user_stories/AcmeTelcoLite/telcolite.azure.json
