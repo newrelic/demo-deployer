@@ -140,7 +140,7 @@ You can visualize service dependencies using service maps. First, navigate back 
 
 ![Login service map](imgs/login-service-map.png)
 
-Both **Telco-Web Portal** and **Telco-Warehouse Portal** depend on **Telco-Login Service**. So, when the login service goes down, you start seeing errors in the portals.
+Both **Telco-Web Portal** and **Telco-Warehouse Portal** depend on **Telco-Login Service**. So, when the login service goes down, you start seeing errors in both portals.
 
 > **Extra Credit:** Use the same steps you used to investigate issues in the web portal to confirm there are issues in the warehouse portal.
 
