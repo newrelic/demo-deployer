@@ -310,6 +310,14 @@
             "alert_cpu_threshold": 75
           }
         }
+      ],
+      "global": [
+        {
+          "id": "nr_golden_dashboard",
+          "provider": "newrelic",
+          "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+          "deploy_script_path": "deploy/dashboards/golden/restapi/roles"
+        }
       ]
     }
   }
