@@ -62,6 +62,10 @@ module Services
         service_definition.add_files(files)
         tags = @tags_provider.get_service_tags(id)
         service_definition.add_tags(tags)
+        params = service["params"]
+        (params || {}).each do |k, v|
+          service_definition.get_params().add(k, v)
+        end
         service_definitions.push(service_definition)
       end
       return service_definitions

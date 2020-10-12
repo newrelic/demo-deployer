@@ -15,26 +15,34 @@ module Teardown
       @execution_path = nil
     end
 
-    def execute(resources)
-      execute_on_host_install(resources)
-      execute_service_plus_instrumentation_install(resources)
+    def execute(provisioned_resources)
+      execute_on_host_install(provisioned_resources)
+      execute_service_plus_instrumentation_install(provisioned_resources)
+      execute_global_instrumentation_install(provisioned_resources)
     end
 
     private
 
-    def execute_on_host_install(resources)
-      install_definitions = get_install_definitions_builder(resources)
+    def execute_on_host_install(provisioned_resources)
+      install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_onhost_instrumentations()
                                 .build()
       execute_install(install_definitions, "On-Host instrumentation")
     end
 
-    def execute_service_plus_instrumentation_install(resources)
-      install_definitions = get_install_definitions_builder(resources)
+    def execute_service_plus_instrumentation_install(provisioned_resources)
+      install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_services()
                                 .with_service_instrumentations()
                                 .build()
       execute_install(install_definitions, "Services and instrumentations")
+    end
+
+    def execute_global_instrumentation_install(provisioned_resources) 
+      install_definitions = get_install_definitions_builder(provisioned_resources)
+                                .with_global_instrumentations()
+                                .build()
+      execute_install(install_definitions, "Global instrumentation")
     end
 
     def execute_install(install_definitions, target_installation)
@@ -45,8 +53,8 @@ module Teardown
       end
     end
 
-    def get_install_definitions_builder(resources)
-      return Install::InstallDefinitionsBuilder.new(@context, resources)
+    def get_install_definitions_builder(provisioned_resources)
+      return Install::InstallDefinitionsBuilder.new(@context, provisioned_resources)
     end
 
     def get_installer()
