@@ -24,7 +24,7 @@ jobs:
       env:
         USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_AZURE_DOCKER }}
       run: |
-        echo "$USER_JSON" > gitstgazdkr.local.json
+        echo "$USER_JSON" > gitstgazdkr.json.local
 
     - name: Build the docker image
       run: docker build -t deployer .
