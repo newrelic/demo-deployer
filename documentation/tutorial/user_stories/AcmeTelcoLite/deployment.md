@@ -124,23 +124,24 @@ Completed at 2020-08-11 11:27:00 -0700
 [INFO]   /tmp/alec-telcolite/deploy_summary.txt
 ```
 
-## User stories
+After configuring your environment, you only needed two commands (and a bit of patience) to spin up all the Telco Lite services!
 
-After configuring your environment, you only needed two commands (and a bit of patience) to spin up all the Telco Lite services. As you learned before, the `simulator` sends traffic to those services. It also triggers problem scenarios within those services for you to investigate using New Relic.
+## View your services
 
-From here, there are two user stories you can walk through to better understand the New Relic interface and how you can use it to understand problems in real web services.
+With your services running in AWS, log in to New Relic and select **APM** from the top navigation to see how your services are holding up:
 
-### Story: CPU spike
+![APM story introduction](imgs/story-introduction.png)
 
-Attention Acme developer! We've received reports that the Warehouse Portal is crawling along, with response times approaching one minute. Please help us [solve this mystery](cpu_spike.md) and restore a pleasant experience to our users!
+Yikes! The alerts, high response times, and red-colored indicators suggest things aren't well. Throughout [this story](story.md), you'll use New Relic to diagnose these issues, which are simultaneously affecting your services:
 
-### Story: Memory leak
+- [Issue 1: The Warehouse Portal has abnormally high response times](high-response-times.md)
+- [Issue 2: Multiple services are raising error alerts](error-alerts.md)
 
-work in progress
+> **Note:** If you don't see all the same alerts, don't worry. The simulated issues happen at regular intervals, so you should start seeing these problems in New Relic within 30 minutes to an hour.
 
 ## Tear down Telco Lite
 
-When you're finished walking through the user stories, you can tear down all the services you created in AWS. To remove the deployment and all associated cloud resources, execute the deployer with the same command as before, but add the parameter `-t` to specify a teardown execution:
+When you're finished diagnosing all the issues effecting Telco Lite, you can tear down all the services you created in AWS. To remove the deployment and all associated cloud resources, execute the deployer with the same command as before, but add the parameter `-t` to specify a teardown execution:
 
 ```console
 $ docker run -it\

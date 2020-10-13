@@ -21,8 +21,8 @@ The simulator is not part of the Telco Lite infrastructure, but it is part of th
 
 ![Acme Telco Lite architecture diagram](imgs/acme.png)
 
-## Tutorial
+## Story
 
-In this tutorial, you deploy Telco Lite and use New Relic to investigate issues by walking through a set of user stories. At the end, you'll tear down the infrastructure you created to tidy up your cloud resources.
+In this story, you deploy Telco Lite and use New Relic to investigate issues. At the end, you'll tear down the infrastructure you created to tidy up your cloud resources.
 
 Your first step is to [set up](prereqs.md) your environment so that you'll be ready to deploy the services.
