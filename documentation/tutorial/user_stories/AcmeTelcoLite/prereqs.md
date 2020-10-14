@@ -1,6 +1,6 @@
 # Getting started
 
-Before you begin this tutorial, complete [Step 0](../../README.md#step-0---install-pre-reqs--create-configs).
+Before you begin this story, complete [Step 0](../../README.md#step-0---install-pre-reqs--create-configs).
 
 When you've finished, you'll have:
 

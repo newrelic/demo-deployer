@@ -1,16 +1,16 @@
-# User story: CPU spike
+# Diagnosing High Response Times
 
-You're a developer working on Telco Lite and you've been paged about high response times in the warehouse portal. It's time to open up New Relic, uncover the source of the problem, and save the day.
+In this tutorial, you'll use New Relic to understand why **Telco-Warehouse Portal** has slower than normal response times.
 
 ## Prerequisites
 
-This user story assumes you're familiar with the [infrastructure of Telco Lite](README.md#application-design), you've [set up your local environment](prereqs.md), and you've [deployed and instrumented the Telco Lite services](deployment.md).
+This tutorial assumes you're familiar with the [infrastructure of Telco Lite](README.md#application-design), you've [set up your local environment](prereqs.md), and you've [deployed and instrumented the Telco Lite services](deployment.md).
 
 ## Start with APM
 
 To begin, log into [New Relic One](one.newrelic.com) and select **APM** from the top navigation menu. Here, you see an overview of all eight Telco Lite services, including the service names, response times, and throughputs. Notice that the response time for **Telco-Warehouse Portal** is unusually high:
 
-![APM overview](imgs/apm-overview.png)
+![APM overview](imgs/high-response-times.png)
 
 Select the **Telco-Warehouse Portal** service name from the APM overview to see a summary of that service. The top graph in the summary view shows **Web transactions time**:
 
@@ -101,4 +101,4 @@ At the end of your investigation, you discovered:
 
 Now, as the developer behind the fulfillment service, you have enough information to debug the issue causing the CPU spikes. Congratulations!
 
-You can learn more about using New Relic by walking through [other stories](deployment.md#user-stories). If this is your last story, you can [tear down](deployment.md#tear-down-telco-lite) all the Telco Lite services.
+You can learn more about using New Relic by diagnosing [other issues](deployment.md#view-your-services). If this is your last issue, you can [tear down](deployment.md#tear-down-telco-lite) all the Telco Lite services.

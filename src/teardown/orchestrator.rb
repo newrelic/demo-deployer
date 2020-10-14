@@ -41,13 +41,17 @@ module Teardown
       Common::Logger::LoggerFactory.get_logger().debug("Uninstalling on #{target_provisioned_resources.length} resources")
 
       provisioned_resources_by_group = partition_by_provision_group_descending(target_provisioned_resources)
-      provisioned_resources_by_group.each do |provisioned_resources|
-        get_uninstall_orchestrator().execute(provisioned_resources)
-        errors = execute_teardown(provisioned_resources)
-        if errors.length > 0
-          log_token.error()
-          raise Common::InstallError.new("Teardown resources has failed", errors)
+      if provisioned_resources_by_group.any?
+        provisioned_resources_by_group.each do |provisioned_resources|
+          get_uninstall_orchestrator().execute(provisioned_resources)
+          errors = execute_teardown(provisioned_resources)
+          if errors.length > 0
+            log_token.error()
+            raise Common::InstallError.new("Teardown resources has failed", errors)
+          end
         end
+      else
+        get_uninstall_orchestrator().execute([])
       end
 
       get_post_actions_orchestrator().execute()
