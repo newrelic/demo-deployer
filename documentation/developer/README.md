@@ -24,6 +24,7 @@ To run the deployer locally, you'll want to install the dependencies below. Note
 * Bundler, you may need to install a specific version with "gem i bundler -v 1.17.3" in order to successfuly run "sudo bundle install" in the deployer directory
 * Git
 * Python3
+* Terraform
 * Ansible v2.8 or above. See the ansible installation steps below.
 * Cloud provider account and credentials, more info can be found at [UserConfig](../user_config/README.md)
 * For Azure, ```pip install 'ansible[azure]' packaging msrestazure```
