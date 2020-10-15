@@ -8,9 +8,9 @@ The deployer is a ruby application that can be used to deploy an environment and
 
 ## Tutorial
 
-To learn and how to use the deployer, you may want to go through the [Tutorial](documentation/tutorial/README.md).
+To learn and how to use the deployer, you may want to go through the [Tutorial](documentation/tutorials/README.md).
 
-This tutorial will guide you step by step to install the minimum dependency and set your local configuration to run the deployer. 
+This tutorial will guide you step by step to install the minimum dependency and set your local configuration to run the deployer.
 
 You'll also practice how to deploy some examples to get more familiar with the deployer and its configuration.
 
