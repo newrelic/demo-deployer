@@ -181,51 +181,44 @@
       "dxDepartment": "Area51",
       "dxProduct": "AcmeTelcoLite"
     },
-  
+
     "resources": [
       {
         "id": "simuhost",
-        "provider": "aws",
-        "type": "ec2",
-        "size": "t3.small"
+        "provider": "gcp",
+        "type": "compute",
+        "size": "e2-micro"
       },
       {
         "id": "uihost",
         "display_name": "Telco-UI-host",
-        "provider": "aws",
-        "type": "ec2",
-        "size": "t3.micro"
+        "provider": "gcp",
+        "type": "compute",
+        "size": "e2-small"
       },
       {
         "id": "authhost",
         "display_name": "Telco-Authentication-host",
-        "provider": "aws",
-        "type": "ec2",
-        "size": "t3a.micro"
+        "provider": "gcp",
+        "type": "compute",
+        "size": "e2-micro"
       },
       {
         "id": "backendhost",
         "display_name": "Telco-Backend-host",
-        "provider": "aws",
-        "type": "ec2",
-        "size": "t2.small",
-        "cpu_credit_specification": "unlimited"
+        "provider": "gcp",
+        "type": "compute",
+        "size": "n1-standard-1"
       },
       {
         "id": "reportinghost",
         "display_name": "Telco-Reporting-host",
-        "provider": "aws",
-        "type": "ec2",
-        "size": "t3a.micro"
-      },
-      {
-        "id": "storage1",
-        "provider": "aws",
-        "type": "s3",
-        "bucket_name": "terraform-[global:deployment_name]"
+        "provider": "gcp",
+        "type": "compute",
+        "size": "e2-small"
       }
     ],
-  
+
     "instrumentations": {
       "resources": [
         {
@@ -307,11 +300,9 @@
             "login"
           ],
           "provider": "newrelic",
-          "provider_credential": "aws",
           "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
-          "deploy_script_path": "deploy/alerts/terraform/roles",
+          "deploy_script_path": "deploy/alerts/restapi/roles",
           "params": {
-            "s3_bucketname_tfstate": "terraform-[global:deployment_name]",
             "alert_duration": 5,
             "alert_response_time_threshold": 5,
             "alert_throughput_threshold": 5,
@@ -324,12 +315,8 @@
         {
           "id": "nr_golden_dashboard",
           "provider": "newrelic",
-          "provider_credential": "aws",
           "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
-          "deploy_script_path": "deploy/dashboards/golden/terraform/roles",
-          "params": {
-            "s3_bucketname_tfstate": "terraform-[global:deployment_name]"
-          }
+          "deploy_script_path": "deploy/dashboards/golden/restapi/roles"
         },
         {
           "id": "nr_golden_workload",
