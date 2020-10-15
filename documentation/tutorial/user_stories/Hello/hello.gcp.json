@@ -1,0 +1,89 @@
+{
+  "services": [
+    {
+      "id": "app1",
+      "display_name": "Hello-App1",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5001,
+      "destinations": ["host1"],
+      "files":[{
+        "destination_filepath": "engine/data/index.json",
+        "content": [
+            "<h1>Welcome!</h1>",
+            "Congrats! You have successfully setup our <b>Hello World</b> demo environment. So, what's been deployed?",
+            "<ul><li>A simple host on your cloud provider, e.g. AWS, Azure.</li>",
+            "<li>A simple node application that is serving up this page.</li>",
+            "<li>New Relic instrumentation, specifically, the infrastructure and node agents.</li></ul>",
+            " ",
+            "Next, start generating some traffic on the app. This can be done by clicking the <b>Inventory</b> button, which will simply return a collection of items. You can then click each item to see its details.",
+            "You can also use postman to generate a burst of requests. The APIs for the app are quite simple:",
+            "<ul><li>Inventory <a href=\"[service:app1:url]/api/inventory\" target=\"_blank\">[service:app1:url]/api/inventory</a></li>",
+            "<li>Item details <a href=\"[service:app1:url]/api/inventory/1\" target=\"_blank\">[service:app1:url]/api/inventory/[item number]</a></li></ul>",
+            " ",
+            "Now, head on over to New Relic and explore what's been created.",
+            "<ul><li>Search for your app and host using <a href=\"https://one.newrelic.com/redirect/search/Hello\" target=\"_blank\">global search</a>.</li>",
+            "<li>Check out <a href=\"https://one.newrelic.com/redirect/explorer\" target=\"_blank\">Entity Explorer</a>.</li></ul>",
+            "<br/>",
+            "Build some awesome graphs in Query Builder with this NRQL:",
+            "<pre><code>SELECT count(*) FROM Transaction FACET request.headers.userAgent WHERE appName = 'Hello-App1' LIMIT MAX</code></pre>",
+            "<pre><code>SELECT average(duration) FROM Transaction FACET name WHERE appName = 'Hello-App1'</code></pre>",
+            "<pre><code>SELECT count(*) FROM Transaction TIMESERIES FACET httpResponseCode WHERE appName = 'Hello-App1'</code></pre>",
+            "<pre><code>SELECT average(memoryUsedPercent) as '% Used', average(memoryFreePercent) as '% Free' FROM SystemSample TIMESERIES WHERE apmApplicationNames = 'Hello-App1'</code></pre>",
+            "<br/>",
+            "That's it! We hope you enjoyed this quick <b>Hello World</b> example. Please give us feedback and ideas in our <a href=\"https://discuss.newrelic.com/c/build-on-new-relic\" target=\"_blank\">Explorer's Hub community</a>.",
+            " ",
+            "<h2>Remember:</h2>Make sure to tear down the infrastructure and app you just provisioned!"
+          ]
+      },{
+        "destination_filepath": "engine/cronjob.json",
+        "content": [
+          {
+            "frequency": "* * * * *",
+            "job": "for ((i=1;i<=30;i++)); do curl '[service:app1:url]/'; curl '[service:app1:url]/api/inventory'; sleep 1; done"
+          }
+        ]
+      }]
+    }
+  ],
+
+  "global_tags": {
+    "dxOwningTeam": "DemoX",
+    "dxEnvironment": "development",
+    "dxDepartment": "Area51",
+    "dxProduct": "Hello"
+  },
+
+  "resources": [
+    {
+      "id": "host1",
+      "display_name": "Hello-Host1",
+      "provider": "gcp",
+      "type": "compute",
+      "size": "e2-small"
+    }
+  ],
+
+  "instrumentations": {
+    "resources": [
+      {
+        "id": "nr_infra",
+        "resource_ids": ["host1"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/linux/roles",
+        "version": "1.12.4"
+      }
+    ],
+    "services": [
+      {
+        "id": "nr_node_agent",
+        "service_ids": ["app1"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/node/linux/roles",
+        "version": "6.13.0"
+      }
+    ]
+  }
+}

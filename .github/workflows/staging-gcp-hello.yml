@@ -1,0 +1,36 @@
+name: Hello - newrelic staging gcp
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy_hello:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+    - name: Write GCP files
+      env:
+        UAT_GCP_PEM_FILE: ${{ secrets.UAT_GCP_PEM_FILE }}
+        UAT_GCP_SERVICEACCOUNT_FILE: ${{ secrets.UAT_GCP_SERVICEACCOUNT_FILE }}
+      run: |
+        rm -f compute-user.pem
+        echo "$UAT_GCP_PEM_FILE" > compute-user.pem
+        sudo chmod 400 compute-user.pem
+        rm -f demo-newrelic-staging-gcp-service-account.json
+        echo "$UAT_GCP_SERVICEACCOUNT_FILE" > demo-newrelic-staging-gcp-service-account.json
+
+    - name: Write UAT JSON to file
+      env:
+        USER_JSON: ${{ secrets.GITACTIONS_DEPLOY_STAGING_GCP_DOCKER }}
+      run: |
+        echo "$USER_JSON" > gitstggcpdkr.local.json
+
+    - name: Build the docker image
+      run: docker build -t deployer .
+
+    - name: Teardown any previous deployment
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.gcp.json -t
+
+    - name: Run deployer
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d documentation/tutorial/user_stories/Hello/hello.gcp.json
