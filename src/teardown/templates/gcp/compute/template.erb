@@ -44,7 +44,6 @@
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
         state: absent
-      ignore_errors: yes
 
     - name: delete the network
       google.cloud.gcp_compute_network:
@@ -53,4 +52,3 @@
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
         state: absent
-      ignore_errors: yes
