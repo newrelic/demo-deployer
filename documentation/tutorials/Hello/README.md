@@ -1,27 +1,28 @@
-# User Story: Hello
+# Hello
 
-This user story is a single app deployment on a host, with NewRelic instrumentation for the host and the application. 
+In this user story, you deploy a single application on a host and instrument both the host and the app with New Relic.
 
-Note, in the instructions below, there are references to `[user]` and a `$HOME` path.
-The user is your typical user name on your local machine. 
-`$HOME` similarly is where your user profile is stored on your machine. On MacOS this is typically `/Users/[user]`, on Linux `/home/[user]` and windows `C:\Users\[user]`
+> **Note:** In the instructions below, there are references to `[user]` and a `$HOME` path.
+>
+> The user is your typical user name on your local machine. `$HOME`, similarly, is where your user profile is stored on your machine. On MacOS this is typically `/Users/[user]`. On Linux, `/home [user]`. On Windows, `C:\Users\[user]`.
 
-## Pre-requesite
+## Getting started
 
-* The tutorial Step-0 is completed
+Before you begin, complete the [Getting Started](../README.md#getting-started) guide.
 
 ## Deploying
 
-The deploy config file [hello.json](hello.json) is provided for this user story. 
+In this story, you'll use the deployment configuration file: [hello.json](hello.json).
 
 To execute the deployment with docker, run the below commands from within your local deployer directory:
 
-* Execute the deployer with the syntax below. This command will take several minutes.
 ```bash
 docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/[user].docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json
+    --entrypoint ruby deployer main.rb -c configs/[user].docker.local.json -d documentation/tutorials/Hello/hello.json
 ```
+
+Because this command spins up
 
 ### Example output from the Demo Deployer
 
@@ -34,7 +35,7 @@ Execute the command below to run the deployer with the `hello.json` deploy confi
 ```bash
 > docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json
+    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorials/Hello/hello.json
 [INFO] Executing Deployment
 [✔] Parsing and validating Deployment configuration success
 [✔] Provisioner success
@@ -79,6 +80,6 @@ For example:
 ```bash
 > docker run -it\
     -v $HOME/configs/:/mnt/deployer/configs/\
-    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorial/user_stories/Hello/hello.json -t
+    --entrypoint ruby deployer main.rb -c configs/jsmith.docker.local.json -d documentation/tutorials/Hello/hello.json -t
 ...
 ```
