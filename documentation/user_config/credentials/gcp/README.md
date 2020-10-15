@@ -50,7 +50,7 @@ The region configuration is typically use for creating Virtual Machine hosts. Yo
 
 In order to create and access GCP `Virtual Machines`, we need to create an SSH key pair. By default, those files are created in the ~/.ssh directory.
 
-* Use this command to create an RSA SSH key pair with a length of 4096 bits `ssh-keygen -m PEM -t rsa -b 4096 -C "compute-user"`
+* Use this command to create an RSA SSH key pair with a length of 4096 bits `ssh-keygen -m PEM -t rsa -b 4096 -N "" -C "compute-user"`
 * Write down the absolute path of the generated private key and put this absolute path in your user config credentials for gcp `secretKeyPath`.
 * Upload the public key content to the GCP Compute metadata to allow this SSH key to be used with your project using https://console.cloud.google.com/compute/metadata
 * Click `SSH Keys` tab
