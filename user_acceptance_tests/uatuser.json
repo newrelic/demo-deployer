@@ -13,7 +13,7 @@
       "insightsInsertApiKey": "NR_INSIGHTS_INSERT_API_KEY",
       "accountId": "NR_ACCOUNT_ID",
       "accountRootId": "NR_ACCOUNT_ROOT_ID",
-      "urls":{
+      "urls": {
         "collector": "NR_COLLECTOR_URL"
       }
     },
