@@ -51,10 +51,6 @@ The file is stored on my local machine in `/home/jerard/configs/jerard.docker.lo
       "secretKeyPath": "/mnt/deployer/configs/jerardUsEast2.pem",
       "region": "us-east-2"
     },
-
-    "git": {
-      "username": "a secret git personal access token"
-    }
   }
 }
 ```
