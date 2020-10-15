@@ -58,10 +58,13 @@ module Teardown
     end
 
     def get_installer()
+      serial = true
+      parallel = false
       @installer = Common::Install::Installer.new(get_temporary_directory_service())
+      @installer.warn_on_error()
       @installer
-        .queue_step("stop")
-        .queue_step("teardown", true)
+        .queue_step("stop", parallel)
+        .queue_step("teardown", serial)
       return @installer
     end
 

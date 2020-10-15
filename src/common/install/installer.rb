@@ -17,6 +17,7 @@ module Common
         @player_construct_lambda = player_construct_lambda
         @composer = composer
         @steps = []
+        @isWarningOnError = false
       end
 
       def execute(install_definitions)
@@ -33,6 +34,10 @@ module Common
         step = {action_name:action_name, serial_step: serial_step}
         @steps.push(step)
         return self
+      end
+
+      def warn_on_error(value = true)
+        @isWarningOnError = value
       end
 
       private
@@ -88,7 +93,11 @@ module Common
         errors = player.execute(isAsync)
 
         if errors.length > 0
-          raise Common::InstallError.new("Installation failed at the '#{action_name}' step", errors)
+          if @isWarningOnError
+            Common::Logger::LoggerFactory.get_logger().debug("Installation failed at the '#{action_name}' step, details:#{errors}")
+          else
+            raise Common::InstallError.new("Installation failed at the '#{action_name}' step", errors)
+          end
         end
       end
 
