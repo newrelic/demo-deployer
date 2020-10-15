@@ -9,6 +9,7 @@
     project: <%= gcp[:project] %>
     service_account_file: <%= gcp[:service_account_file] %>
     region: <%= gcp[:region] %>
+    zone: <%= gcp[:zone] %>
 
     resource_id: <%= compute[:resource_id] %>
     resource_name: <%= compute[:resource_name] %>
@@ -22,7 +23,7 @@
         google.cloud.gcp_compute_instance_info:
           filters:
           - name = "{{ resource_name }}"
-          zone: "{{ region }}-a"
+          zone: "{{ zone }}"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           auth_kind: serviceaccount

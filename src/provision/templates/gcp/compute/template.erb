@@ -9,6 +9,7 @@
     project: <%= gcp[:project] %>
     service_account_file: <%= gcp[:service_account_file] %>
     region: <%= gcp[:region] %>
+    zone: <%= gcp[:zone] %>
     vnet_name: <%= gcp[:vnet_name] %>
     resource_group: <%= gcp[:resource_group] %>
     firewall_name: <%= gcp[:firewall_name] %>
@@ -34,7 +35,7 @@
           name: "{{ disk_name }}"
           size_gb: 50
           source_image: "{{ source_image }}"
-          zone: "{{ region }}-a"
+          zone: "{{ zone }}"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"
@@ -67,7 +68,7 @@
               nat_ip: "{{ address }}"
               type: ONE_TO_ONE_NAT
           tags: "{{ network_tags }}"
-          zone: "{{ region }}-b"
+          zone: "{{ zone }}"
           project: "{{ project }}"
           auth_kind: "{{ auth_kind }}"
           service_account_file: "{{ service_account_file }}"

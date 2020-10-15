@@ -40,6 +40,7 @@ module Provision
             template_context[:project] = credential.get_project()
             template_context[:service_account_file] = credential.get_service_account_file()
             template_context[:region] = credential.get_region()
+            template_context[:zone] = "#{credential.get_region()}-b"
           end
 
           def self.parse_resource_group(template_context, context, resource)
