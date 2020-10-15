@@ -8,7 +8,7 @@ Here is an illustration of the configuration:
 
 ```json
 {
-    
+
   "instrumentations": {
 
     "resources": [
@@ -74,8 +74,7 @@ This field is optional, and must be omitted if `source_repository` is specified.
 
 ## source_repository
 
-This field is optional, and must be omitted if `local_source_path` is specified. The value represent a GIT repository, which can either be an SSH string, or an HTTPS URI. For example, the `newrelic` instrumentation is available in this repository `https://github.com/newrelic/demo-newrelic-instrumentation.git`.
-Note for the HTTPS usage, it is possible to use a GIT access token. For more information see [Git Credentials](../../user_config/credentials/git/README.md)
+This field is optional, and must be omitted if `local_source_path` is specified. The value represents a GitHub repository and can either be an SSH string or an HTTPS URI.
 
 ## version
 
@@ -100,7 +99,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "provider": "newrelic",
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
-        "version": "1.4.11" 
+        "version": "1.4.11"
       },
       {
         "id": "nr_lambda",
@@ -126,7 +125,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "provider": "newrelic",
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/go/datanerd.us/demotron/V3-Gotron/roles",
-        "version": "3.6.0" 
+        "version": "3.6.0"
       },
       {
         "id": "nr_lambda_python",
