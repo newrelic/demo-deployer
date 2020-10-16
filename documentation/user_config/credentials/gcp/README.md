@@ -61,7 +61,7 @@ In order to create and access GCP `Virtual Machines`, we need to create an SSH k
 
 ### scopes
 
-This element defines the permissions associated with the GCP credentials. Currently, since the deployer supports provisioning a `compute` instead, only the read-write scope for compute instead is associated with `https://www.googleapis.com/auth/compute`
+This element defines the permissions associated with the GCP credentials. Currently, since the deployer only supports provisioning a `compute` instance, only the read-write scope for compute is defined with `https://www.googleapis.com/auth/compute`
 Other values can be added to the array, more information is available at https://developers.google.com/identity/protocols/oauth2/scopes
 
 ## Create a new Gcp account
