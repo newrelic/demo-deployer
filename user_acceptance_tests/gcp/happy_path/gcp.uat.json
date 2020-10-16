@@ -1,0 +1,63 @@
+{
+  "services": [{
+      "id": "uat1",
+      "display_name": "UAT1 GCP NodeJS App",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "relationships": ["uat2"],
+      "port": 5001,
+      "destinations": ["host1"]
+    },{
+      "id": "uat2",
+      "display_name": "UAT2 GCP NodeJS App",
+      "source_repository": "https://github.com/newrelic/demo-nodetron.git",
+      "deploy_script_path": "deploy/linux/roles",
+      "port": 5002,
+      "destinations": ["host1"]
+    }
+  ],
+
+  "global_tags": {
+    "owning_team": "DEMO",
+    "Environment": "development",
+    "Department": "product",
+    "Product": "V3",
+    "DeployedBy": "UATGCP"
+  },
+
+  "resources": [
+    {
+      "id": "host1",
+      "provider": "gcp",
+      "type": "compute",
+      "size": "e2-small",
+      "tags": {
+        "OpsTeam": "OpsUat",
+        "BillingCode": "2"
+      }
+    }
+  ],
+
+  "instrumentations": {
+    "resources": [
+      {
+        "id": "nr_infra",
+        "resource_ids": ["host1"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/linux/roles",
+        "version": "1.12.4" 
+      }
+    ],
+    "services": [
+      {
+        "id": "nr_node_agent",
+        "service_ids": ["uat1", "uat2"],
+        "provider": "newrelic",
+        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+        "deploy_script_path": "deploy/node/linux/roles",
+        "version": "6.13.0"
+      }
+    ]
+  }
+}

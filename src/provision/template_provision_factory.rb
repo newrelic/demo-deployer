@@ -1,6 +1,7 @@
 require "./src/common/type_repository"
 require "./src/provision/templates/aws/template_factory"
 require "./src/provision/templates/azure/template_factory"
+require "./src/provision/templates/gcp/template_factory"
 
 module Provision
   class TemplateProvisionFactory
@@ -21,7 +22,8 @@ module Provision
     def get_supported_types()
       @supported_types ||= {
         "aws" => Provision::Templates::Aws::TemplateFactory,
-        "azure" => Provision::Templates::Azure::TemplateFactory
+        "azure" => Provision::Templates::Azure::TemplateFactory,
+        "gcp" => Provision::Templates::Gcp::TemplateFactory
       }
     end
 
