@@ -53,6 +53,6 @@ The references below give more details regarding how to setup specific vendors. 
 
 * [Azure](azure.md)
 * [Aws](aws.md)
-* [Gcp](credentials/gcp/README.md)
+* [Gcp](gcp.md)
 * [NewRelic](newrelic.md)
 * [GitHub](github.md)
