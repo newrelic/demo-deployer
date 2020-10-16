@@ -61,11 +61,11 @@ The deployer will validate the dependent services exist.
 
 ## provider
 
-This string represent the instrumentation provider to use. The value must match a credential definition within the user config file. An example of instrumentation provider will be `newrelic`. For more information regarding how to setup the `newrelic` user config credential, refer to this page [NewRelic UserConfig Credential](../../user_config/credentials/newrelic/README.md)
+This string represent the instrumentation provider to use. The value must match a credential definition within the user config file. An example of instrumentation provider will be `newrelic`. For more information regarding how to setup the `newrelic` user config credential, refer to this page [NewRelic UserConfig Credential](../../user_config/newrelic.md)
 
 ## provider_credential
 
-Optional, this field represent an additional set of credential to be given to the instrumentor play. For example, a value of `aws` would look up all the credentials for the `aws` key in the [NewRelic UserConfig Credential](../../user_config/credentials/newrelic/README.md) file and add those credentials to each of the instrumentor plays.
+Optional, this field represent an additional set of credential to be given to the instrumentor play. For example, a value of `aws` would look up all the credentials for the `aws` key in the [NewRelic UserConfig Credential](../../user_config/newrelic.md) file and add those credentials to each of the instrumentor plays.
 This can be useful if an instrumentation play requires to have access to some cloud provider resources, for example, when using terraform and wanting to store the state file onto an S3 bucket.
 
 ## local_source_path
