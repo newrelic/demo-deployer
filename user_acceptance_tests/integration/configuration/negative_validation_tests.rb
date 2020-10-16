@@ -52,17 +52,17 @@ describe "UserAcceptanceTests::NegativeValidationTests" do
   it "should fail on resources missing id and unsupported providers" do
     given_resource(host1, "aws")
     given_resource_without_id("aws")
-    given_resource_without_id("gcp")
+    given_resource_without_id("gws")
     given_deploy_config()
 
     error = assert_raises do
       orchestrator.execute(arguments)
-    end        
+    end
 
     error.message.must_include("Allowed keys are ")
     error.message.must_include("Resource id is missing")
     error.message.must_include("Missing key")
-    error.message.must_include("Key 'gcp' is not currently supported")
+    error.message.must_include("Key 'gws' is not currently supported")
   end
   
   it "should fail on services missing host resource and" do

@@ -1,0 +1,56 @@
+---
+
+- name: Delete GCP Compute
+  hosts: localhost
+  connection: local
+
+  vars:
+    auth_kind: <%= gcp[:auth_kind] %>
+    project: <%= gcp[:project] %>
+    service_account_file: <%= gcp[:service_account_file] %>
+    region: <%= gcp[:region] %>
+    zone: <%= gcp[:zone] %>
+    vnet_name: <%= gcp[:vnet_name] %>
+    resource_group: <%= gcp[:resource_group] %>
+    firewall_name: <%= gcp[:firewall_name] %>
+
+    resource_id: <%= compute[:resource_id] %>
+    resource_name: <%= compute[:resource_name] %>
+    disk_name: <%= compute[:disk_name] %>
+    address_name: <%= compute[:address_name] %>
+
+  tasks:
+    - name: delete instance
+      google.cloud.gcp_compute_instance:
+        name: "{{ resource_name }}"
+        zone: "{{ zone }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+
+    - name: delete address
+      google.cloud.gcp_compute_address:
+        name: "{{ address_name }}"
+        region: "{{ region }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+
+    - name: delete the firewall
+      google.cloud.gcp_compute_firewall:
+        name: "{{ firewall_name }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+
+    - name: delete the network
+      google.cloud.gcp_compute_network:
+        name: "{{ vnet_name }}"
+        project: "{{ project }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        state: absent
+      ignore_errors: yes

@@ -16,19 +16,24 @@ RUN python3 -m pip install --upgrade setuptools
 
 # Install Ansible
 RUN python3 -m pip install ansible==2.9.9
+# AWS
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
+# Azure
 RUN python3 -m pip install ansible[azure]
+RUN python3 -m pip install packaging
 RUN python3 -m pip install msrestazure
+# GCP
+RUN python3 -m pip install requests google-auth
+RUN ansible-galaxy collection install google.cloud
+# NewRelic
+RUN ansible-galaxy install newrelic.newrelic_java_agent
 
 # Others
 RUN apt-get update
 RUN apt-get install git -y
 RUN apt-get install rsync -y
-
-# Ansible galaxy plugins
-RUN ansible-galaxy install newrelic.newrelic_java_agent
 
 # Install Terraform (used in newrelic instrumentations for alerts)
 RUN apt-get update

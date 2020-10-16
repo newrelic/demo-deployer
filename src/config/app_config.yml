@@ -15,5 +15,10 @@ resourceIdMaxLength: 20
 awsEc2SupportedSizes: ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "t3.nano", "t3.micro", "t3.small", "t3.medium", "t3.large", "t3.xlarge", "t3a.nano", "t3a.micro", "t3a.small", "t3a.medium", "t3a.large", "t3a.xlarge"]
 awsElbPort: 80
 awsElbMaxListeners: 50
-
 awsApiGatewaySleepTimeSeconds: 35
+
+# Azure-specific defaults.
+azureVmSupportedSizes: ["Standard_B1s","Standard_B1ms","Standard_B2s","Standard_B2ms","Standard_E2_v3"]
+
+# Gcp-specific defaults.
+gcpComputeSupportedSizes: ["e2-micro","e2-small","e2-medium","n1-standard-1","n1-standard-2","n1-standard-4"]

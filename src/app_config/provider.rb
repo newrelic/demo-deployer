@@ -47,6 +47,14 @@ module AppConfig
       return @config_file["awsApiGatewaySleepTimeSeconds"]
     end
 
+    def get_azure_vm_supported_sizes()
+      return @config_file["azureVmSupportedSizes"]
+    end
+
+    def get_gcp_compute_supported_sizes()
+      return @config_file["gcpComputeSupportedSizes"]
+    end
+
     def get_ansible_roles_path()
       raw = @config_file["ansibleRolesPath"]
       if raw != nil && raw.include?("$")

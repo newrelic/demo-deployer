@@ -18,7 +18,7 @@ module Infrastructure
 
       private
       def get_supported_sizes()
-        return ["Standard_B1s"]
+        return @app_config_provider.get_azure_vm_supported_sizes()
       end
 
     end
