@@ -22,7 +22,7 @@
     "Environment": "development",
     "Department": "product",
     "Product": "V3",
-    "DeployedBy": "UAT GCP"
+    "DeployedBy": "UATGCP"
   },
 
   "resources": [
