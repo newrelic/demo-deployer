@@ -28,6 +28,13 @@ Rake::TestTask.new do |t|
   t.warning = false
 end
 
+Rake::TestTask.new do |t|
+  t.name = 'test:uat:gcp'
+  t.test_files = FileList['user_acceptance_tests/gcp/**/*_tests.rb']
+  t.verbose = true
+  t.warning = false
+end
+
 task :unit do
   Rake::Task['test:unit'].invoke
 end
