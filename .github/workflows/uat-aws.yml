@@ -60,7 +60,7 @@ jobs:
 
       - name: Write UAT JSON to file
         env:
-          UAT_JSON: ${{ secrets.USER_UAT_JSON }}
+          UAT_JSON: ${{ secrets.UAT_USER_AWS }}
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
 
