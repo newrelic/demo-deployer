@@ -55,10 +55,10 @@ jobs:
           UAT_GCP_SERVICEACCOUNT_FILE: ${{ secrets.UAT_GCP_SERVICEACCOUNT_FILE }}
         run: |
           rm -f compute-user.pem
-          echo "$UAT_GCP_PEM_FILE" > compute-user.pem
-          sudo chmod 400 compute-user.pem
+          echo "$UAT_GCP_PEM_FILE" > user_acceptance_tests/compute-user.pem
+          sudo chmod 400 user_acceptance_tests/compute-user.pem
           rm -f demo-newrelic-staging-gcp-service-account.json
-          echo "$UAT_GCP_SERVICEACCOUNT_FILE" > demo-newrelic-staging-gcp-service-account.json
+          echo "$UAT_GCP_SERVICEACCOUNT_FILE" > user_acceptance_tests/demo-newrelic-staging-gcp-service-account.json
 
       - name: Write UAT JSON to file
         env:
