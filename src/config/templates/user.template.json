@@ -1,13 +1,11 @@
 {
   "credentials": {
-
     "aws": {
       "apiKey": "AWS_ACCESS_ID",
       "secretKey": "AWS_SECRETKEY",
       "secretKeyPath": "AWS_SECRET_KEYPATH",
       "region": "AWS_REGION"
     },
-
     "newrelic": {
       "licenseKey": "NR_LICENSE_KEY",
       "nrPersonalApiKey": "NR_PERSONAL_API_KEY",
@@ -16,7 +14,7 @@
       "accountId": "NR_ACCOUNT_ID",
       "accountRootId": "NR_ACCOUNT_ROOT_ID",
       "nrRegion": "NR_REGION",
-      "urls":{
+      "urls": {
         "collector": "NR_COLLECTOR_URL",
         "api": "NR_API_URL",
         "infraCollector": "NR_INFRA_COLLECTOR_URL",
@@ -26,7 +24,6 @@
         "cloudCollector": "NR_CLOUD_COLLECTOR_URL"
       }
     },
-
     "azure": {
       "client_id": "AZURE_CLIENT_ID",
       "tenant": "AZURE_TENANT",
@@ -34,10 +31,6 @@
       "secret": "AZURE_SECRET",
       "region": "AZURE_REGION",
       "sshPublicKeyPath": "AZURE_SSH_PUBLIC_KEY_PATH"
-    },
-
-    "git": {
-      "myusername": "my git personal access token value"
     }
   }
 }

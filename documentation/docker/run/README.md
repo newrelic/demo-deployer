@@ -8,7 +8,7 @@ The deployer can be run through a built image. A [Dockerfile](../../../Dockerfil
 * A user config file stored locally on your machine, see [UserConfig](../../user_config/README.md) for creating your user config file. Copy this file into your `$HOME/configs` folder.
 * A deploy config file stored locally on your machine, see [DeployConfig](../../deploy_config/README.md) for creating your deploy config. Copy this file into your `$HOME/configs` folder.
 
-Note, several deploy config examples are available in [UserStories](../../tutorial/user_stories/README.md)
+Note, several deploy config examples are available in [UserStories](../../tutorials/README.md)
 
 ## Building the docker image
 
@@ -23,7 +23,7 @@ docker build -t deployer .
 
 After building the deployer docker image, you can now run the deployer through docker.
 Any file dependency needed by the deployer needs to be explicitly handled through the use of volume. To make things simpler, we only mount your local `$HOME/configs` folder so all the files in that folder will be accessible by the docker image. The location for that `/configs` folder in the docker image will be `/mnt/deployer/configs`.
-Important, you'll want to make sure the .pem key path in your user config file is using the docker image path. 
+Important, you'll want to make sure the .pem key path in your user config file is using the docker image path.
 
 Therefore, the steps for running the deployer with docker are as follow:
 
@@ -39,7 +39,7 @@ docker run -it\
 
 ### Example
 
-I have a user config with some AWS credentials. 
+I have a user config with some AWS credentials.
 
 The file is stored on my local machine in `/home/jerard/configs/jerard.docker.local.json`. The file looks like this:
 ```json
@@ -51,10 +51,6 @@ The file is stored on my local machine in `/home/jerard/configs/jerard.docker.lo
       "secretKeyPath": "/mnt/deployer/configs/jerardUsEast2.pem",
       "region": "us-east-2"
     },
-
-    "git": {
-      "username": "a secret git personal access token"
-    }
   }
 }
 ```
@@ -96,7 +92,7 @@ docker run -it\
 
 ## Tearing down resources
 
-The deployer can also be run to remove all the resources provisioned. 
+The deployer can also be run to remove all the resources provisioned.
 
 To do, the syntax is identical to the command used for deploying with the addition of a `-t` parameter to indicate a `teardown`.
 
