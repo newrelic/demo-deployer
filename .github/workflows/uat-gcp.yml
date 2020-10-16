@@ -49,6 +49,9 @@ jobs:
       - name: Install Ansible Galaxy Plugins
         run: ansible-galaxy install newrelic.newrelic_java_agent
 
+      - name: Generate Default SSH Keypair
+        run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
+
       - name: Write GCP files
         env:
           UAT_GCP_PEM_FILE: ${{ secrets.UAT_GCP_PEM_FILE }}
