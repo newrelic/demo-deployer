@@ -1,15 +1,15 @@
 # Getting started
 
-Before you begin this story, complete [Step 0](../../README.md#step-0---install-pre-reqs--create-configs).
+Before you begin, complete the [Getting Started](../README.md#getting-started) guide.
 
 When you've finished, you'll have:
 
 - Installed Docker
-- Cloned the demo-deployer
+- Cloned the `demo-deployer`
 - Created a user config file containing AWS and New Relic credentials
 - Downloaded a .pem key file from AWS
 
-> **Note:** While the demo-deployer supports user credentials from AWS, Azure, or GCP, the Acme Telco Lite stories require that you use AWS credentials.
+> **Note:** While the `demo-deployer` supports user credentials from AWS, Azure, or GCP, the Acme Telco Lite stories require that you use AWS credentials.
 
 Your user config file must contain the following keys:
 

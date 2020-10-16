@@ -8,7 +8,7 @@ Here is an illustration of the configuration:
 
 ```json
 {
-    
+
   "instrumentations": {
 
     "resources": [
@@ -61,11 +61,11 @@ The deployer will validate the dependent services exist.
 
 ## provider
 
-This string represent the instrumentation provider to use. The value must match a credential definition within the user config file. An example of instrumentation provider will be `newrelic`. For more information regarding how to setup the `newrelic` user config credential, refer to this page [NewRelic UserConfig Credential](../../user_config/credentials/newrelic/README.md)
+This string represent the instrumentation provider to use. The value must match a credential definition within the user config file. An example of instrumentation provider will be `newrelic`. For more information regarding how to setup the `newrelic` user config credential, refer to this page [NewRelic UserConfig Credential](../../user_config/newrelic.md)
 
 ## provider_credential
 
-Optional, this field represent an additional set of credential to be given to the instrumentor play. For example, a value of `aws` would look up all the credentials for the `aws` key in the [NewRelic UserConfig Credential](../../user_config/credentials/newrelic/README.md) file and add those credentials to each of the instrumentor plays.
+Optional, this field represent an additional set of credential to be given to the instrumentor play. For example, a value of `aws` would look up all the credentials for the `aws` key in the [NewRelic UserConfig Credential](../../user_config/newrelic.md) file and add those credentials to each of the instrumentor plays.
 This can be useful if an instrumentation play requires to have access to some cloud provider resources, for example, when using terraform and wanting to store the state file onto an S3 bucket.
 
 ## local_source_path
@@ -74,8 +74,7 @@ This field is optional, and must be omitted if `source_repository` is specified.
 
 ## source_repository
 
-This field is optional, and must be omitted if `local_source_path` is specified. The value represent a GIT repository, which can either be an SSH string, or an HTTPS URI. For example, the `newrelic` instrumentation is available in this repository `https://github.com/newrelic/demo-newrelic-instrumentation.git`.
-Note for the HTTPS usage, it is possible to use a GIT access token. For more information see [Git Credentials](../../user_config/credentials/git/README.md)
+This field is optional, and must be omitted if `local_source_path` is specified. The value represents a GitHub repository and can either be an SSH string or an HTTPS URI.
 
 ## version
 
@@ -100,7 +99,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "provider": "newrelic",
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
-        "version": "1.4.11" 
+        "version": "1.4.11"
       },
       {
         "id": "nr_lambda",
@@ -126,7 +125,7 @@ This snippet is an example of instrumentation definitions for a set of resources
         "provider": "newrelic",
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/go/datanerd.us/demotron/V3-Gotron/roles",
-        "version": "3.6.0" 
+        "version": "3.6.0"
       },
       {
         "id": "nr_lambda_python",

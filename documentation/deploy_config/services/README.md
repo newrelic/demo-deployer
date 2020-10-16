@@ -46,8 +46,7 @@ This field is optional, and must be omitted if `source_repository` is specified.
 
 ## source_repository
 
-This field is optional, and must be omitted if `local_source_path` is specified. The value represent a GIT repository, which can either be an SSH string, or an HTTPS URI.
-Note for the HTTPS usage, it is possible to use a GIT access token. For more information see [Git Credentials](../../user_config/credentials/git/README.md)
+This field is optional, and must be omitted if `local_source_path` is specified. The value represents a GitHub repository and can either be an SSH string or an HTTPS URI.
 
 ## deploy_script_path
 

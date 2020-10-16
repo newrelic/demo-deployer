@@ -41,20 +41,18 @@ The structure of the user config is a list of credentials, for example:
     },
 
     "git": {
-      "username": "my_git_access_token"
+        "username": "my personal access token value"
     }
   }
 }
 ```
-*Note*: 
 
 ## Credentials
 
-The sections belows give more details regarding how to setup each specific credential.
-Proceed with any of the section below depending on your needs. Typically the tutorial uses only AWS, Git and NewRelic.
+The references below give more details regarding how to setup specific vendors. Typically, tutorials use AWS and NewRelic.
 
-* [Azure](credentials/azure/README.md)
-* [Aws](credentials/aws/README.md)
+* [Azure](azure.md)
+* [Aws](aws.md)
 * [Gcp](credentials/gcp/README.md)
-* [Git](credentials/git/README.md)
-* [NewRelic](credentials/newrelic/README.md)
+* [NewRelic](newrelic.md)
+* [GitHub](github.md)
