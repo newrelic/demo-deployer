@@ -21,8 +21,6 @@ The `newrelic` user configuration has the following schema:
 
 To set any of the value referenced above, follow the steps below.
 
-> **Note:** Some fields are optional.
-
 ### licenseKey
 
 The deployer requires your New Relic license key to make changes to your account. Read the [official New Relic documentation](https://docs.newrelic.com/docs/accounts/accounts-billing/account-setup/new-relic-license-key) to learn how to obtain your license key.
@@ -31,21 +29,17 @@ The deployer requires your New Relic license key to make changes to your account
 
 The deployer uses your Personal API key to make requests to New Relic's APIs on behalf of your account. Read the [official New Relic documentation](https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#personal-api-key) to learn how to obtain a Personal API key.
 
-### nrAdminApiKey (optional)
+### insightsInsertApiKey
 
-The deployer uses your Admin API key to make requests to certain New Relic APIs on behalf of your account. This is typically an **optional** element. Read the [official New Relic documentation](https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#admin) to learn how to obtain an Admin API key.
-
-### insightsInsertApiKey (optional)
-
-The deployer uses your Insert API key to manage logs in New Relic. This is typically an **optional** element. Read the [official New Relic documentation](https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#event-insert-key) to learn how to obtain an Insert API key.
+The deployer uses your Insert API key to manage logs in New Relic. Read the [official New Relic documentation](https://docs.newrelic.com/docs/apis/get-started/intro-apis/types-new-relic-api-keys#event-insert-key) to learn how to obtain an Insert API key.
 
 ### accountId
 
 The deployer requires your New Relic account ID to make changes to your account. Read the [official New Relic documentation](https://docs.newrelic.com/docs/accounts/accounts-billing/account-setup/account-id) to learn how to obtain your account ID.
 
-### accountRootId (optional)
+### accountRootId
 
-The deployer uses your account's root ID for handling agent data coming from AWS Lambda. This is typically an **optional** element. To find your root Id:
+The deployer uses your account's root ID for handling agent data coming from AWS Lambda. To find your root Id:
 
 1. Log in to New Relic
 2. Expand the username drop down in the top right corner, and click on `Account settings`
