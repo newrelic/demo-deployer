@@ -336,6 +336,13 @@
           "provider": "newrelic",
           "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
           "deploy_script_path": "deploy/workloads/golden/restapi/roles"
+        },
+        {
+          "id": "nr_aws_integration",
+          "provider": "newrelic",
+          "provider_credential": "aws",
+          "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
+          "deploy_script_path": "deploy/cloud_providers/aws/restapi/roles"
         }
       ]
     }
