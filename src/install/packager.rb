@@ -72,6 +72,7 @@ module Install
       provisioned_resources = @context.get_provision_provider().get_all()
       field_merger = @service_field_merger_builder
         .with_services(services, provisioned_resources)
+        .with_new_relic(@context)
         .build()
       return field_merger
     end

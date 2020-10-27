@@ -3,16 +3,24 @@ require "minitest/autorun"
 require "mocha/minitest"
 
 require "./src/user_config/definitions/git_credential"
+require "./src/user_config/definitions/new_relic_credential"
 require "./src/user_config/credential_factory"
 require "./src/common/text/credential_field_merger_builder"
+require "./tests/context_builder"
 
 describe "Common::Text::CredentialFieldMergerBuilder" do
-  let(:user_config) { {} }
+  let(:git_user_config) { {} }
   let(:usernames) { [] }
   let(:my_personal_access_token) { "my access token"}
   let(:another_personal_access_token) { "another access token"}
   let(:no_token_credential_stub) { m = mock(); m.stubs(:get_personal_access_token); m.stubs(:get_usernames).returns(usernames); m }
-  let(:credentials) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
+  let(:git_credentials) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(git_user_config)) }
+  let(:newrelic_credentials) { Tests::ContextBuilder.new()
+                                .user_config()
+                                .with_new_relic()
+                                .build()
+                                .get_user_config_provider()
+                                .get_new_relic_credential() }
   let(:builder)  { Common::Text::CredentialFieldMergerBuilder.new() }
 
   it "should build empty" do
@@ -21,7 +29,7 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
 
   it "should build single git credential" do
     given_git_credential("myusername", my_personal_access_token)
-    fields = builder.with_git(credentials).build()
+    fields = builder.with_git(git_credentials).build()
     fields.get_definitions_key().length().must_equal(1)
     fields.get_definitions_key()[0].must_equal("[credential:git:myusername]")
   end
@@ -29,7 +37,7 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
   it "should build multiple git credential" do
     given_git_credential("myusername", my_personal_access_token)
     given_git_credential("anotherusername", another_personal_access_token)
-    fields = builder.with_git(credentials).build()
+    fields = builder.with_git(git_credentials).build()
     fields.get_definitions_key().length().must_equal(2)
   end
 
@@ -39,9 +47,20 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
     fields.get_definitions_key().length().must_equal(0)
   end
 
-  def given_git_credential(username, token)
-    user_config[username] = token
-    usernames.push(username)
+  it "should NOT build newrelic credential when not exist" do 
+    fields = builder.with_new_relic(nil).build()
+    fields.get_definitions_key().length().must_equal(0)
   end
 
+  it "should build newrelic credential" do
+    fields = builder.with_new_relic(newrelic_credentials).build()
+    definitions = fields.get_definitions_key()
+    definitions.length().must_equal(1)
+    definitions.must_include("[credential:newrelic:licenseKey]")
+  end
+
+  def given_git_credential(username, token)
+    git_user_config[username] = token
+    usernames.push(username)
+  end
 end

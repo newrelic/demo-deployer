@@ -1,6 +1,7 @@
 require "./src/common/logger/logger_factory"
 require "./src/common/text/field_merger_builder"
 require "./src/common/text/global_field_merger_builder"
+require "./src/common/text/credential_field_merger_builder"
 
 module Install
   class ServiceFieldMergerBuilder
@@ -48,6 +49,12 @@ module Install
       return self
     end
 
+    def with_new_relic(context)
+      merger = Common::Text::CredentialFieldMergerBuilder.create(context)
+      @field_merger_builder.append_definitions(merger.get_definitions())
+      return self
+    end
+
     def build()
       return @field_merger_builder.build()
     end
@@ -62,6 +69,7 @@ module Install
       end
       instance.with_services(services, provisioned_resources)
       instance.with_global(context)
+      instance.with_new_relic(context)
       return instance.build()
     end
 
