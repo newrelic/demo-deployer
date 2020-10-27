@@ -56,10 +56,9 @@ Alongside the user configuration file, the deployer uses a **deployment configur
 
 Below are the demos we currently offer and what you can expect from them. If you'd like a guided walkthrough of a demo, we've also included developer guides for most of our demos:
 
-| Demo | Description | Guide |
+| Demo files | Description | Guide |
 |---|---|---|
-| [Hello World](https://raw.githubusercontent.com/newrelic/demo-deployer/main/demo/catalog/hello.aws.json) | A single-page web application with New Relic instrumentation | [Automate tagging of your entire stack
-](https://developer.newrelic.com/automate-workflows/automated-tagging) |
+| [Hello World](https://raw.githubusercontent.com/newrelic/demo-deployer/main/demo/catalog/hello.aws.json) | A single-page web application with New Relic instrumentation | [Automate tagging of your entire stack](https://developer.newrelic.com/automate-workflows/automated-tagging) |
 | [Acme Telco Lite](https://raw.githubusercontent.com/newrelic/demo-deployer/main/demo/catalog/telcolite.aws.json) | A microservice architecture for an eCommerce platform, with simulated issues for investigating | [Use New Relic to diagnose problems in Acme Telco Lite](https://developer.newrelic.com/automate-workflows/diagnose-problems)
 
 > **Important!** While the links provided in the **Demo** column are all for Amazon Web Services (AWS), the `demo-deployer` supports three prominent cloud providers: AWS, Microsoft Azure, and Google Cloud Platform (GCP). To use another provider, change the link from `<demo>.aws.json` to `<demo>.azure.json` or `<demo>.gcp.json`.
