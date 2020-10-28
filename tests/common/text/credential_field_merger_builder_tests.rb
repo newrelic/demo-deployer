@@ -50,10 +50,12 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
 
   it "should build newrelic credential" do
     given_newrelic_credential("licenseKey", "test")
+    given_newrelic_credential("nrRegion", "test2")
     fields = builder.with_new_relic(newrelic_credentials).build()
     definitions = fields.get_definitions_key()
-    definitions.length().must_equal(1)
-    definitions.must_include("[credential:newrelic:licenseKey]")
+    definitions.length().must_equal(2)
+    definitions.must_include("[credential:newrelic:license_key]")
+    definitions.must_include("[credential:newrelic:region]")
   end
 
   it "should not include new relic fields without values" do
@@ -62,8 +64,8 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
     fields = builder.with_new_relic(newrelic_credentials).build()
     definitions = fields.get_definitions_key()
     definitions.length().must_equal(1)
-    definitions.wont_include("[credential:newrelic:licenseKey]")
-    definitions.must_include("[credential:newrelic:nrRegion]")
+    definitions.wont_include("[credential:newrelic:license_key]")
+    definitions.must_include("[credential:newrelic:region]")
   end
 
   def given_git_credential(username, token)

@@ -49,7 +49,7 @@ module Install
       return self
     end
 
-    def with_new_relic(context)
+    def with_user_credentials(context)
       merger = Common::Text::CredentialFieldMergerBuilder.create(context)
       @field_merger_builder.append_definitions(merger.get_definitions())
       return self
@@ -65,11 +65,11 @@ module Install
       provisioned_resources = []
       provision_provider = context.get_provision_provider()
       unless provision_provider.nil?
-        provisiprovisioned_resourcesoned_resources = provision_provider.get_all()
+        provisioned_resources = provision_provider.get_all()
       end
       instance.with_services(services, provisioned_resources)
       instance.with_global(context)
-      instance.with_new_relic(context)
+      instance.with_user_credentials(context)
       return instance.build()
     end
 

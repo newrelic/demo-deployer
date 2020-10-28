@@ -7,9 +7,14 @@ module UserConfig
             @user_config_query_lambda = user_config_query_lambda
         end
 
-        def add_if_exist(items, name, value)
+        def add_if_exist(items, name, value, no_prefix = false)
           unless value.nil?
-            key = "#{@provider}_#{name}"
+            if no_prefix
+              key = name
+            else
+              key = "#{@provider}_#{name}"
+            end
+
             items[key] = value
           end
         end
