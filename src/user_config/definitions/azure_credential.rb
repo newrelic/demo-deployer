@@ -46,15 +46,15 @@ module UserConfig
         return query("region")
       end
 
-      def to_h()
+      def to_h(key_prefix = @provider)
         items = {}
-        add_if_exist(items, "client_id", get_client_id())
-        add_if_exist(items, "tenant", get_tenant())
-        add_if_exist(items, "subscription_id", get_subscription_id())
-        add_if_exist(items, "secret", get_secret())
-        add_if_exist(items, "secretKeyPath", get_secret_key_path())
-        add_if_exist(items, "region", get_region())
-        add_if_exist(items, "ssh_public_key", get_ssh_public_key())
+        add_if_exist(items, "client_id", get_client_id(), key_prefix)
+        add_if_exist(items, "tenant", get_tenant(), key_prefix)
+        add_if_exist(items, "subscription_id", get_subscription_id(), key_prefix)
+        add_if_exist(items, "secret", get_secret(), key_prefix)
+        add_if_exist(items, "secretKeyPath", get_secret_key_path(), key_prefix)
+        add_if_exist(items, "region", get_region(), key_prefix)
+        add_if_exist(items, "ssh_public_key", get_ssh_public_key(), key_prefix)
         return items
       end
 

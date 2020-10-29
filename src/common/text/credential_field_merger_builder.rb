@@ -26,7 +26,7 @@ module Common
 
       def with_new_relic(credentials)
         unless credentials.nil?
-          new_relic_credential = credentials.to_h_no_prefix()
+          new_relic_credential = credentials.to_h(nil)
 
           new_relic_credential.each do | key, value |
             add_field_merger_definition(["credential", "newrelic", key], value)
@@ -50,8 +50,10 @@ module Common
         git_credential = context.get_user_config_provider().get_git_credentials()
         newrelic_credential = context.get_user_config_provider().get_new_relic_credential()
 
-        instance.with_git(git_credential)
         instance.with_global(context)
+        unless git_credential.nil?
+          instance.with_git(git_credential)
+        end
         unless newrelic_credential.nil?
           instance.with_new_relic(newrelic_credential)
         end
