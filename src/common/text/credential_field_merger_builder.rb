@@ -26,7 +26,8 @@ module Common
 
       def with_new_relic(credentials)
         unless credentials.nil?
-          new_relic_credential = credentials.to_h(nil)
+          no_provider_prefix = nil
+          new_relic_credential = credentials.to_h(no_provider_prefix)
 
           new_relic_credential.each do | key, value |
             add_field_merger_definition(["credential", "newrelic", key], value)
@@ -47,13 +48,14 @@ module Common
 
       def self.create(context)
         instance = CredentialFieldMergerBuilder.new()
-        git_credential = context.get_user_config_provider().get_git_credentials()
-        newrelic_credential = context.get_user_config_provider().get_new_relic_credential()
-
         instance.with_global(context)
+
+        git_credential = context.get_user_config_provider().get_git_credentials()
         unless git_credential.nil?
           instance.with_git(git_credential)
         end
+
+        newrelic_credential = context.get_user_config_provider().get_new_relic_credential()
         unless newrelic_credential.nil?
           instance.with_new_relic(newrelic_credential)
         end
