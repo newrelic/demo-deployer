@@ -74,6 +74,22 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[service:app1]").must_equal("http://myelb.somewhere.com/api")
     merger.merge("[service:app1:url]").must_equal("http://myelb.somewhere.com/api")
   end
+   
+  it "should build service field merger WITHOUT user credentials" do
+    merger = given_builder()
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[credential:newrelic:license_key]").must_equal("[credential:newrelic:license_key]")
+  end
+
+  it "should build service field merger with user credentials" do
+    given_new_relic_credential("test_license_key") 
+    merger = given_builder()
+      .with_user_credentials(context())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[credential:newrelic:license_key]").must_equal("test_license_key")
+  end
 
   def given_service(service_id, destinations, port = 5000, display_name = nil)
     local_source_path = "src/path"
@@ -93,6 +109,10 @@ describe "Install::ServiceFieldMergerBuilder" do
     context_builder.provision().service_endpoint(id, url)
   end
 
+  def given_new_relic_credential(licenseKey) 
+    context_builder.user_config().with_new_relic(licenseKey)
+  end
+
   def given_builder()
     return @builder ||= create_builder()
   end
@@ -110,4 +130,7 @@ describe "Install::ServiceFieldMergerBuilder" do
     return @context.get_provision_provider().get_all()
   end
 
+  def context()
+    return @context
+  end
 end

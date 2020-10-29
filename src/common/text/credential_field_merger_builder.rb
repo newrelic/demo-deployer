@@ -17,13 +17,25 @@ module Common
             token = credentials.get_personal_access_token(username)
             unless token.nil?
               user_access_token = "#{username}:#{token}"
-              @field_merger_builder.create_definition(["credential", "git", username], user_access_token)
+              add_field_merger_definition(["credential", "git", username], user_access_token)
             end
           end
         end
         return self
       end
 
+      def with_new_relic(credentials)
+        unless credentials.nil?
+          no_provider_prefix = nil
+          new_relic_credential = credentials.to_h(no_provider_prefix)
+
+          new_relic_credential.each do | key, value |
+            add_field_merger_definition(["credential", "newrelic", key], value)
+          end
+        end
+        return self
+      end
+ 
       def with_global(context)
         merger = GlobalFieldMergerBuilder.create(context)
         @field_merger_builder.append_definitions(merger.get_definitions())
@@ -36,13 +48,30 @@ module Common
 
       def self.create(context)
         instance = CredentialFieldMergerBuilder.new()
-        credentials = context.get_user_config_provider().get_git_credentials()
-        instance.with_git(credentials)
         instance.with_global(context)
+
+        git_credential = context.get_user_config_provider().get_git_credentials()
+        unless git_credential.nil?
+          instance.with_git(git_credential)
+        end
+
+        newrelic_credential = context.get_user_config_provider().get_new_relic_credential()
+        unless newrelic_credential.nil?
+          instance.with_new_relic(newrelic_credential)
+        end
+
         merger = instance.build()
-        finder = FieldMergerFinder.new("credential", "git", "*")
-        merger.add_finder(finder)
+        git_finder = FieldMergerFinder.new("credential", "git", "*")
+        merger.add_finder(git_finder)
         return merger
+      end
+
+      private
+      
+      def add_field_merger_definition(key, value)
+        unless key.nil? || value.nil?
+          @field_merger_builder.create_definition(key, value)
+        end
       end
 
     end

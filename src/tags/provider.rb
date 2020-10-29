@@ -1,4 +1,4 @@
-require "./src/common/text/global_field_merger_builder"
+require "./src/common/text/credential_field_merger_builder"
 
 module Tags
   class Provider
@@ -47,7 +47,7 @@ module Tags
     end
 
     def get_merged_tags(tags)
-      merger = Common::Text::GlobalFieldMergerBuilder.create(@context)
+      merger = Common::Text::CredentialFieldMergerBuilder.create(@context)
       return merger.merge_values(tags)
     end
 

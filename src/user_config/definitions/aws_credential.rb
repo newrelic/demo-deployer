@@ -33,13 +33,13 @@ module UserConfig
         return query("region")
       end
 
-      def to_h()
+      def to_h(key_prefix = @provider)
         items = {}
-        add_if_exist(items, "access_key", get_access_key())
-        add_if_exist(items, "secret_key", get_secret_key())
-        add_if_exist(items, "secret_key_name", get_secret_key_name())
-        add_if_exist(items, "secret_key_path", get_secret_key_path())
-        add_if_exist(items, "region", get_region())
+        add_if_exist(items, "access_key", get_access_key(), key_prefix)
+        add_if_exist(items, "secret_key", get_secret_key(), key_prefix)
+        add_if_exist(items, "secret_key_name", get_secret_key_name(), key_prefix)
+        add_if_exist(items, "secret_key_path", get_secret_key_path(), key_prefix)
+        add_if_exist(items, "region", get_region(), key_prefix)
         return items
       end
 
