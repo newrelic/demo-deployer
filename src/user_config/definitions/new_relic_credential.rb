@@ -4,8 +4,9 @@ module UserConfig
   module Definitions
       class NewRelicCredential < Credential
 
-        def initialize (provider, user_config_query_lambda)
+        def initialize (context, provider, user_config_query_lambda)
           super(provider, user_config_query_lambda)
+          @context = context
         end
 
         def get_license_key()
@@ -37,36 +38,41 @@ module UserConfig
         end
 
         def get_collector_url()
-          return query("urls.collector")
+          return query("urls.collector") || get_default_urls()["collector"]
         end
 
         def get_api_url()
-          return query("urls.api")
+          return query("urls.api") || get_default_urls()["api"]
         end
 
         def get_infra_collector_url()
-          return query("urls.infraCollector")
+          return query("urls.infraCollector") || get_default_urls()["infraCollector"]
         end
 
         def get_lambda_url()
-          return query("urls.lambda")
+          return query("urls.lambda") || get_default_urls()["lambda"]
         end
 
         def get_infra_command_url()
-          return query("urls.infraCommand")
+          return query("urls.infraCommand") || get_default_urls()["infraCommand"]
         end
 
         def get_identity_url()
-          return query("urls.identity")
+          return query("urls.identity") || get_default_urls()["identity"]
         end
 
         def get_logging_url()
-          return query("urls.logging")
+          return query("urls.logging") || get_default_urls()["logging"]
         end
 
         def get_cloud_collector_url()
-          return query("urls.cloudCollector")
+          return query("urls.cloudCollector") || get_default_urls()["cloudCollector"]
         end
+
+        def get_default_urls()
+          return @new_relic_default_urls ||= @context.get_app_config_provider().get_new_relic_default_urls()
+        end
+
 
         def to_h(key_prefix = @provider)
           items = {}

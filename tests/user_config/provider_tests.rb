@@ -7,7 +7,8 @@ require "./src/user_config/provider"
 describe "UserConfig" do
   describe "Provider" do 
     let(:user_config) {{"credentials"=>{}}}
-    let(:provider) { UserConfig::Provider.new(user_config) }
+    let(:fake_context) {}
+    let(:provider) { UserConfig::Provider.new(fake_context, user_config) }
 
     it "should create provider" do
       provider.wont_be_nil

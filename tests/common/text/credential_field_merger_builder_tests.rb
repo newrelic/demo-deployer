@@ -9,14 +9,15 @@ require "./src/common/text/credential_field_merger_builder"
 require "./tests/context_builder"
 
 describe "Common::Text::CredentialFieldMergerBuilder" do
+  let(:context) { Tests::ContextBuilder.new().build() }
   let(:git_user_config) { {} }
   let(:nr_user_config) { {} }
   let(:usernames) { [] }
   let(:my_personal_access_token) { "my access token"}
   let(:another_personal_access_token) { "another access token"}
   let(:no_token_credential_stub) { m = mock(); m.stubs(:get_personal_access_token); m.stubs(:get_usernames).returns(usernames); m }
-  let(:git_credentials) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(git_user_config)) }
-  let(:newrelic_credentials) { UserConfig::Definitions::NewRelicCredential.new("newrelic", UserConfig::CredentialFactory.get_credential_query_lambda(nr_user_config)) }
+  let(:git_credentials) { UserConfig::Definitions::GitCredential.new(context, "git", UserConfig::CredentialFactory.get_credential_query_lambda(git_user_config)) }
+  let(:newrelic_credentials) { UserConfig::Definitions::NewRelicCredential.new(context, "newrelic", UserConfig::CredentialFactory.get_credential_query_lambda(nr_user_config)) }
   let(:builder)  { Common::Text::CredentialFieldMergerBuilder.new() }
 
   it "should build empty" do
@@ -53,7 +54,7 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
     given_newrelic_credential("nrRegion", "test2")
     fields = builder.with_new_relic(newrelic_credentials).build()
     definitions = fields.get_definitions_key()
-    definitions.length().must_equal(2)
+    definitions.length().must_equal(9)
     definitions.must_include("[credential:newrelic:license_key]")
     definitions.must_include("[credential:newrelic:region]")
   end
@@ -63,7 +64,7 @@ describe "Common::Text::CredentialFieldMergerBuilder" do
     given_newrelic_credential("nrRegion", "test")
     fields = builder.with_new_relic(newrelic_credentials).build()
     definitions = fields.get_definitions_key()
-    definitions.length().must_equal(1)
+    definitions.length().must_equal(8)
     definitions.wont_include("[credential:newrelic:license_key]")
     definitions.must_include("[credential:newrelic:region]")
   end

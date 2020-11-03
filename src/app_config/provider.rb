@@ -60,6 +60,10 @@ module AppConfig
       return @config_file["gcpComputeSupportedSizes"]
     end
 
+    def get_new_relic_default_urls()
+      return @config_file["newRelicDefaultUrls"]
+    end
+
     def get_ansible_roles_path()
       raw = @config_file["ansibleRolesPath"]
       if raw != nil && raw.include?("$")

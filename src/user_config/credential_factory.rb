@@ -16,11 +16,11 @@ module UserConfig
       @supported_types = supported_types
     end
 
-    def create(config_credential, credential_key)
+    def create(context, config_credential, credential_key)
       repository = get_repository()
       type = repository.get(credential_key)
       unless type.nil?
-        return type.new(credential_key, CredentialFactory.get_credential_query_lambda(config_credential))
+        return type.new(context, credential_key, CredentialFactory.get_credential_query_lambda(config_credential))
       end
       return nil
     end
@@ -61,5 +61,4 @@ module UserConfig
       return current
     end
   end
-
 end
