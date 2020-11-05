@@ -16,7 +16,7 @@ module Common
           (usernames || []).each do |username|
             token = credentials.get_personal_access_token(username)
             unless token.nil?
-              user_access_token = "#{username}:#{token}"
+              user_access_token = "#{token}"
               add_field_merger_definition(["credential", "git", username], user_access_token)
             end
           end
