@@ -30,6 +30,17 @@ Once deployed, you can find that resource on AWS Console, EC2 dashboard.
 The deployer follows a naming convention when creating resources. All resources have the following format `[user config filename prefix]-[deploy config filename prefix]-[resource_id]`
 For example, if you've run the deployer with a command `ruby main.rb -c jsmith.local.json -d hello.json` with `hello.json` the resource definition above, you'll find an EC2 resource created with a name of `jsmith-hello-host1`.
 
+### ami_name
+
+Optional, this field specify which ami to use. The default ami name is `amzn2-ami-hvm-2.0.20190228-x86_64-gp2`.
+The value is used as a filter pattern to find the most recent AMI of a resultset.
+For example `"ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-????????.1"` will search and find the most recent Ubuntu 18.04 version.
+Note, when using an OS having a different user than the default `ec2-user` name, the field `user_name` should be used to configure which user name to use for SSH.
+
+### user_name
+
+Optional, this field specify which user to use for SSH. By default the value of `ec2-user` is used, which is the default user for AWS Linux AMIs. For example, a `user_name` of `ubuntu` should be used when provisioning a Ubuntu linux instance.
+
 ### size
 
 This field specify which size to use for the EC2 instance. All the possible values are configured in the [`/src/config/app_config.yml`](/src/config/app_config.yml) for the element `awsEc2SupportedSizes`.
