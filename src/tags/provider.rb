@@ -37,10 +37,11 @@ module Tags
 
     private
     def get_deployment_tags()
+      deployer_version = @context.get_app_config_provider().get_deployer_version()
       tags = { 
         "dxDeploymentName" => "[global:deployment_name]",
         "dxDeploymentDate" => Date.today.to_s,
-        "dxDeployerVersion" => "3.0.0",
+        "dxDeployerVersion" => deployer_version,
         "dxDeployedBy" => "[global:user_name]"
       }
       return tags

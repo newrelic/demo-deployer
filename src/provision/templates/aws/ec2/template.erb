@@ -33,10 +33,16 @@
         msg: "AMI not found"
       when: found_ec2_ami_fact is not defined
 
-    - name: set AMI ID fact
+    - name:  set AMI ID fact
+      vars:
+        amis: >
+          {{ found_ec2_ami_fact.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}
       set_fact:
-        ami_id:  "{{item['image_id']}}"
-      with_items: "{{found_ec2_ami_fact['images']}}"
+        ami_id:  "{{ amis.image_id }}"
+
+    - name: Found ami output
+      debug:
+        msg: "Using ami_id:{{ami_id}}"
 
     - name: Security group rule descriptions - "{{ resource_id }}"
       ec2_group:

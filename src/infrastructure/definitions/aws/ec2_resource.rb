@@ -26,6 +26,9 @@ module Infrastructure
         def get_ami_name()
           return @ami_name
         end
+        def set_ami_name(ami_name)
+          @ami_name = ami_name
+        end
 
         def get_tags()
           return @tags.merge({})

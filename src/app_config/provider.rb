@@ -8,6 +8,11 @@ module AppConfig
       @config_file = config_file || {}
     end
 
+    def get_deployer_version()
+      version = "#{@config_file["deployerMajorVersion"]}.#{@config_file["deployerMinorVersion"]}.#{@config_file["deployerBuildVersion"]}"
+      return version
+    end
+
     def get_execution_path()
       output_path = @config_file["executionPath"]
       return output_path
