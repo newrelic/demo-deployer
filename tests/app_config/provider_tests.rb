@@ -5,7 +5,18 @@ require "mocha/minitest"
 require "./src/app_config/provider"
 
 describe "AppConfig::Provider" do
-  let(:app_config) {{"executionPath"=>"path", "summaryFilename"=>"filename.txt", "serviceIdMaxLength"=>99, "resourceIdMaxLength"=>99, "awsEc2SupportedSizes"=>["t2.nino", "t2.micra", "t2.smallz", "t2.mediums"], "awsElbPort"=>45, "awsElbMaxListeners"=>99}}
+  let(:app_config) {{
+      "deployerMajorVersion"=>"a",
+      "deployerMinorVersion"=>"b",
+      "deployerBuildVersion"=>"c",
+      "executionPath"=>"path", 
+      "summaryFilename"=>"filename.txt", 
+      "serviceIdMaxLength"=>99, 
+      "resourceIdMaxLength"=>99, 
+      "awsEc2SupportedSizes"=>["t2.nino", "t2.micra", "t2.smallz", "t2.mediums"], 
+      "awsElbPort"=>45, 
+      "awsElbMaxListeners"=>99
+    }}
   let(:provider) { AppConfig::Provider.new(app_config)}
 
   it "should create provider" do
@@ -52,6 +63,10 @@ describe "AppConfig::Provider" do
     it "should get max number of listeners associated with an ELB if it exists" do
       provider.get_aws_elb_max_listeners().must_equal(99)
     end
+  end
+
+  it "Should get deployer version" do
+    provider.get_deployer_version().must_equal("a.b.c")
   end
 
 end

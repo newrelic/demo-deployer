@@ -25,7 +25,7 @@ module Infrastructure
             when "ec2"
               ec2_resource = Ec2Resource.new(resource_id, credential, config_resource["size"], user_name, tags, config_resource["cpu_credit_specification"])
               ami_name = config_resource["ami_name"]
-              unless ami_name.empty?
+              unless (ami_name.nil? || ami_name.empty?)
                 ec2_resource.set_ami_name(ami_name)
               end
               return ec2_resource
