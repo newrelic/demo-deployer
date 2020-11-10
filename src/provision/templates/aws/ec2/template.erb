@@ -99,7 +99,9 @@
 
     - name: set IP address fact
       set_fact:
-        ip_address: "{{ item['public_ip_address']}}"
+        ip_address: "{{ item['public_ip_address'] }}"
+        private_dns_name: "{{ item['private_dns_name'] }}"
+        instance_id: "{{ item['instance_id'] }}"
       with_items: "{{ ec2_facts.instances }}"
 
     - block:
@@ -118,7 +120,9 @@
           artifact_json: "{{ temp_json | default([]) | combine({
             'resource_id': resource_id,
             'params': {
-                'ip': item.public_ip_address
+                'ip': item.public_ip_address,
+                'private_dns_name': private_dns_name,
+                'instance_id': instance_id
             }
             })
           }}"

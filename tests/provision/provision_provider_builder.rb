@@ -15,6 +15,15 @@ module Tests
         return @provider ||= createInstance(context)
       end
 
+      def service(id, params)
+        output_param = {}
+        output_param["id"] = id
+        params.each do |k,v|
+          output_param[k] = v
+        end
+        @output_params.push(output_param)
+      end
+
       def service_host(id, ip)
         output_param = {}
         output_param["id"] = id
@@ -37,14 +46,20 @@ module Tests
           id = output_param["id"]
           resource = infrastructure_provider.get_by_id(id)
           unless resource.nil?
-            ip = output_param["ip"]
-            unless ip.nil?
-              resource.get_params().add("ip", ip)
+            output_param.each do |k,v|
+              unless k=="id"
+                resource.get_params().add(k, v)
+              end
             end
-            url = output_param["url"]
-            unless url.nil?
-              resource.get_params().add("url", url)
-            end
+
+            # ip = output_param["ip"]
+            # unless ip.nil?
+            #   resource.get_params().add("ip", ip)
+            # end
+            # url = output_param["url"]
+            # unless url.nil?
+            #   resource.get_params().add("url", url)
+            # end
           end
         end
         provider = ::Provision::Provider.new(infrastructure_provider)

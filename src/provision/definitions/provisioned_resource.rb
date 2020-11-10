@@ -15,11 +15,19 @@ module Provision
       end
 
       def get_url()
-        url = get_param("url")        
+        url = get_param("url")
         if url!=nil && url.start_with?("http") == false
           url = "http://" +url
         end
         return url
+      end
+
+      def get_private_dns_name()
+        return get_param("private_dns_name")
+      end
+
+      def get_instance_id()
+        return get_param("instance_id")
       end
 
       def get_user_name()
