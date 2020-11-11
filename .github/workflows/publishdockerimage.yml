@@ -1,0 +1,39 @@
+name: publish docker image
+
+on: [workflow_dispatch]
+
+jobs:
+  multi:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Login to GitHub Container Registry
+          run: docker login ghcr.io -u ${{ secrets.GHR_USERNAME }} -p ${{ secrets.GHR_PASSWORD }}
+
+        - name: Parse major version
+          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerMajorVersion | awk '{print $2}')
+          id: major_version
+
+        - name: Parse minor version
+          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerMinorVersion | awk '{print $2}')
+          id: minor_version
+
+        - name: Parse build version
+          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerBuildVersion | awk '{print $2}')
+          id: build_version
+
+        - name: Output version
+          run: echo "The deployer version built will be ${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }}"
+
+        # - name: Build & tag image
+        #   run: |
+        #     docker build -f Dockerfile . \
+        #       -t ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }} \
+        #       -t ghcr.io/newrelic/deployer:latest
+
+        # - name: Publish image
+        #   run: |
+        #     docker push ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }}
+        #     docker push ghcr.io/newrelic/deployer:latest
