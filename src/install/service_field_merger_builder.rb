@@ -16,6 +16,7 @@ module Install
         url = provisioned_resource.get_url()
         @field_merger_builder.create_definition(["resource", id], url)
         @field_merger_builder.create_definition(["resource", id, "url"], url)
+        @field_merger_builder.create_definition(["resource", id, "display_name"], provisioned_resource.get_resource().get_display_name())
         @field_merger_builder.create_definition(["resource", id, "ip"], provisioned_resource.get_ip())
         @field_merger_builder.create_definition(["resource", id, "private_dns_name"], provisioned_resource.get_private_dns_name())
         @field_merger_builder.create_definition(["resource", id, "instance_id"], provisioned_resource.get_instance_id())
