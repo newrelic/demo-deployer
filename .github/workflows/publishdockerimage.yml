@@ -13,15 +13,15 @@ jobs:
           run: docker login ghcr.io -u ${{ secrets.GHR_USERNAME }} -p ${{ secrets.GHR_PASSWORD }}
 
         - name: Parse major version
-          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerMajorVersion | awk '{print $2}')
+          run: echo '::set-output name=number::'"$(cat src/config/app_config.yml | grep deployerMajorVersion | awk '{print $2}')"
           id: major_version
 
         - name: Parse minor version
-          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerMinorVersion | awk '{print $2}')
+          run: echo '::set-output name=number::'"$(cat src/config/app_config.yml | grep deployerMinorVersion | awk '{print $2}')"
           id: minor_version
 
         - name: Parse build version
-          run: echo "::set-output name=number::"(cat src/config/app_config.yml | grep deployerBuildVersion | awk '{print $2}')
+          run: echo '::set-output name=number::'"$(cat src/config/app_config.yml | grep deployerBuildVersion | awk '{print $2}')"
           id: build_version
 
         - name: Output version
