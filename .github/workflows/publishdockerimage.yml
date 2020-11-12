@@ -1,9 +1,12 @@
 name: publish docker image
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+  push:
+    branches: master
 
 jobs:
-  multi:
+  publish:
     runs-on: ubuntu-latest
     steps:
         - name: Checkout
@@ -27,11 +30,11 @@ jobs:
         - name: Output version
           run: echo "The deployer version built will be ${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }}"
 
-        # - name: Build & tag image
-        #   run: |
-        #     docker build -f Dockerfile . \
-        #       -t ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }} \
-        #       -t ghcr.io/newrelic/deployer:latest
+        - name: Build & tag image
+          run: |
+            docker build -f Dockerfile . \
+              -t ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }} \
+              -t ghcr.io/newrelic/deployer:latest
 
         # - name: Publish image
         #   run: |
