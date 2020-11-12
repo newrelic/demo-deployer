@@ -36,7 +36,7 @@ jobs:
               -t ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }} \
               -t ghcr.io/newrelic/deployer:latest
 
-        # - name: Publish image
-        #   run: |
-        #     docker push ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }}
-        #     docker push ghcr.io/newrelic/deployer:latest
+        - name: Publish image
+          run: |
+            docker push ghcr.io/newrelic/deployer:${{ steps.major_version.outputs.number }}.${{ steps.minor_version.outputs.number }}.${{ steps.build_version.outputs.number }}
+            docker push ghcr.io/newrelic/deployer:latest
