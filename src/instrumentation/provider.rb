@@ -121,7 +121,7 @@ module Instrumentation
     end
 
     def get_field_merger()
-      return @field_merger ||= Install::ServiceFieldMergerBuilder.create(@context)
+      return Install::ServiceFieldMergerBuilder.create(@context)
     end
 
   end

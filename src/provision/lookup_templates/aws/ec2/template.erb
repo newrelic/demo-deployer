@@ -49,7 +49,9 @@
           artifact_json: "{{ artifact_json | combine({
             'resource_id': resource_id,
             'params': {
-                'ip': item.public_ip_address
+                'ip': item.public_ip_address,
+                'private_dns_name': item.private_dns_name,
+                'instance_id': item.instance_id
             }
             })
           }}"

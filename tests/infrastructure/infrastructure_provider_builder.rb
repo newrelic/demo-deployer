@@ -16,11 +16,14 @@ module Tests
         return @parent_builder
       end
 
-      def ec2(id, size = "t2.small")
+      def ec2(id, size = "t2.small", display_name = nil)
         resource = create_new_resource(id)
         resource["provider"] = "aws"
         resource["type"] = "ec2"
         resource["size"] = size
+        unless display_name.nil?
+          resource["display_name"] = display_name
+        end
         return @parent_builder
       end
       

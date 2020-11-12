@@ -18,7 +18,7 @@ describe "Install::ServiceFieldMergerBuilder" do
 
   it "should build service field merger with service and provisioned resource" do
     given_ec2_resource("host1")
-    given_provisioned_service("host1", "1.2.3.4")
+    given_provisioned_service_ip("host1", "1.2.3.4")
     given_service("app1", ["host1"], 5001)
     merger = given_builder()
       .with_services(services(), provisioned_resources())
@@ -91,22 +91,51 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[credential:newrelic:license_key]").must_equal("test_license_key")
   end
 
+  it "should build resource field merger and provisioned resource" do
+    given_ec2_resource("host1", "MyHost1")
+    given_provisioned_service("host1", {"ip"=>"1.2.3.4", "private_dns_name"=>"my.private.host.com", "instance_id"=>"i-abc123"})
+    given_service("app1", ["host1"], 5001)
+    merger = given_builder()
+      .with_services(services(), provisioned_resources())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[resource:host1:display_name]").must_equal("MyHost1")
+    merger.merge("[resource:host1:ip]").must_equal("1.2.3.4")
+    merger.merge("[resource:host1:private_dns_name]").must_equal("my.private.host.com")
+    merger.merge("[resource:host1:instance_id]").must_equal("i-abc123")
+  end
+
+  it "should build resource field merger and provisioned resource with default display_name" do
+    given_ec2_resource("host1")
+    given_provisioned_service_ip("host1", "1.2.3.4")
+    given_service("app1", ["host1"], 5001)
+    merger = given_builder()
+      .with_services(services(), provisioned_resources())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[resource:host1:display_name]").must_equal("host1")
+  end
+
   def given_service(service_id, destinations, port = 5000, display_name = nil)
     local_source_path = "src/path"
     deploy_script_path = "deploy"
     context_builder.services().service(service_id, port, local_source_path, deploy_script_path, destinations, display_name)
   end
 
-  def given_ec2_resource(id)
-    context_builder.infrastructure().ec2(id, "t2.micro")
-  end  
-
-  def given_provisioned_service(id, ip)
-    context_builder.provision().service_host(id, ip)
+  def given_ec2_resource(id, display_name = nil)
+    context_builder.infrastructure().ec2(id, "t2.micro", display_name)
   end
-  
+
+  def given_provisioned_service(id, params)
+    context_builder.provision().service(id, params)
+  end
+
+  def given_provisioned_service_ip(id, ip)
+    context_builder.provision().service(id, {"ip"=>ip})
+  end
+
   def given_provisioned_service_url(id, url)
-    context_builder.provision().service_endpoint(id, url)
+    context_builder.provision().service(id, {"url"=>url})
   end
 
   def given_new_relic_credential(licenseKey) 
