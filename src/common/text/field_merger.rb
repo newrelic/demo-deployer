@@ -28,7 +28,7 @@ module Common
         @matches = {}
         unless text.nil?
           @definitions.each do |key, value|
-            if text.kind_of?(String) && text.include?(key)
+            if text.kind_of?(String) && text.include?(key) && value.nil? == false
               addMatch(key, value)
               text = text.gsub(key, value)
             end

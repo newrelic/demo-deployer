@@ -26,6 +26,14 @@ describe "Common::Text::FieldMerger" do
     merger.merge("anything").must_equal("anything")
   end
 
+  it "should not replace values when nil" do
+    merger = given_merger("[resource:host1:private_dns_name]", nil)
+    dictionary = {
+      "key1": "This is the dns [resource:host1:private_dns_name] value."
+    }
+    merger.merge_values(dictionary).must_equal(dictionary)
+  end
+
   def given_merger(key, value)
     definitions = Hash.new()
     definitions[key] = value
