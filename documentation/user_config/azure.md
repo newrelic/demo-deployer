@@ -50,6 +50,10 @@ _Note, if you're a NewRelic employee your username should be in the form of [use
 * If you don't have any subscription, create a new one by clicking the `+ Add` button.
 _Note, if you're a NewRelic employee, there should already be a subscription. If not, follow up with the ask-it channel._
 * Write down the `Subscription ID` value displayed in the subscriptions list, this will be your user config credentials for azure tenant
+* Select `Access control (IAM)` on the left.
+* Click the `Add` button and select `Add role assignment`
+* Select `Owner` as the role, `User, group or service principal` as what you assigning access to, and select the app you registered earlier.
+* Save the role assignment.
 
 ### region
 
