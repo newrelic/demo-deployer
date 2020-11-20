@@ -10,10 +10,12 @@ module CommandLine
     def initialize(context,
                    parser = nil,
                    validator = nil,
+                   provider_type = nil,
                    is_validation_enabled = true)
       @context = context
       @parser = parser || CommandLine::Parser.new()
       @validator = validator || CommandLine::Validator.new()
+      @provider_type = provider_type || CommandLine::Provider
       @is_validation_enabled = is_validation_enabled
     end
 
@@ -25,7 +27,7 @@ module CommandLine
           raise Common::ValidationError.new("Command Line validation has failed", validation_errors)
         end
       end
-      provider = CommandLine::Provider.new(@context, parser_options)
+      provider = @provider_type.new(@context, parser_options)
       @context.set_command_line_provider(provider)
       return provider
     end
