@@ -3,7 +3,6 @@ require "./src/app_config/validator"
 require "./src/app_config/provider"
 require "./src/app_config/merge_files"
 require "./src/common/io/yaml_file_loader"
-require './src/common/logger/logger_factory'
 
 module AppConfig
   class Orchestrator

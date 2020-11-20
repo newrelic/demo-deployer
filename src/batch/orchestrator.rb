@@ -19,9 +19,8 @@ module Batch
 
     def execute(arguments = ARGV)
       get_command_line_orchestrator().execute(arguments)
-      log_token = init_logging()
-
       get_app_config_orchestrator().execute()
+      log_token = init_logging()
 
       log_token.success()
     end

@@ -33,15 +33,15 @@ module Batch
 
         @opts.banner = "Usage: config"
 
-        @opts.on('-c', '--configpath file/directory', String, 'The local path for the user config file or files') do |config|
+        @opts.on('-c', '--configpath FILEPATH', 'The local path for the user config file or files. This can be a comma separated list of files or folders.') do |config|
           options[:user_config] = config
         end
 
-        @opts.on('-d', '--deploymentpath file/directory', String, 'The local path for the deployment config file or files') do |config|
+        @opts.on('-d', '--deployment FILEPATH', 'The local path for the deployment config file or files. This can be a comma separated list of files or folders.') do |config|
           options[:deploy_config] = config
         end
 
-        @opts.on('-s', '--batch_size INTEGER', Integer, 'Specify how many concurrent deployments to process at once, default to 10') do |value|
+        @opts.on('-s', '--batch_size integer', Integer, 'Specify how many concurrent deployments to process at once, default to 10') do |value|
           options[:batch_size] = value
         end
 
@@ -49,7 +49,7 @@ module Batch
           options[:mode] = mode
         end
 
-        @opts.on('-l', '--logging LEVEL', String, 'Logging level used during deployment or teardown. debug, info (default), error') do |logging|
+        @opts.on('-l', '--logging level', String, 'Logging level used during deployment or teardown. debug, info (default), error') do |logging|
           options[:logging_level] = logging
         end
 
