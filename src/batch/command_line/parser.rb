@@ -27,29 +27,34 @@ module Batch
       def create_options()
         options = {
             mode: "deploy",
+            batch_size: 10,
             logging_level: "info"
         }
 
         @opts.banner = "Usage: config"
 
-        @opts.on('-c', '--configpath', 'The local path for the user config file or files') do |config|
+        @opts.on('-c', '--configpath file/directory', String, 'The local path for the user config file or files') do |config|
           options[:user_config] = config
         end
 
-        @opts.on('-d', '--deploymentpath', 'The local path for the deployment config file or files.') do |config|
+        @opts.on('-d', '--deploymentpath file/directory', String, 'The local path for the deployment config file or files') do |config|
           options[:deploy_config] = config
         end
 
-        @opts.on('-m', '--mode', String, 'Specify the mode for deployment: deploy (default), teardown, deployteardown') do |mode|
+        @opts.on('-s', '--batch_size INTEGER', Integer, 'Specify how many concurrent deployments to process at once, default to 10') do |value|
+          options[:batch_size] = value
+        end
+
+        @opts.on('-m', '--mode deploy/teardown/deployteardown', String, 'Specify the mode for deployment: deploy (default), teardown, deployteardown') do |mode|
           options[:mode] = mode
         end
 
         @opts.on('-l', '--logging LEVEL', String, 'Logging level used during deployment or teardown. debug, info (default), error') do |logging|
           options[:logging_level] = logging
         end
-        
-        @opts.on('-i', '--ignore_teardown_error', FalseClass, 'When tearing down, specify if any error should be ignored (default false)') do |config|
-          options[:ignore_teardown_error] = true
+
+        @opts.on('-i', '--ignore_teardown_errors', FalseClass, 'When tearing down, specify if any error should be ignored (default false)') do |config|
+          options[:ignore_teardown_errors] = true
         end
 
         return options

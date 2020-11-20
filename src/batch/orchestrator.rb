@@ -23,6 +23,8 @@ module Batch
 
       get_app_config_orchestrator().execute()
 
+      puts "batch_size:#{@context.get_command_line_provider().get_batch_size()}"
+
       log_token.success()
     end
 
@@ -30,8 +32,18 @@ module Batch
 
     def init_logging()
       logging_level = @context.get_command_line_provider().get_logging_level()
-      Common::Logger::LoggerFactory.set_logging_level(logging_level)  
-      Common::Logger::LoggerFactory.get_logger().info("Executing batch processing")
+      Common::Logger::LoggerFactory.set_logging_level(logging_level)
+      displayMode = ""
+      if @context.get_command_line_provider().is_mode_deploy?()
+        displayMode = "#{displayMode} Deploy"
+      end
+      if @context.get_command_line_provider().is_mode_teardown?()
+        displayMode = "#{displayMode} Teardown"
+        if @context.get_command_line_provider().is_ignore_teardown_errors?()
+          displayMode = "(ignore errors)"
+        end
+      end
+      Common::Logger::LoggerFactory.get_logger().info("Executing batch processing, mode:#{displayMode}, batchSize:#{@context.get_command_line_provider().get_batch_size()}")
       Common::Logger::LoggerFactory.get_logger().task_start("Parsing and validating configuration")
     end
 

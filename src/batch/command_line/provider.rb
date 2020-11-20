@@ -15,6 +15,10 @@ module Batch
         return @options[:deploy_config]
       end
 
+      def get_batch_size()
+        return @options[:batch_size]
+      end
+
       def is_mode_deploy?()
         return @options[:mode] == "deploy" || @options[:mode] == "deployteardown"
       end
@@ -23,8 +27,8 @@ module Batch
         return @options[:mode] == "teardown" || @options[:mode] == "deployteardown"
       end
 
-      def is_ignore_teardown_error?()
-        return @options[:ignore_teardown_error] == true
+      def is_ignore_teardown_errors?()
+        return @options[:ignore_teardown_errors] == true
       end
 
       def get_logging_level()
