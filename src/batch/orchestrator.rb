@@ -19,11 +19,21 @@ module Batch
 
     def execute(arguments = ARGV)
       get_command_line_orchestrator().execute(arguments)
+      log_token = init_logging()
+
       get_app_config_orchestrator().execute()
 
+      log_token.success()
     end
 
     private
+
+    def init_logging()
+      logging_level = @context.get_command_line_provider().get_logging_level()
+      Common::Logger::LoggerFactory.set_logging_level(logging_level)  
+      Common::Logger::LoggerFactory.get_logger().info("Executing batch processing")
+      Common::Logger::LoggerFactory.get_logger().task_start("Parsing and validating configuration")
+    end
 
     def get_app_config_orchestrator()
       return @app_config_orchestrator ||= AppConfig::Orchestrator.new(@context)
