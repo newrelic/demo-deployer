@@ -23,8 +23,6 @@ module Batch
 
       get_app_config_orchestrator().execute()
 
-      puts "batch_size:#{@context.get_command_line_provider().get_batch_size()}"
-
       log_token.success()
     end
 
