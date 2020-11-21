@@ -36,7 +36,7 @@ module Batch
       runner = get_runner()
       if is_mode_deploy?()
         partitions.each do |partition|
-          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Deploying partition:#{partition.get_id()}")
+          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Deploying:#{partition}")
           runner.deploy(partition)
           log_token.success()
         end
@@ -48,7 +48,7 @@ module Batch
           if is_ignore_teardown_errors?()
             ignore_error_message = " (ignore any errors)"
           end
-          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Tearing down partition:#{partition.get_id()}#{ignore_error_message}")
+          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Tearing down:#{partition}#{ignore_error_message}")
           runner.teardown(partition)
           log_token.success()
         end
