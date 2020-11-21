@@ -17,7 +17,7 @@ module Batch
       end
 
       def get_user_config_filename()
-        return strip_to_name(@user_config_file)
+        return strip_to_name(@user_config_filepath)
       end
 
 

@@ -21,5 +21,13 @@ module Batch
       @context[:app_config_provider]
     end
 
+    def set_batch_provider(provider)
+      @context[:batch_provider] = provider
+    end
+  
+    def get_batch_provider()
+      @context[:batch_provider]
+    end
+
   end
 end

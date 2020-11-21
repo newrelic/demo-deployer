@@ -20,11 +20,11 @@ module Batch
       end
 
       def is_mode_deploy?()
-        return @options[:mode] == "deploy" || @options[:mode] == "deployteardown"
+        return @options[:mode].downcase() == "deploy" || @options[:mode].downcase() == "deployteardown"
       end
 
       def is_mode_teardown?()
-        return @options[:mode] == "teardown" || @options[:mode] == "deployteardown"
+        return @options[:mode] == "teardown".downcase() || @options[:mode].downcase() == "deployteardown"
       end
 
       def is_ignore_teardown_errors?()

@@ -18,7 +18,7 @@ module Batch
           user_file_exist_validator = nil,
           deploy_file_exist_validator = nil
         )
-        @invalid_batch_size_validator = invalid_batch_size_validator || IsIntegerValidator.new(lambda {|input| return input>=1}, "Number should be greater or equal to 1, but got:")
+        @invalid_batch_size_validator = invalid_batch_size_validator || IsIntegerValidator.new(lambda {|input| return input>=1}, "Batch size should be a number greater or equal to 1, but got:")
         @is_mode_validator = is_mode_validator || IsModeValidator.new()
         @user_file_or_directory_validator = user_file_or_directory_validator
         @deploy_file_or_directory_validator = deploy_file_or_directory_validator

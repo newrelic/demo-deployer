@@ -45,7 +45,7 @@ module Batch
           options[:batch_size] = value
         end
 
-        @opts.on('-m', '--mode deploy/teardown/deployteardown', String, 'Specify the mode for deployment: deploy (default), teardown, deployteardown') do |mode|
+        @opts.on('-m', '--mode DEPLOY/TEARDOWN/DEPLOYTEARDOWN', String, 'Specify the mode for deployment: deploy (default), teardown, deployteardown') do |mode|
           options[:mode] = mode
         end
 
