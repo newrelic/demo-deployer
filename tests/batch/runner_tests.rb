@@ -12,6 +12,7 @@ describe "Batch::Runner" do
   let(:errors) { [] }
   let(:deployments) { [] }
   let(:partitions ) { [] }
+  let(:launch_count) { [] }
   let(:process_launcher) { m = mock(); m }
   let(:context){ Tests::Batch::ContextBuilder.new().build() }
   let(:runner) { Batch::Runner.new(context, process_launcher) }
@@ -23,6 +24,7 @@ describe "Batch::Runner" do
 
   it "should deploy no partitions" do
     runner.deploy([], on_complete_lambda)
+    launch_count.length().must_equal(0)
     errors.length().must_equal(0)
   end
 
@@ -31,6 +33,7 @@ describe "Batch::Runner" do
     given_deployment("user1.json", "deploy.json")
     given_process_success()
     runner.deploy(partitions, on_complete_lambda)
+    launch_count.length().must_equal(1)
     errors.length().must_equal(0)
   end
 
@@ -40,6 +43,7 @@ describe "Batch::Runner" do
     given_success_deployment("user1.json", "deploy.json", partition)
     given_success_deployment("user2.json", "deploy.json", partition)
     runner.deploy(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
     errors.length().must_equal(0)
   end
 
@@ -49,6 +53,7 @@ describe "Batch::Runner" do
     given_error_deployment("user1.json", "deploy.json", partition)
     given_success_deployment("user2.json", "deploy.json", partition)
     runner.deploy(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
     errors.length().must_equal(1)
   end
 
@@ -57,12 +62,52 @@ describe "Batch::Runner" do
     given_error_deployment("user1.json", "deploy.json", given_partition())
     given_error_deployment("user2.json", "deploy.json", given_partition())
     runner.deploy(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
     errors.length().must_equal(2)
   end
 
   it "should teardown no partitions" do
     runner.teardown([], on_complete_lambda)
+    launch_count.length().must_equal(0)
     errors.length().must_equal(0)
+  end
+
+  it "should teardown once" do
+    given_logger()
+    given_deployment("user1.json", "deploy.json")
+    given_process_success()
+    runner.teardown(partitions, on_complete_lambda)
+    launch_count.length().must_equal(1)
+    errors.length().must_equal(0)
+  end
+
+  it "should teardown 2 on single partition" do
+    given_logger()
+    partition = given_partition()
+    given_success_deployment("user1.json", "deploy.json", partition)
+    given_success_deployment("user2.json", "deploy.json", partition)
+    runner.teardown(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
+    errors.length().must_equal(0)
+  end
+
+  it "should fail 1 out of 2 teardown on single partition" do
+    given_logger()
+    partition = given_partition()
+    given_error_deployment("user1.json", "deploy.json", partition)
+    given_success_deployment("user2.json", "deploy.json", partition)
+    runner.teardown(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
+    errors.length().must_equal(1)
+  end
+
+  it "should attempt all deployment when multiple partitions" do
+    given_logger()
+    given_error_deployment("user1.json", "deploy.json", given_partition())
+    given_error_deployment("user2.json", "deploy.json", given_partition())
+    runner.teardown(partitions, on_complete_lambda)
+    launch_count.length().must_equal(2)
+    errors.length().must_equal(2)
   end
 
   def given_success_deployment(user, deploy, partition = nil)
@@ -100,7 +145,12 @@ describe "Batch::Runner" do
     process.stubs(:get_context).returns(deployment)
     process.stubs(:get_execution_time)
     process.stubs(:wait_to_completion).returns(process_output)
-    process_launcher.expects(:call).with(anything, anything, anything, (deployment || anything)).returns(process)
+    process_launcher.expects(:call).with(anything, anything, anything, (deployment || anything)).returns(count_process_launch(process))
+  end
+
+  def count_process_launch(process)
+    launch_count.push(1)
+    return process
   end
 
   def given_partition(max_capacity = 10)

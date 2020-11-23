@@ -1,6 +1,8 @@
 require "json"
 
 require './src/command_line/orchestrator'
+require './src/batch/command_line/parser'
+require './src/batch/command_line/provider'
 
 module Tests
   module Batch
@@ -60,7 +62,7 @@ module Tests
         private
 
         def createInstance(context)
-          orchestrator = ::CommandLine::Orchestrator.new(context, nil, nil, nil, false)
+          orchestrator = ::CommandLine::Orchestrator.new(context, ::Batch::CommandLine::Parser.new(), nil, ::Batch::CommandLine::Provider, false)
           unless @arguments.include?("-c")
             deploy_config("user_config_filename.json")
           end
