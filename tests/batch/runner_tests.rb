@@ -9,25 +9,29 @@ require "./src/batch/definitions/partition"
 require "./src/batch/runner"
 
 describe "Batch::Runner" do
+  let(:errors) { [] }
   let(:deployments) { [] }
   let(:partitions ) { [] }
   let(:process_launcher) { m = mock(); m }
   let(:context){ Tests::Batch::ContextBuilder.new().build() }
   let(:runner) { Batch::Runner.new(context, process_launcher) }
+  let(:on_complete_lambda) { lambda { |all| errors.concat(all)}}
 
   it "should create runner" do
     runner.wont_be_nil()
   end
 
   it "should deploy no partitions" do
-    runner.deploy([])
+    runner.deploy([], on_complete_lambda)
+    errors.length().must_equal(0)
   end
 
   it "should deploy once" do
     given_logger()
     given_deployment("user1.json", "deploy.json")
     given_process_success()
-    runner.deploy(partitions)
+    runner.deploy(partitions, on_complete_lambda)
+    errors.length().must_equal(0)
   end
 
   it "should deploy 2 on single partition" do
@@ -35,11 +39,30 @@ describe "Batch::Runner" do
     partition = given_partition()
     given_success_deployment("user1.json", "deploy.json", partition)
     given_success_deployment("user2.json", "deploy.json", partition)
-    runner.deploy(partitions)
+    runner.deploy(partitions, on_complete_lambda)
+    errors.length().must_equal(0)
+  end
+
+  it "should fail 1 out of 2 deploy on single partition" do
+    given_logger()
+    partition = given_partition()
+    given_error_deployment("user1.json", "deploy.json", partition)
+    given_success_deployment("user2.json", "deploy.json", partition)
+    runner.deploy(partitions, on_complete_lambda)
+    errors.length().must_equal(1)
+  end
+
+  it "should attempt all deployment when multiple partitions" do
+    given_logger()
+    given_error_deployment("user1.json", "deploy.json", given_partition())
+    given_error_deployment("user2.json", "deploy.json", given_partition())
+    runner.deploy(partitions, on_complete_lambda)
+    errors.length().must_equal(2)
   end
 
   it "should teardown no partitions" do
-    runner.teardown([])
+    runner.teardown([], on_complete_lambda)
+    errors.length().must_equal(0)
   end
 
   def given_success_deployment(user, deploy, partition = nil)
@@ -48,8 +71,29 @@ describe "Batch::Runner" do
     given_process_success(deployment)
   end
 
+  def given_error_deployment(user, deploy, partition = nil)
+    partition = partition || given_partition()
+    deployment = given_deployment(user, deploy, partition)
+    given_process_error(deployment)
+  end
+
+  def given_process_error(user, deploy, partition = nil)
+    partition = partition || given_partition()
+    deployment = given_deployment(user, deploy, partition)
+    given_process_success(deployment)
+  end
+
   def given_process_success(deployment = nil)
     exit_code = 0
+    given_process(exit_code)
+  end
+
+  def given_process_error(deployment = nil)
+    exit_code = 2
+    given_process(exit_code)
+  end
+
+  def given_process(exit_code, deployment = nil)
     process_output = Common::Tasks::ProcessOutput.new(exit_code, "", "", "")
     process = mock()
     process.stubs(:start)
