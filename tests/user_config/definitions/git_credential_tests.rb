@@ -8,14 +8,13 @@ require "./src/user_config/credential_factory"
 describe "UserConfig::Definitions::GitCredential" do
 
     describe "git" do
-        let(:fake_context) {}
         let(:my_personal_access_token) { "my access token"}
         let(:another_personal_access_token) { "another access token"}
         let(:user_config) { {
             "myusername" => my_personal_access_token,
             "anotherusername" => another_personal_access_token
             } }
-        let(:credential) { UserConfig::Definitions::GitCredential.new(fake_context, "git", UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
+        let(:credential) { UserConfig::Definitions::GitCredential.new("git", UserConfig::CredentialFactory.get_credential_query_lambda(user_config)) }
 
         it "should return access token value" do
             credential.get_personal_access_token("myusername").must_equal(my_personal_access_token)

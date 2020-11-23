@@ -90,6 +90,15 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.wont_be_nil()
     merger.merge("[credential:newrelic:license_key]").must_equal("test_license_key")
   end
+   
+  it "should build service field merger with app_config" do
+    given_app_config_url("us", "test_url", "test.com")
+    merger = given_builder()
+      .with_app_config(context())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[app_config:newrelic:test_url]").must_equal("test.com") 
+  end
 
   it "should build resource field merger and provisioned resource" do
     given_ec2_resource("host1", "MyHost1")
@@ -140,6 +149,10 @@ describe "Install::ServiceFieldMergerBuilder" do
 
   def given_new_relic_credential(licenseKey) 
     context_builder.user_config().with_new_relic(licenseKey)
+  end
+
+  def given_app_config_url(region, name, url)
+    context_builder.app_config().with("newRelicUrls", { region => { name => url }})
   end
 
   def given_builder()

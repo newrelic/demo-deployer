@@ -5,7 +5,7 @@ module UserConfig
   module Definitions
     class GcpCredential < Credential
 
-      def initialize (context, provider, user_config_query_lambda)
+      def initialize (provider, user_config_query_lambda)
         @provider = provider
         @user_config_query_lambda = user_config_query_lambda
       end

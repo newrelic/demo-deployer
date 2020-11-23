@@ -12,7 +12,7 @@ module AppConfig
       resource_id_length_validator = Common::Validators::NotNullOrEmptyValidator.new("App Configuration file is missing \"resourceIdMaxLength\" value"),
       aws_ec2_supported_sizes_validator = Common::Validators::NotNullOrEmptyValidator.new("App Configuration file is missing \"awsEc2SupportedSizes\" value"),
       aws_elb_max_listeners_validator = Common::Validators::NotNullOrEmptyValidator.new("App Configuration file is missing \"awsElbMaxListeners\" value"), 
-      new_relic_default_urls_validator = Common::Validators::NotNullOrEmptyValidator.new("App Configuration file is missing \"newRelicDefaultUrls\" value")
+      new_relic_urls_validator = Common::Validators::NotNullOrEmptyValidator.new("App Configuration file is missing \"newRelicUrls\" value")
       )
       @aws_elb_port_validator = aws_elb_port_validator
       @execution_path_validator = execution_path_validator
@@ -21,7 +21,7 @@ module AppConfig
       @resource_id_length_validator = resource_id_length_validator
       @aws_ec2_supported_sizes_validator = aws_ec2_supported_sizes_validator
       @aws_elb_max_listeners_validator = aws_elb_max_listeners_validator 
-      @new_relic_default_urls_validator = new_relic_default_urls_validator
+      @new_relic_urls_validator = new_relic_urls_validator
     end
 
     def execute(config)
@@ -33,7 +33,7 @@ module AppConfig
         lambda { return @resource_id_length_validator.execute(config['resourceIdMaxLength']) },
         lambda { return @aws_ec2_supported_sizes_validator.execute(config['awsEc2SupportedSizes']) },
         lambda { return @aws_elb_max_listeners_validator.execute(config['awsElbMaxListeners']) },
-        lambda { return @new_relic_default_urls_validator.execute(config['newRelicDefaultUrls']) }
+        lambda { return @new_relic_urls_validator.execute(config['newRelicUrls']) }
       ]      
       validator = Common::Validators::Validator.new(validators)
       return validator.execute()

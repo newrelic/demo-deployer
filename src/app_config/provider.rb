@@ -60,8 +60,8 @@ module AppConfig
       return @config_file["gcpComputeSupportedSizes"]
     end
 
-    def get_new_relic_default_urls()
-      return @config_file["newRelicDefaultUrls"]
+    def get_new_relic_urls()
+      return @config_file["newRelicUrls"]
     end
 
     def get_ansible_roles_path()

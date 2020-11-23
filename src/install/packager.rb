@@ -25,10 +25,13 @@ module Install
           content = file.get_content()
           filepath = Common::Io::DirectoryService.combine_paths(service_path, destination_filepath)
           ensure_destination_sub_directory_exist(service_path, destination_filepath)
+          file_permission = file.is_executable() ? 0755 : nil
+
           if File.exist?(filepath)
             Common::Logger::LoggerFactory.get_logger().debug("Deleting existing file #{filepath}")
             File.delete(filepath)
           end
+
           merged_content = field_merger.merge(content)
           if file.is_content_uri?()
             Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{merged_content} to file #{filepath}")
@@ -36,9 +39,7 @@ module Install
             IO.copy_stream(download, filepath)
           else
             Common::Logger::LoggerFactory.get_logger().debug("Writing content file #{filepath}")
-            File.open(filepath, "w") do |stream|
-              stream.write(merged_content)
-            end
+            write_file(filepath, merged_content, file_permission)
           end
         end
       end
@@ -58,6 +59,18 @@ module Install
       end
     end
 
+    def write_file(filepath, content, permission)
+      if permission.nil?
+        File.open(filepath, mode="w") do |stream|
+          stream.write(content)
+        end
+      else
+        File.open(filepath, mode="w", perm=permission) do |stream|
+          stream.write(content)
+        end
+      end
+    end
+
     def get_services()
       return @context.get_services_provider().get_services()
     end
@@ -73,6 +86,7 @@ module Install
       field_merger = @service_field_merger_builder
         .with_services(services, provisioned_resources)
         .with_user_credentials(@context)
+        .with_app_config(@context)
         .build()
       return field_merger
     end

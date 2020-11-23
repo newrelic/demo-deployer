@@ -4,9 +4,8 @@ module UserConfig
   module Definitions
       class NewRelicCredential < Credential
 
-        def initialize (context, provider, user_config_query_lambda)
+        def initialize (provider, user_config_query_lambda)
           super(provider, user_config_query_lambda)
-          @context = context
         end
 
         def get_license_key()
@@ -38,51 +37,39 @@ module UserConfig
         end
 
         def get_collector_url()
-          return query("urls.collector") || get_default_urls()["collector"]
+          return query("urls.collector") 
         end
 
         def get_api_url()
-          return query("urls.api") || get_default_urls()["api"]
+          return query("urls.api") 
         end
 
         def get_infra_collector_url()
-          return query("urls.infraCollector") || get_default_urls()["infraCollector"]
+          return query("urls.infraCollector") 
         end
 
         def get_lambda_url()
-          return query("urls.lambda") || get_default_urls()["lambda"]
+          return query("urls.lambda") 
         end
 
         def get_infra_command_url()
-          return query("urls.infraCommand") || get_default_urls()["infraCommand"]
+          return query("urls.infraCommand")
         end
 
         def get_identity_url()
-          return query("urls.identity") || get_default_urls()["identity"]
+          return query("urls.identity")
         end
 
         def get_logging_url()
-          return query("urls.logging") || get_default_urls()["logging"]
+          return query("urls.logging")
         end
 
         def get_cloud_collector_url()
-          return query("urls.cloudCollector") || get_default_urls()["cloudCollector"]
+          return query("urls.cloudCollector")
         end
 
-        def get_default_urls()
-          return @new_relic_default_urls ||= @context.get_app_config_provider().get_new_relic_default_urls()
-        end
-
-
-        def to_h(key_prefix = @provider)
+        def urls_to_h(key_prefix = @provider)
           items = {}
-          add_if_exist(items, "license_key", get_license_key(), key_prefix)
-          add_if_exist(items, "personal_api_key", get_personal_api_key(), key_prefix)
-          add_if_exist(items, "admin_api_key", get_admin_api_key(), key_prefix)
-          add_if_exist(items, "insights_insert_api_key", get_insights_api_key(), key_prefix)
-          add_if_exist(items, "account_id", get_account_id(), key_prefix)
-          add_if_exist(items, "account_root_id", get_account_root_id(), key_prefix)
-          add_if_exist(items, "region", get_region(), key_prefix)
           add_if_exist(items, "collector_url", get_collector_url(), key_prefix)
           add_if_exist(items, "api_url", get_api_url(), key_prefix)
           add_if_exist(items, "infra_collector_url", get_infra_collector_url(), key_prefix)
@@ -90,6 +77,18 @@ module UserConfig
           add_if_exist(items, "identity_url", get_identity_url(), key_prefix)
           add_if_exist(items, "logging_url", get_logging_url(), key_prefix)
           add_if_exist(items, "cloud_collector_url", get_cloud_collector_url(), key_prefix)
+          return items
+        end
+
+        def to_h(key_prefix = @provider)
+          items = urls_to_h(key_prefix)
+          add_if_exist(items, "license_key", get_license_key(), key_prefix)
+          add_if_exist(items, "personal_api_key", get_personal_api_key(), key_prefix)
+          add_if_exist(items, "admin_api_key", get_admin_api_key(), key_prefix)
+          add_if_exist(items, "insights_insert_api_key", get_insights_api_key(), key_prefix)
+          add_if_exist(items, "account_id", get_account_id(), key_prefix)
+          add_if_exist(items, "account_root_id", get_account_root_id(), key_prefix)
+          add_if_exist(items, "region", get_region(), key_prefix)
           return items
         end
     end

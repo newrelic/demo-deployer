@@ -29,7 +29,7 @@ module UserConfig
           raise Common::ValidationError.new("User Configuration failed validation:", validation_errors)
         end
       end
-      provider = UserConfig::Provider.new(@context, parsed_user_config)
+      provider = UserConfig::Provider.new(parsed_user_config)
       @context.set_user_config_provider(provider)
       return provider
     end

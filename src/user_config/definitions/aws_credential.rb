@@ -5,7 +5,7 @@ module UserConfig
   module Definitions
     class AwsCredential < Credential
 
-      def initialize (context, provider, user_config_query_lambda)
+      def initialize (provider, user_config_query_lambda)
         super(provider, user_config_query_lambda)
       end
 
