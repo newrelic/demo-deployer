@@ -121,7 +121,7 @@ module Batch
     end
 
     def get_logging_level()
-      return @context.get_command_line_provider().get_logging_level?()
+      return @context.get_command_line_provider().get_logging_level()
     end
 
   end
