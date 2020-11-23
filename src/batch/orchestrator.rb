@@ -35,23 +35,11 @@ module Batch
 
       runner = get_runner()
       if is_mode_deploy?()
-        partitions.each do |partition|
-          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Deploying:#{partition}")
-          runner.deploy(partition)
-          log_token.success()
-        end
+        runner.deploy(partitions)
       end
 
       if is_mode_teardown?()
-        partitions.each do |partition|
-          ignore_error_message = ""
-          if is_ignore_teardown_errors?()
-            ignore_error_message = " (ignore any errors)"
-          end
-          log_token = Common::Logger::LoggerFactory.get_logger().task_start("Tearing down:#{partition}#{ignore_error_message}")
-          runner.teardown(partition)
-          log_token.success()
-        end
+        runner.teardown(partitions)
       end
 
       log_token.success()
@@ -81,10 +69,6 @@ module Batch
 
     def is_mode_teardown?()
       return @context.get_command_line_provider().is_mode_teardown?()
-    end
-
-    def is_ignore_teardown_errors?()
-      return @context.get_command_line_provider().is_ignore_teardown_errors?()
     end
 
     def get_runner()
