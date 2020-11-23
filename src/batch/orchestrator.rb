@@ -34,12 +34,14 @@ module Batch
       end
 
       runner = get_runner()
-      if is_mode_deploy?()
-        runner.deploy(partitions)
-      end
+      get_modes().each do |mode|
+        if is_mode_deploy?(mode)
+          runner.deploy(partitions)
+        end
 
-      if is_mode_teardown?()
-        runner.teardown(partitions)
+        if is_mode_teardown?(mode)
+          runner.teardown(partitions)
+        end
       end
 
       log_token.success()
@@ -50,25 +52,20 @@ module Batch
     def init_logging()
       logging_level = @context.get_command_line_provider().get_logging_level()
       Common::Logger::LoggerFactory.set_logging_level(logging_level)
-      displayMode = ""
-      if @context.get_command_line_provider().is_mode_deploy?()
-        displayMode = "#{displayMode} Deploy"
-      end
-      if @context.get_command_line_provider().is_mode_teardown?()
-        displayMode = "#{displayMode} Teardown"
-        if @context.get_command_line_provider().is_ignore_teardown_errors?()
-          displayMode = "(ignore errors)"
-        end
-      end
-      return Common::Logger::LoggerFactory.get_logger().task_start("Executing batch processing, mode:#{displayMode}, batchSize:#{@context.get_command_line_provider().get_batch_size()}")
+      modes = @context.get_command_line_provider().get_modes()
+      return Common::Logger::LoggerFactory.get_logger().task_start("Executing batch processing, mode:#{modes}, batchSize:#{@context.get_command_line_provider().get_batch_size()}")
     end
 
-    def is_mode_deploy?()
-      return @context.get_command_line_provider().is_mode_deploy?()
+    def get_modes()
+      return @context.get_command_line_provider().get_modes()
     end
 
-    def is_mode_teardown?()
-      return @context.get_command_line_provider().is_mode_teardown?()
+    def is_mode_deploy?(mode)
+      return @context.get_command_line_provider().is_mode_deploy?(mode)
+    end
+
+    def is_mode_teardown?(mode)
+      return @context.get_command_line_provider().is_mode_teardown?(mode)
     end
 
     def get_runner()

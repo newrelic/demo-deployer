@@ -19,12 +19,17 @@ module Batch
         return @options[:batch_size]
       end
 
-      def is_mode_deploy?()
-        return @options[:mode].downcase() == "deploy" || @options[:mode].downcase() == "deployteardown"
+      def is_mode_deploy?(mode)
+        return mode != nil && mode.downcase() == "deploy"
       end
 
-      def is_mode_teardown?()
-        return @options[:mode] == "teardown".downcase() || @options[:mode].downcase() == "deployteardown"
+      def is_mode_teardown?(mode)
+        return mode != nil && mode.downcase() == "teardown"
+      end
+
+      def get_modes()
+        modes = split_or_input(@options[:mode].downcase(), ',')
+        return modes
       end
 
       def is_ignore_teardown_errors?()
@@ -33,6 +38,16 @@ module Batch
 
       def get_logging_level()
         return @options[:logging_level].downcase()
+      end
+
+      def split_or_input(input, delimiter)
+        unless input.nil? 
+          if input.include?(delimiter)
+            return input.split(delimiter)
+          end
+          return [input]
+        end
+        return []
       end
 
     end
