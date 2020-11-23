@@ -32,8 +32,9 @@ describe "Batch::Runner" do
 
   it "should deploy 2 on single partition" do
     given_logger()
-    given_success_deployment("user1.json", "deploy.json")
-    given_success_deployment("user2.json", "deploy.json")
+    partition = given_partition()
+    given_success_deployment("user1.json", "deploy.json", partition)
+    given_success_deployment("user2.json", "deploy.json", partition)
     runner.deploy(partitions)
   end
 
@@ -43,7 +44,7 @@ describe "Batch::Runner" do
 
   def given_success_deployment(user, deploy, partition = nil)
     partition = partition || given_partition()
-    deployment = given_deployment("user1.json", "deploy.json", partition)
+    deployment = given_deployment(user, deploy, partition)
     given_process_success(deployment)
   end
 
