@@ -114,3 +114,19 @@ Each `Tron` can have various behavior defined.
 #### Tron Behaviors
 
 Each tron support the execution of [behaviors](behaviors/README.md).
+
+## Batch execution
+
+The Deployer can also be run in batch. This could be useful to deploy a same configuration to multiple users at once, or deploy and teardown multiple deploy configurations at once (for the purpose of testing for example).
+
+Here are a few examples:
+
+* Deploy and Teardown afterward (ignoring any errors)
+```bash
+docker run -it -v $HOME/configs/:/mnt/deployer/configs/ -v $HOME/myproject/test/definitions/:/mnt/deployer/definitions/ --entrypoint ruby deployer batch.rb -c /mnt/deployer/configs/jerard.docker.local.json -d definitions -s 15 -l debug -m deploy,teardown -i
+```
+
+* Teardown first followed by a deploy to multiple user configs, then another teardown attempt to clean the environment
+```bash
+docker run -it -v $HOME/configs/allusers/:/mnt/deployer/allusersconfigs/ -v $HOME/myproject/deploy/:/mnt/deployer/deploy/ --entrypoint ruby deployer batch.rb -c /mnt/deployer/allusersconfigs/ -d /mnt/deployer/deploy/hello.json -s 15 -l debug -m teardown,deploy,teardown -i
+```

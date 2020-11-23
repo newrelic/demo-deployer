@@ -87,7 +87,7 @@ module Batch
       execution_path = Dir.pwd
 
       partition.get_all_deployments().each do |deployment|
-        command = base_command +" -c #{deployment.get_user_config_filepath()}" +" -d #{deployment.get_deploy_config_filepath()}"
+        command = base_command +" -c #{deployment.get_user_config_filepath()}" +" -d #{deployment.get_deploy_config_filepath()}" +" -l #{get_logging_level()}"
         if is_teardown == true
           command += " -t"
         end
@@ -118,6 +118,10 @@ module Batch
 
     def is_ignore_teardown_errors?()
       return @context.get_command_line_provider().is_ignore_teardown_errors?()
+    end
+
+    def get_logging_level()
+      return @context.get_command_line_provider().get_logging_level?()
     end
 
   end
