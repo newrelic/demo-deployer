@@ -7,7 +7,7 @@ module Services
 
     def initialize(
       port_type_validator = PortTypeValidator.new("The following services require a valid integer for port number:"),
-      port_range_validator = PortRangeValidator.new([[1024,65535]], "The following services have a port assignment that does not fall within these ranges:"),
+      port_range_validator = PortRangeValidator.new([[80,80],[1024,65535]], "The following services have a port assignment that does not fall within these ranges:"),
       port_destination_validator = PortDestinationValidator.new("The following resources are configured to host multiple services on the same port:")
       )
       @port_type_validator = port_type_validator

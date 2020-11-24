@@ -15,9 +15,11 @@ module Install
     end
 
     def execute(provisioned_resources)
-      execute_on_host_install(provisioned_resources)
-      execute_service_plus_instrumentation_install(provisioned_resources)
-      execute_global_instrumentation_install(provisioned_resources)
+      install_definitions = []
+      install_definitions.concat(execute_on_host_install(provisioned_resources))
+      install_definitions.concat(execute_service_plus_instrumentation_install(provisioned_resources))
+      install_definitions.concat(execute_global_instrumentation_install(provisioned_resources))
+      execute_install(install_definitions, "#{install_definitions.length} Definitions")
     end
 
     private
@@ -25,7 +27,7 @@ module Install
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_onhost_instrumentations()
                                 .build()
-      execute_install(install_definitions, "On-Host instrumentation")
+      return install_definitions
     end
 
     def execute_service_plus_instrumentation_install(provisioned_resources)
@@ -33,14 +35,14 @@ module Install
                                 .with_services()
                                 .with_service_instrumentations()
                                 .build()
-      execute_install(install_definitions, "Services and instrumentations")
+      return install_definitions
     end
 
     def execute_global_instrumentation_install(provisioned_resources) 
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_global_instrumentations()
                                 .build()
-      execute_install(install_definitions, "Global instrumentation")
+      return install_definitions
     end
 
     def execute_install(install_definitions, target_installation)
