@@ -27,8 +27,7 @@ module Install
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_onhost_instrumentations()
                                 .build()
-                                return install_definitions
-      # execute_install(install_definitions, "On-Host instrumentation")
+      return install_definitions
     end
 
     def execute_service_plus_instrumentation_install(provisioned_resources)
@@ -37,15 +36,13 @@ module Install
                                 .with_service_instrumentations()
                                 .build()
       return install_definitions
-      # execute_install(install_definitions, "Services and instrumentations")
     end
 
     def execute_global_instrumentation_install(provisioned_resources) 
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_global_instrumentations()
                                 .build()
-                                return install_definitions
-      # execute_install(install_definitions, "Global instrumentation")
+      return install_definitions
     end
 
     def execute_install(install_definitions, target_installation)
