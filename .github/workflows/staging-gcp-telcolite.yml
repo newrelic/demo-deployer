@@ -30,7 +30,7 @@ jobs:
       run: docker build -t deployer .
 
     - name: Teardown any previous deployment
-      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d demo/catalog/telcolite.gcp.json -t
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d https://raw.githubusercontent.com/newrelic/demo-catalog/main/catalog/telcolite.gcp.json -t
 
     - name: Run deployer
-      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d demo/catalog/telcolite.gcp.json
+      run: docker run -i --entrypoint ruby deployer main.rb -c gitstggcpdkr.local.json -d https://raw.githubusercontent.com/newrelic/demo-catalog/main/catalog/telcolite.gcp.json
