@@ -41,7 +41,7 @@ module Tests
       private
 
       def createInstance(context)
-        orchestrator = ::CommandLine::Orchestrator.new(context, nil, nil, false)
+        orchestrator = ::CommandLine::Orchestrator.new(context, nil, nil, nil, false)
         unless @arguments.include?("-c")
           deploy_config("user_config_filename.json")
         end
