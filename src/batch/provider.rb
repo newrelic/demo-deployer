@@ -50,14 +50,14 @@ module Batch
     def get_config_filenames(current, filenames = [])
       split_or_input(current, ',').each do |filename|
         if File.file?(filename)
-          filenames.push(filename)
+          if filename.downcase().end_with?(".json")
+            filenames.push(filename)
+          end
         else
           directory = filename.delete_suffix("/")
           if Dir.exist?(directory)
             Dir.children(directory).each do |item|
-              if item.downcase().end_with?(".json")
-                get_config_filenames(directory+"/" +item, filenames)
-              end
+              get_config_filenames(directory+"/" +item, filenames)
             end
           end
         end
