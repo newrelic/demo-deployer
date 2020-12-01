@@ -8,11 +8,11 @@ module Common
         @error_message = error_message
       end
 
-      def succeeded?
-        if @exit_code == 0
-          return true
+      def succeeded?(*valid_codes)
+        if valid_codes.empty?
+          valid_codes = [0]
         end
-        return false
+        return valid_codes.include?(@exit_code)
       end
 
       def get_exit_code()

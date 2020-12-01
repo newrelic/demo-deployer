@@ -76,7 +76,7 @@ module Common
             error_message = @error_message
           end
         rescue Errno::ENOENT => e
-          exit_code = -1
+          exit_code = 255
           error_message = e.message
         ensure
           wout.close

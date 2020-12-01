@@ -104,7 +104,7 @@ module Batch
         process_output = process.wait_to_completion()
         deployment = process.get_context()
         exit_code = process_output.get_exit_code()
-        succeeded = process_output.succeeded?()
+        succeeded = process_output.succeeded?(0, 255)
         if succeeded == true
           Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
         else
