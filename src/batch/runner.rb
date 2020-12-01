@@ -109,7 +109,7 @@ module Batch
           Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
         else
           message = "'deployer' for deployment_name: #{deployment} FAILED with exit_code:#{exit_code}, executed in #{process.get_execution_time()}s"
-          errors.push("#{message} output:#{process_output.get_stdout()}")
+          errors.push("#{message} output:#{process_output.get_stdout()} error_message:#{process_output.get_error_message()}")
         end
       end
       return errors.compact()
