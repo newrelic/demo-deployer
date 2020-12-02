@@ -6,12 +6,31 @@
 
 The deployer is a Ruby application that you can use to deploy and configure resources in various cloud environments.
 
+The latest version of the demo-deployer is available from the GitHub Container Registry: `docker pull ghcr.io/newrelic/deployer:latest`
+
 ## Demo Catalog
 
 While you can build components and deployment configurations for the deployer, we have created a set of demos so that you can hit the ground running with no prior work.
 
-To learn how to use the deployer and run a demo, read our [Demo documentation](demo/README.md).
+To learn how to use the deployer and run a demo, have a look at our [Demo catalog](https://github.com/newrelic/demo-catalog).
 
+## Building the demo-deployer locally
+First make sure to [Install Docker](https://docs.docker.com/get-docker/) and [install Git](https://git-scm.com/downloads) 
+
+Clone the `demo-deployer` repository:
+
+```console
+$ git clone https://github.com/newrelic/demo-deployer.git
+```
+
+Then, navigate to the deployer directory and [build](https://docs.docker.com/engine/reference/commandline/build/) the container:
+
+```console
+$ cd demo-deployer
+$ docker build -t deployer .
+```
+
+Follow our [Getting Started guide](https://github.com/newrelic/demo-catalog/blob/main/GETTING_STARTED.md) to deploy a demo scenario (note that you already have the deployer running locally if you have followed the above build steps)
 ## Developer
 
 For more advanced insights of what the deployer is and does, check the [Developer documentation](documentation/developer/README.md). There, you'll learn about the deployer's architecture and how to run and test the application locally.
