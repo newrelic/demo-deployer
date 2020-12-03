@@ -9,7 +9,6 @@ require "./src/common/text/credential_field_merger_builder"
 require "./tests/context_builder"
 
 describe "Common::Text::CredentialFieldMergerBuilder" do
-  let(:context) { Tests::ContextBuilder.new().build() }
   let(:git_user_config) { {} }
   let(:nr_user_config) { {} }
   let(:usernames) { [] }
