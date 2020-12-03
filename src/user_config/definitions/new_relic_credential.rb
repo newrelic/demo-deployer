@@ -68,20 +68,8 @@ module UserConfig
           return query("urls.cloudCollector")
         end
 
-        def urls_to_h(key_prefix = @provider)
-          items = {}
-          add_if_exist(items, "collector_url", get_collector_url(), key_prefix)
-          add_if_exist(items, "api_url", get_api_url(), key_prefix)
-          add_if_exist(items, "infra_collector_url", get_infra_collector_url(), key_prefix)
-          add_if_exist(items, "infra_command_url", get_infra_command_url(), key_prefix)
-          add_if_exist(items, "identity_url", get_identity_url(), key_prefix)
-          add_if_exist(items, "logging_url", get_logging_url(), key_prefix)
-          add_if_exist(items, "cloud_collector_url", get_cloud_collector_url(), key_prefix)
-          return items
-        end
-
         def to_h(key_prefix = @provider)
-          items = urls_to_h(key_prefix)
+          items = {}
           add_if_exist(items, "license_key", get_license_key(), key_prefix)
           add_if_exist(items, "personal_api_key", get_personal_api_key(), key_prefix)
           add_if_exist(items, "admin_api_key", get_admin_api_key(), key_prefix)
@@ -89,6 +77,14 @@ module UserConfig
           add_if_exist(items, "account_id", get_account_id(), key_prefix)
           add_if_exist(items, "account_root_id", get_account_root_id(), key_prefix)
           add_if_exist(items, "region", get_region(), key_prefix)
+          add_if_exist(items, "collector_url", get_collector_url(), key_prefix)
+          add_if_exist(items, "api_url", get_api_url(), key_prefix)
+          add_if_exist(items, "infra_collector_url", get_infra_collector_url(), key_prefix)
+          add_if_exist(items, "infra_command_url", get_infra_command_url(), key_prefix)
+          add_if_exist(items, "identity_url", get_identity_url(), key_prefix)
+          add_if_exist(items, "logging_url", get_logging_url(), key_prefix)
+          add_if_exist(items, "cloud_collector_url", get_cloud_collector_url(), key_prefix)
+
           return items
         end
     end
