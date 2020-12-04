@@ -10,24 +10,11 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+      - name: Install Dependencies
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.4'
-
-      - name: Ruby Gem Cache
-        uses: actions/cache@v1
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-
-      - name: Install Gems
-        id: install
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+          ruby-version: 2.4
+          bundler-cache: true
 
       - name: Setup Python
         uses: actions/setup-python@v2

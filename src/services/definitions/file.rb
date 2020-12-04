@@ -2,9 +2,10 @@ module Services
   module Definitions
     class File
 
-      def initialize(destination_filepath, content)
+      def initialize(destination_filepath, content, is_executable = false)
         @destination_filepath = destination_filepath
         @content = content
+        @is_executable = is_executable
       end
 
       def ==(other_file)
@@ -21,6 +22,10 @@ module Services
 
       def get_content()
         return @content
+      end
+
+      def is_executable()
+        return @is_executable
       end
 
       def is_content_uri?()

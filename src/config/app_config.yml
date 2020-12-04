@@ -26,3 +26,30 @@ azureVmSupportedSizes: ["Standard_B1s","Standard_B1ms","Standard_B2s","Standard_
 
 # Gcp-specific defaults.
 gcpComputeSupportedSizes: ["e2-micro","e2-small","e2-medium","n1-standard-1","n1-standard-2","n1-standard-4"]
+
+# New Relic API defaults
+newRelicUrls:
+        us:
+                collector_url: "collector.newrelic.com"
+                api_url: "https://api.newrelic.com"
+                infra_collector_url: "https://infra-api.newrelic.com"
+                infra_command_url: "https://infrastructure-command-api.newrelic.com"
+                identity_url: "https://identity-api.newrelic.com"
+                logging_url: "https://log-api.newrelic.com/log/v1"
+                cloud_collector_url: "https://cloud-collector.newrelic.com"
+        eu:
+                collector_url: "collector.eu.newrelic.com"
+                api_url: "https://api.eu.newrelic.com"
+                infra_collector_url: "https://infra-api.eu.newrelic.com"
+                infra_command_url: "https://infrastructure-command-api.eu.newrelic.com"
+                identity_url: "https://identity-api.eu.newrelic.com"
+                logging_url: "https://log-api.eu.newrelic.com/log/v1"
+                cloud_collector_url: "https://cloud-collector.eu.newrelic.com"
+        staging:
+                collector_url: "staging-collector.newrelic.com"
+                api_url: "https://staging-api.newrelic.com"
+                infra_collector_url: "https://staging-infra-api.newrelic.com"
+                infra_command_url: "https://staging-infrastructure-command-api.newrelic.com"
+                identity_url: "https://staging-identity-api.newrelic.com"
+                logging_url: "https://staging-log-api.newrelic.com/log/v1"
+                cloud_collector_url: "https://staging-cloud-collector.newrelic.com"

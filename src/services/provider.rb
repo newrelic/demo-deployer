@@ -76,12 +76,13 @@ module Services
       raw_files.each do |raw_file|
         destination_filepath = raw_file['destination_filepath']
         content = raw_file['content']
+        is_executable = raw_file['executable']
         unless content.nil?
           if destination_filepath!=nil && destination_filepath.downcase().end_with?(".json") && destination_filepath.downcase().start_with?("http")==false
             content = JSON.pretty_generate(content)
           end
         end
-        file = Definitions::File.new(destination_filepath, content)
+        file = Definitions::File.new(destination_filepath, content, is_executable)
         files.push(file)
       end
       return files

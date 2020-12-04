@@ -61,5 +61,4 @@ module UserConfig
       return current
     end
   end
-
 end

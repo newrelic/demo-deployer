@@ -37,19 +37,19 @@ module UserConfig
         end
 
         def get_collector_url()
-          return query("urls.collector")
+          return query("urls.collector") 
         end
 
         def get_api_url()
-          return query("urls.api")
+          return query("urls.api") 
         end
 
         def get_infra_collector_url()
-          return query("urls.infraCollector")
+          return query("urls.infraCollector") 
         end
 
         def get_lambda_url()
-          return query("urls.lambda")
+          return query("urls.lambda") 
         end
 
         def get_infra_command_url()
@@ -84,6 +84,7 @@ module UserConfig
           add_if_exist(items, "identity_url", get_identity_url(), key_prefix)
           add_if_exist(items, "logging_url", get_logging_url(), key_prefix)
           add_if_exist(items, "cloud_collector_url", get_cloud_collector_url(), key_prefix)
+
           return items
         end
     end
