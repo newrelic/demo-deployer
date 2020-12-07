@@ -30,6 +30,8 @@ RUN python3 -m pip install requests google-auth
 RUN ansible-galaxy collection install google.cloud
 # NewRelic
 RUN ansible-galaxy install newrelic.newrelic_java_agent
+# Windows
+RUN ansible-galaxy collection install ansible.windows
 
 # Others
 RUN apt-get update
