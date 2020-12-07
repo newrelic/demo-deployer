@@ -28,6 +28,10 @@ module Infrastructure
               unless (ami_name.nil? || ami_name.empty?)
                 ec2_resource.set_ami_name(ami_name)
               end
+              is_windows = config_resource["is_windows"]
+              unless is_windows.nil?
+                ec2_resource.set_windows(is_windows)
+              end
               return ec2_resource
 
             when "elb"

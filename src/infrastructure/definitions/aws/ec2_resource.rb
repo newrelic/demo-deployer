@@ -11,6 +11,7 @@ module Infrastructure
           @size = size
           @user_name = user_name
           @ami_name = "amzn2-ami-hvm-2.0.20190228-x86_64-gp2"
+          @is_windows = false
           @tags = tags
           @cpu_credit_specification = cpu_credit_specification
         end
@@ -28,6 +29,13 @@ module Infrastructure
         end
         def set_ami_name(ami_name)
           @ami_name = ami_name
+        end
+
+        def is_windows?()
+          return @is_windows == true
+        end
+        def set_windows(is_windows)
+          @is_windows = is_windows
         end
 
         def get_tags()
