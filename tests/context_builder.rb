@@ -65,8 +65,8 @@ module Tests
     private
     def createInstance()
       context = Context.new()
-      @command_line_provider_builder.build(context)
       @app_config_provider_builder.build(context)
+      @command_line_provider_builder.build(context)
       @user_config_provider_builder.build(context)
       @tags_provider_builder.build(context)
       @infrastructure_provider_builder.build(context)

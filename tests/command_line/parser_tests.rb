@@ -3,9 +3,11 @@ require "minitest/autorun"
 require "mocha/minitest"
 
 require "./src/command_line/parser"
+require "./tests/context_builder"
 
 describe "Commandline::Parser" do
-  let(:parser) { CommandLine::Parser.new() }
+  let(:context_builder){ Tests::ContextBuilder.new() }
+  let(:parser) { CommandLine::Parser.new(context_builder) }
 
   it "should create parser" do
     parser.wont_be_nil
