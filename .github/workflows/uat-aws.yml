@@ -31,6 +31,9 @@ jobs:
           python -m pip install --upgrade pip setuptools
           python3 -m pip install ansible==2.9.9
           python3 -m pip install ansible boto3 botocore boto
+          python3 -m pip install pywinrm
+          ansible-galaxy collection install community.aws
+          ansible-galaxy collection install ansible.windows
 
       - name: Install Ansible Galaxy Plugins
         run: ansible-galaxy install newrelic.newrelic_java_agent
