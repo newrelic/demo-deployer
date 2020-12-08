@@ -61,11 +61,16 @@
     - block:
       - name: Init the params config
         set_fact:
+          params: "{{ (params|default({})) | combine({}) }}"
+
+      - name: Init the params config
+        set_fact:
           params: "{{ (params|default({})) | combine({
             'ip': item.public_ip_address
             })
           }}"
         with_items: "{{ ec2_facts.instances }}"
+        when: instance_id is defined
 
       - name: Add eventual windows params
         set_fact:
@@ -73,7 +78,7 @@
             'win_password': result_win_password['win_password']
             })
           }}"
-        when: is_windows and result_win_password
+        when: instance_id is defined and is_windows
 
       - name: Creating artifact JSON key/values
         set_fact:
