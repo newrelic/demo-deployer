@@ -78,23 +78,19 @@
           artifact_json: "{{ temp_json | default([]) | combine({
             'resource_id': resource_id,
             'params': {
-                'ip': item.public_ip_address,
-                'private_dns_name': private_dns_name,
-                'instance_id': instance_id
+                'ip': item.public_ip_address
             }
             })
           }}"
         with_items: "{{ ec2_facts.instances }}"
         when: (is_windows and result_win_password) == false
 
-    - name: Creating artifact JSON key/values for windows
+      - name: Creating artifact JSON key/values for windows
         set_fact:
           artifact_json: "{{ temp_json | default([]) | combine({
             'resource_id': resource_id,
             'params': {
                 'ip': item.public_ip_address,
-                'private_dns_name': private_dns_name,
-                'instance_id': instance_id,
                 'win_password': result_win_password['win_password']
             }
             })
