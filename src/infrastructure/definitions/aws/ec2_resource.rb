@@ -46,6 +46,19 @@ module Infrastructure
           return @cpu_credit_specification
         end
 
+        def get_user_data()
+          if is_windows?()
+            return "<powershell>
+            Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force\n
+            $url = \"https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1\"\n
+            $file = \"$env:temp\\ConfigureRemotingForAnsible.ps1\"\n
+            (New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)\n
+            powershell.exe -ExecutionPolicy ByPass -File $file\n
+          </powershell>"
+          end
+          return nil
+        end
+
       end
     end
   end

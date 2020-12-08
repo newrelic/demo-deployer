@@ -31,6 +31,7 @@ RUN ansible-galaxy collection install google.cloud
 # NewRelic
 RUN ansible-galaxy install newrelic.newrelic_java_agent
 # Windows
+RUN python3 -m pip install pywinrm
 RUN ansible-galaxy collection install ansible.windows
 
 # Others
