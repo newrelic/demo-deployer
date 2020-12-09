@@ -9,7 +9,7 @@ executionPath: "/tmp"
 summaryFilename: "deploy_summary.txt"
 
 #defaultUserConfigPath is available to avoid having to pass one more mount for docker deploys
-defaultUserConfigPath: "config/user.credentials.json"
+defaultUserConfigPath: "configs/user.credentials.json"
 
 ansibleRolesPath: "$HOME/.ansible/roles"
 
