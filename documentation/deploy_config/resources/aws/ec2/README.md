@@ -49,3 +49,26 @@ For example `t3.micro` is a possible instance size.
 ### cpu_credit_specification
 
 This field is **optional**, it specifies if T2 instances should buy more CPU credits when they runs out. The available values are "standard" and "unlimited".
+
+## Windows
+
+The deployer can provision Windows server instances on AWS/EC2.
+the resource element `"is_windows": true` is required. Here is an example for creating a Windows 2019 Server:
+
+```
+{
+  "resources": [
+    {
+      "id": "win1",
+      "provider": "aws",
+      "type": "ec2",
+      "size": "t2.micro",
+      "is_windows": true,
+      "ami_name": "Windows_Server-2019-English-Full-HyperV-*"
+    }
+  ]
+}
+```
+
+Note, the Administrator password is auto-generated and can be obtained using the pem key file on the AWS console (right click the instance and select `Connect`). With the instance public IP and the Administrator/Password you can login using the `Remote Desktop Connection` tool.
+Also, the administrator password is included in the `artifact.json` output file of that ec2 instance. As an example, you can view the content of the file with the following command `cat /tmp/user-windows/win1/artifact.json`

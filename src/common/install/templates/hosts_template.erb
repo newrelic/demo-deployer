@@ -1,2 +1,2 @@
 [<%= destination[:action_name] %>]
-<%= destination[:ip] %> ansible_user=<%= destination[:remote_user] %> <%= destination[:force_local_connection] %>
+<%= destination[:ip] %> ansible_user=<%= destination[:remote_user] %> <%= destination[:force_local_connection] %><% keyvalues.each do |key,value| %> <%= key %>="<%= value%>"<% end %>

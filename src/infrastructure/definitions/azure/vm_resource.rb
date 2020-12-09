@@ -24,6 +24,10 @@ module Infrastructure
           return @tags.merge({})
         end
 
+        def is_windows?()
+          return false
+        end
+
       end
     end
   end
