@@ -114,7 +114,11 @@
         wait_for:
           port: 5986
           host: "{{ ip_address }}"
-          timeout: 320
+          timeout: 900
+
+      - name: Wait for system to become reachable over WinRM
+        wait_for_connection:
+          timeout: 900
 
       - name: get the Administrator password
         community.aws.ec2_win_password:
