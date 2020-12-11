@@ -34,7 +34,7 @@ A `service` definition has the possible elements below. Some of those elements a
 
 This field is a user defined string and will be used as the identity for that service.
 This value must be unique, contains alphanumeric character (any casing). Note, the '-' character is also allowed.
-The maximum length for the value is 10 characters. This value is configured in the [`/src/config/app_config.yml`](/src/config/app_config.yml) for the element `serviceIdMaxLength`.
+The maximum length for the value is 10 characters. This value is configured in the [`/src/app_config.yml`](/src/app_config.yml) for the element `serviceIdMaxLength`.
 
 ## display_name
 

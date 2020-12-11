@@ -23,7 +23,7 @@ Currently, the deployer creates a VM with a Linux instance of CentOS from OpenLo
 
 This field is a user defined string and will be used as the identity for that resource.
 This value must be unique, contains alphanumeric character (any casing). Note, the '-' character is also allowed.
-The maximum length for the value is 20 characters. This value is configured in the [`/src/config/app_config.yml`](/src/config/app_config.yml) for the element `resourceIdMaxLength`.
+The maximum length for the value is 20 characters. This value is configured in the [`/src/app_config.yml`](/src/app_config.yml) for the element `resourceIdMaxLength`.
 
 Once deployed, you can find that resource on the Azure portal, Virtual Machines.
 The deployer follows a naming convention when creating resources. All resources have the following format `[user config filename prefix]-[deploy config filename prefix]-[resource_id]`
