@@ -35,6 +35,7 @@ module Common
 
         def get_template_binding()
           destination = {}
+          keyvalues = {}
 
           destination[:action_name] = @action_name
           destination_ip = "localhost"
@@ -43,21 +44,21 @@ module Common
           unless @provisioned_resource.nil?
             destination_remote_user = @provisioned_resource.get_user_name()
             destination_ip = @provisioned_resource.get_ip()
+
+            if @provisioned_resource.get_resource().is_windows?()
+              keyvalues["ansible_password"] = @provisioned_resource.get_param("win_password")
+              keyvalues["ansible_port"] = "5986"
+              keyvalues["ansible_connection"] = "winrm"
+              keyvalues["ansible_winrm_server_cert_validation"] = "ignore"
+            end
           end
 
+          destination[:keyvalues] = keyvalues
           destination[:remote_user] = destination_remote_user
           destination[:ip] = destination_ip
           if ['localhost','127.0.0.1', '0.0.0.0'].include?(destination_ip)
             destination[:force_local_connection] = 'ansible_connection=local'
           end
-          keyvalues = {}
-          if @provisioned_resource.get_resource().is_windows?()
-            keyvalues["ansible_password"] = @provisioned_resource.get_param("win_password")
-            keyvalues["ansible_port"] = "5986"
-            keyvalues["ansible_connection"] = "winrm"
-            keyvalues["ansible_winrm_server_cert_validation"] = "ignore"
-          end
-          destination[:keyvalues] = keyvalues
           template_binding = Kernel.binding()
           template_binding.local_variable_set('destination', destination)
 
