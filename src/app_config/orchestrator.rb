@@ -7,7 +7,7 @@ require "./src/common/io/yaml_file_loader"
 module AppConfig
   class Orchestrator
 
-    APP_CONFIG_FILEPATH = "src/config/app_config.yml"
+    APP_CONFIG_FILEPATH = "src/app_config.yml"
 
     def initialize(context,
                    validator = nil,
@@ -34,21 +34,21 @@ module AppConfig
       return provider
     end
 
-    private 
+    private
 
     def get_override()
       filepath = APP_CONFIG_FILEPATH+".local"
       if File.exist?(filepath)
-        yaml_file_loader = Common::Io::YamlFileLoader.new(filepath, "App config override file #{filepath} exists, but failed validation.  Please address the failure or delete the file (if you do not wish to override any default application config values): ")          
-        return yaml_file_loader.execute      
+        yaml_file_loader = Common::Io::YamlFileLoader.new(filepath, "App config override file #{filepath} exists, but failed validation.  Please address the failure or delete the file (if you do not wish to override any default application config values): ")
+        return yaml_file_loader.execute
       else
         return nil
       end
     end
 
     def get_default()
-      yaml_file_loader = Common::Io::YamlFileLoader.new(APP_CONFIG_FILEPATH, "The default app config file #{APP_CONFIG_FILEPATH} failed YAML validation.  This is a required file - please fix the error or get a clean copy before retrying: ")        
-      return yaml_file_loader.execute()    
+      yaml_file_loader = Common::Io::YamlFileLoader.new(APP_CONFIG_FILEPATH, "The default app config file #{APP_CONFIG_FILEPATH} failed YAML validation.  This is a required file - please fix the error or get a clean copy before retrying: ")
+      return yaml_file_loader.execute()
     end
 
     def validate(config)
