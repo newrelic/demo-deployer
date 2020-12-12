@@ -64,7 +64,8 @@ the resource element `"is_windows": true` is required. Here is an example for cr
       "type": "ec2",
       "size": "t2.micro",
       "is_windows": true,
-      "ami_name": "Windows_Server-2019-English-Full-HyperV-*"
+      "ami_name": "Windows_Server-2019-English-Full-HyperV-*",
+      "user_name": "Administrator"
     }
   ]
 }
