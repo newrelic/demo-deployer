@@ -17,17 +17,18 @@ class ConfigurationOrchestrator
     @tags_orchestrator = Tags::Orchestrator.new(context)
     @app_config_orchestrator = AppConfig::Orchestrator.new(context)
     @user_config_orchestrator = UserConfig::Orchestrator.new(context)
-    @infrastructure_orchestrator = Infrastructure::Orchestrator.new(context)    
-    @instrumentation_orchestrator = Instrumentation::Orchestrator.new(context)    
+    @infrastructure_orchestrator = Infrastructure::Orchestrator.new(context)
+    @instrumentation_orchestrator = Instrumentation::Orchestrator.new(context)
     @services_orchestrator = Services::Orchestrator.new(context)
     @deployment_orchestrator = Deployment::Orchestrator.new(context)
   end
 
   def execute(arguments)
+    @app_config_orchestrator.execute()
+
     @command_line_orchestrator.execute(arguments)
     log_token = init_logging()
 
-    @app_config_orchestrator.execute()
     create_deployment_directory()
 
     @user_config_orchestrator.execute()

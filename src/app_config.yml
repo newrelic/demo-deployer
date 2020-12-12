@@ -3,14 +3,18 @@ deployerMajorVersion: "3"
 deployerMinorVersion: "0"
 deployerBuildVersion: "7"
 
-#executionPath is where the files associated with your deploy will get created 
+#executionPath is where the files associated with your deploy will get created
 #and where you will find your deployment summary file.
 executionPath: "/tmp"
 summaryFilename: "deploy_summary.txt"
 
+#defaultUserConfigPath is available to avoid having to pass one more mount for docker deploys
+defaultUserConfigPath: "configs/user.credentials.json"
+
 ansibleRolesPath: "$HOME/.ansible/roles"
 
-#ids are combined with other fields for unique naming which is important when 
+
+#ids are combined with other fields for unique naming which is important when
 #deploying into a shared cloud provider account.  Use with caution.
 serviceIdMaxLength: 10
 resourceIdMaxLength: 20

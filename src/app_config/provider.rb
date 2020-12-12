@@ -23,6 +23,11 @@ module AppConfig
       return filename
     end
 
+    def get_user_default_config_path()
+      user_config_path = @config_file["defaultUserConfigPath"]
+      return user_config_path
+    end
+
     def get_service_id_max_length()
       length = @config_file["serviceIdMaxLength"]
       return length
@@ -79,6 +84,6 @@ module AppConfig
       end
       return raw
     end
-    
+
   end
 end

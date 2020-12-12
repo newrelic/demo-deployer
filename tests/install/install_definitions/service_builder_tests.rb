@@ -54,7 +54,7 @@ describe "Install::InstallDefinitions::ServiceBuilder" do
 
   def given_ec2_resource(id)
     context_builder.infrastructure().ec2(id)
-  end  
+  end
 
   def given_provisioned_service(id, ip)
     context_builder.provision().service_host(id, ip)

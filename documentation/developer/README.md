@@ -6,11 +6,11 @@ Each component can plug with the deployer through a set of Ansible plays which t
 
 ![Image of architecture](DeployerArchitecture.png)
 
-Upon starts, the deployer will go through the flow documented below. 
+Upon starts, the deployer will go through the flow documented below.
 
 Several validations are made to ensure the required configuration is valid and consistent.
 
-The deployer goes on with the provisioning of resources, running some of those processes in parallel when possible. 
+The deployer goes on with the provisioning of resources, running some of those processes in parallel when possible.
 
 Then it moves on to installing the services, and invoking their starting. Each services, and instrumentations, steps are executed in parallel. For example, all the defined services will be started at once.
 
@@ -68,7 +68,7 @@ In addition some aws/lambda dependencies on s3 require python2 and the following
 
 ## Application Defaults
 
-The deployer default configuration is defined in [app_config.yml](../../src/config/app_config.yml).
+The deployer default configuration is defined in [app_config.yml](../../src/app_config.yml).
 
 If needed you can define local override of those configuration options. To do so create a file named `app_config.yml.local` in the same `src/config` folder.
 
@@ -89,7 +89,7 @@ rake
 
 ### Integration and UserAcceptanceTests
 
-We also use Rake to execute the integration and user acceptance tests (UATs). 
+We also use Rake to execute the integration and user acceptance tests (UATs).
 To run those locally, you'll want to update the [UAT user config file](../../user_acceptance_tests/uatuser.json) with your own user credentials.
 Then you can run any of the below commands to run the associated tests:
 

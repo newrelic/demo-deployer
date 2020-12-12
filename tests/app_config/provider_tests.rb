@@ -9,12 +9,13 @@ describe "AppConfig::Provider" do
       "deployerMajorVersion"=>"a",
       "deployerMinorVersion"=>"b",
       "deployerBuildVersion"=>"c",
-      "executionPath"=>"path", 
-      "summaryFilename"=>"filename.txt", 
-      "serviceIdMaxLength"=>99, 
-      "resourceIdMaxLength"=>99, 
-      "awsEc2SupportedSizes"=>["t2.nino", "t2.micra", "t2.smallz", "t2.mediums"], 
-      "awsElbPort"=>45, 
+      "executionPath"=>"path",
+      "defaultUserConfigPath"=>"path/config.json",
+      "summaryFilename"=>"filename.txt",
+      "serviceIdMaxLength"=>99,
+      "resourceIdMaxLength"=>99,
+      "awsEc2SupportedSizes"=>["t2.nino", "t2.micra", "t2.smallz", "t2.mediums"],
+      "awsElbPort"=>45,
       "awsElbMaxListeners"=>99
     }}
   let(:provider) { AppConfig::Provider.new(app_config)}
@@ -24,26 +25,32 @@ describe "AppConfig::Provider" do
   end
 
   describe "get_execution_path" do
-    it "should get execution path if it exists" do      
-      expect(provider.get_execution_path).must_equal("path")
+    it "should get execution path if it exists" do
+      expect(provider.get_execution_path()).must_equal("path")
     end
   end
 
   describe "get_summary_filename" do
-    it "should get summary filename if it exists" do      
-      expect(provider.get_summary_filename).must_equal("filename.txt")
+    it "should get summary filename if it exists" do
+      expect(provider.get_summary_filename()).must_equal("filename.txt")
+    end
+  end
+
+  describe "get_user_default_config_path" do
+    it "should get default config file path" do
+      expect(provider.get_user_default_config_path()).must_equal("path/config.json")
     end
   end
 
   describe "get_service_id__max_length" do
-    it "should get service_id_max_length if it exists" do      
-      expect(provider.get_service_id_max_length).must_equal(99)
+    it "should get service_id_max_length if it exists" do
+      expect(provider.get_service_id_max_length()).must_equal(99)
     end
   end
 
   describe "get_resource_id_max_length" do
-    it "should get resource id max length if it exists" do      
-      expect(provider.get_resource_id_max_length).must_equal(99)
+    it "should get resource id max length if it exists" do
+      expect(provider.get_resource_id_max_length()).must_equal(99)
     end
   end
 

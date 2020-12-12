@@ -52,9 +52,9 @@ describe "UserAcceptanceTests::CommandLine::FailedValidation" do
     error = assert_raises Common::ValidationError do
       orchestrator.execute(arguments)
     end
-    error.message.must_include("No user config file defined")
+    error.message.must_include("doesn't exist")
   end
-  
+
   def given_user_config()
     arguments.push("-c")
     arguments.push(user_config_filename)
@@ -63,7 +63,7 @@ describe "UserAcceptanceTests::CommandLine::FailedValidation" do
     user_config_jsonfilebuilder.with("credentials", {})
     user_config_jsonfilebuilder.build()
   end
-  
+
   def given_deploy_config()
     arguments.push("-d")
     arguments.push(deploy_config_filename)

@@ -13,7 +13,7 @@ module CommandLine
                    provider_type = nil,
                    is_validation_enabled = true)
       @context = context
-      @parser = parser || CommandLine::Parser.new()
+      @parser = parser || CommandLine::Parser.new(@context)
       @validator = validator || CommandLine::Validator.new()
       @provider_type = provider_type || CommandLine::Provider
       @is_validation_enabled = is_validation_enabled
