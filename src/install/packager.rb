@@ -35,8 +35,9 @@ module Install
           merged_content = field_merger.merge(content)
           if file.is_content_uri?()
             Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{merged_content} to file #{filepath}")
-            download = open(merged_content)
-            IO.copy_stream(download, filepath)
+            download = open(merged_content).read()
+            merged_download = field_merger.merge(download)
+            write_file(filepath, merged_download, file_permission)
           else
             Common::Logger::LoggerFactory.get_logger().debug("Writing content file #{filepath}")
             write_file(filepath, merged_content, file_permission)

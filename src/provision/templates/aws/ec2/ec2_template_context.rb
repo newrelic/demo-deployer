@@ -25,9 +25,11 @@ module Provision
             parse_credential(template_context, get_resource().get_credential())
             template_context[:remote_user] = get_resource().get_user_name()
             template_context[:ami_name] = get_resource().get_ami_name()
+            template_context[:is_windows] = get_resource().is_windows?()
             template_context[:artifact_file_path] = get_output_file_path()
             template_context[:resource_name] = get_resource_name()
             template_context[:cpu_credit_specification] = get_resource().get_cpu_credit_specification()
+            template_context[:user_data] = get_resource().get_user_data()
             parse_infrastructure_resource(template_context)
             parse_services_provider(template_context)
 
@@ -40,6 +42,7 @@ module Provision
             template_context[:aws_access_key] = credential.get_access_key()
             template_context[:aws_secret_key] = credential.get_secret_key()
             template_context[:secret_key_name] = credential.get_secret_key_name()
+            template_context[:secret_key_path] = credential.get_secret_key_path()
             template_context[:region] = credential.get_region()
           end
 
@@ -64,6 +67,12 @@ module Provision
               if port != 9999
                 valid_ports.push(port)
               end
+            end
+            if get_resource().is_windows?()
+              # RDP port for user login
+              valid_ports.push(3389)
+              # WinRM port
+              valid_ports.push(5986)
             end
             template_context[:ports] = valid_ports
           end

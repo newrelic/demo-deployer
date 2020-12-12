@@ -20,6 +20,7 @@ RUN python3 -m pip install ansible==2.9.9
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
 RUN python3 -m pip install boto
+RUN ansible-galaxy collection install community.aws
 # Azure
 RUN python3 -m pip install ansible[azure]
 RUN python3 -m pip install packaging
@@ -29,6 +30,9 @@ RUN python3 -m pip install requests google-auth
 RUN ansible-galaxy collection install google.cloud
 # NewRelic
 RUN ansible-galaxy install newrelic.newrelic_java_agent
+# Windows
+RUN python3 -m pip install pywinrm
+RUN ansible-galaxy collection install ansible.windows
 
 # Others
 RUN apt-get update

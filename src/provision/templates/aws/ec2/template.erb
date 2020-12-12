@@ -8,7 +8,9 @@
     access_key: <%= ec2[:aws_access_key] %>
     secret_key: <%= ec2[:aws_secret_key] %>
     secret_key_name: <%= ec2[:secret_key_name] %>
-    ami_name:  <%= ec2[:ami_name] %>
+    secret_key_path: <%= ec2[:secret_key_path] %>
+    ami_name: <%= ec2[:ami_name] %>
+    is_windows: <%= ec2[:is_windows] %>
     region: <%= ec2[:region] %>
 
     resource_id: <%= ec2[:resource_id] %>
@@ -82,6 +84,9 @@
 <% unless ec2[:cpu_credit_specification].nil? %>
          cpu_credit_specification: <%= ec2[:cpu_credit_specification] %>
 <% end %>
+<% unless ec2[:user_data].nil? %>
+         user_data: <%= ec2[:user_data] %>
+<% end %>
       register: ec2
 
     - ec2_instance_facts:
@@ -105,28 +110,61 @@
       with_items: "{{ ec2_facts.instances }}"
 
     - block:
-      - name: Create artifact file
-        file:
-          path: /tmp/var.json
-          state: touch
+      - name: wait for WinRM to answer on all hosts
+        wait_for:
+          port: 5986
+          host: "{{ ip_address }}"
+          timeout: 900
 
-      - name: Load var from file
-        include_vars:
-          file: /tmp/var.json
-          name: temp_json
+      - name: Wait for system to become reachable over WinRM
+        wait_for_connection:
+          timeout: 900
 
-      - name: Creating artifact JSON key/values
+      - name: get the Administrator password
+        community.aws.ec2_win_password:
+          aws_access_key: "{{ access_key }}"
+          aws_secret_key: "{{ secret_key }}"
+          region: "{{ region }}"
+          instance_id: "{{ instance_id }}"
+          key_file: "{{ secret_key_path }}"
+          wait: yes
+          wait_timeout: 5
+        retries: 20
+        delay: 15
+        until: result_win_password is not failed
+        register: result_win_password
+
+      - fail:
+          msg: "Coult not lookup windows instance Administrator password"
+        when: result_win_password is failed
+      when: is_windows
+
+    - block:
+      - name: Init the params config
         set_fact:
-          artifact_json: "{{ temp_json | default([]) | combine({
-            'resource_id': resource_id,
-            'params': {
-                'ip': item.public_ip_address,
-                'private_dns_name': private_dns_name,
-                'instance_id': instance_id
-            }
+          params: "{{ (params|default({})) | combine({
+            'ip': item.public_ip_address,
+            'private_dns_name': private_dns_name,
+            'instance_id': instance_id
             })
           }}"
         with_items: "{{ ec2_facts.instances }}"
+
+      - name: Add eventual windows params
+        set_fact:
+          params: "{{ (params|default({})) | combine({
+            'win_password': result_win_password['win_password']
+            })
+          }}"
+        when: is_windows and result_win_password
+
+      - name: Creating artifact JSON key/values
+        set_fact:
+          artifact_json: "{{ artifact_json | default({}) | combine({
+            'resource_id': resource_id,
+            'params': params
+            })
+          }}"
 
       - name: write var to file
         copy:
@@ -137,3 +175,4 @@
     - name: wait for SSH to come up
       local_action: wait_for host={{ item.public_ip_address }} port=22 delay=60 timeout=320 state=started search_regex="OpenSSH"
       with_items: "{{ ec2.instances }}"
+      when: is_windows == false
