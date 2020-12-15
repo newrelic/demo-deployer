@@ -2,19 +2,63 @@
 
 The deployer is part of a `demo` ecosystem, sometimes referenced as `V3`.
 
-Each component can plug with the deployer through a set of Ansible plays which the deployer leverages and invokes. Specific data between resources and services get marshalled through, as needed.
+Each component can plug with the deployer through a set of Ansible plays which the deployer leverages and invokes. Specific data between resources and services is marshalled as needed.
 
 ![Image of architecture](DeployerArchitecture.png)
 
-Upon starts, the deployer will go through the flow documented below.
+## Contents
+* [Life cycle](#life-cycle)
+* [Ansible contract](#ansible-contract)
+* [Prerequisities](#prerequisites)
+* [Ansible installation](#ansible-installation)
+* [Application defaults](#application-defaults)
+* [Running tests](#running-tests)
+* [Batch execution](#batch-execution)
 
-Several validations are made to ensure the required configuration is valid and consistent.
 
-The deployer goes on with the provisioning of resources, running some of those processes in parallel when possible.
+## Life cycle
 
-Then it moves on to installing the services, and invoking their starting. Each services, and instrumentations, steps are executed in parallel. For example, all the defined services will be started at once.
+While running, the deployer goes through several steps (shown in Figure 2.) I have outlined them below with a short description.
 
-![Image of flowchar](DeployerFlowchart.png)
+* Validate
+	* Various checks to ensure the user credential and deployment configuration have all the required values.
+* Get source
+	* Retrieve the repositories for all services and instrumentation referenced in the deployment configuration.
+* Provision
+	* Create cloud resources in AWS, Azure, or GCP using Ansible.
+	* These resources are created in **sequence**.
+* Install/Teardown
+	* Handles installing, starting, and tearing down services and instrumentations.
+	* The relationship between the deployer and a service/instrumentation is the Ansible contract they share. For more information on the contract, see [Ansible contract](#ansible-contract).
+	* These services/instrumentations are created in **parallel**. 
+* Summary
+	* Output including IP addresses, URLs, instrumentation, and any other information pertinent to the deployment.
+
+![Image of the deployer life cycle](v3-lifecycle.png)  
+
+*Figure 2. Deployer Life Cycle*
+
+## Ansible contract
+
+The deployment process of a service or instrumentation is a set of self defined Ansible roles. They live with the code, stored in a top level `deploy/<operating system>/roles` directory. Ex: `deploy/linux/roles`. The deployer handles passing values to and executing these Ansible plays. There are 8 plays called during installation and 2 called during teardown.
+
+Each of these plays are run in sequence from top to bottom. If a play is not provided, the deployer will silently skip it. Those marked as `parallel` run the play for all services/instrumentations at the same time. Those marked as `serial` run the play for all services/instrumentations one at a time.
+
+#### Installation
+* stop - parallel
+* prepare - serial
+* upload - parallel
+* instrument - serial
+* configure - serial
+* onbeforestart - serial
+* start - parallel
+* onafterstart - serial
+
+#### Teardown
+* stop - parallel
+* teardown - serial
+
+The deployer does not care about the contents of these plays. For example, the steps to start a service could be located in the `configure` Ansible play. However, please place steps in the plays that correspond to what they are doing. This will help with any future debugging.
 
 ## Prerequisites
 
