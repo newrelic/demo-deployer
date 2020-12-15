@@ -74,6 +74,10 @@ This field is optional. It's an array of `file` element. Upon deployment, each o
 
 If a file is specified, this field is required. It represents the relative path and filename for creating the file in the target host service directory.
 
+### file executable
+
+This field is optional. It is a true/false value that defaults to false. If true, it adds execute permissions to the file when it is written to disk.
+
 ### file content
 
 If a file is specified, this field is required.
