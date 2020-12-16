@@ -62,9 +62,9 @@ The deployer does not care about the contents of these plays. For example, the s
 
 The values passed from the deployer to the Ansible plays are outlined in the files below:
 * [On host instrumentation](../../src/install/install_definitions/on_host_instrumentation_builder.rb#L38) (The infrastructure agent and related)
-* [Services](src/install/install_definitions/service_builder.rb#L49) (All services being deployed)
-* [Service instrumentation](src/install/install_definitions/service_instrumentation_builder.rb#L51) (Language agents)
-* [Global instrumentation](src/install/install_definitions/global_instrumentation_builder.rb#L35) (Cloud integrations, alert policies, workloads, etc.)
+* [Services](../../src/install/install_definitions/service_builder.rb#L49) (All services being deployed)
+* [Service instrumentation](../../src/install/install_definitions/service_instrumentation_builder.rb#L51) (Language agents)
+* [Global instrumentation](../../src/install/install_definitions/global_instrumentation_builder.rb#L35) (Cloud integrations, alert policies, workloads, etc.)
 
 ## Prerequisites
 
