@@ -30,7 +30,7 @@ The structure of the user config is a list of credentials, for example:
       "auth_kind": "serviceaccount",
       "service_account_email": "<sa_name>@<project_id>.iam.gserviceaccount.com",
       "service_account_file": "<path/to/service/account.json>",
-      "project": "<project_id",
+      "project": "<project_id>",
       "scopes": ["https://www.googleapis.com/auth/compute"],
       "secretKeyPath": "/path/to/my/secretkey.pem",
       "region": "us-west1"
