@@ -1,8 +1,6 @@
 # Developer
 
-The deployer is part of a `demo` ecosystem, sometimes referenced as `V3`.
-
-Each component can plug with the deployer through a set of Ansible plays which the deployer leverages and invokes. Specific data between resources and services is marshalled as needed.
+The deployer is part of a `demo` ecosystem. Each component can plug with the deployer through a set of Ansible plays which the deployer leverages and invokes. Specific data between resources and services is marshalled as needed.
 
 ![Image of architecture](DeployerArchitecture.png)
 
@@ -18,21 +16,21 @@ Each component can plug with the deployer through a set of Ansible plays which t
 
 ## Life cycle
 
-While running, the deployer goes through several steps (shown in Figure 2.) I have outlined them below with a short description.
+While running, the deployer goes through several steps (shown in Figure 2.) outlined below with a short description.
 
 * Validate
-	* Various checks to ensure the user credential and deployment configuration have all the required values.
+	* Various checks to ensure the user credential and deployment configuration have all the required values
 * Get source
-	* Retrieve the repositories for all services and instrumentation referenced in the deployment configuration.
+	* Retrieve the repositories for all services and instrumentation referenced in the deployment configuration
 * Provision
-	* Create cloud resources in AWS, Azure, or GCP using Ansible.
-	* These resources are created in **sequence**.
+	* Create cloud resources in AWS, Azure, or GCP using Ansible
+	* These resources are created in **sequence**
 * Install/Teardown
-	* Handles installing, starting, and tearing down services and instrumentations.
-	* The relationship between the deployer and a service/instrumentation is the Ansible contract they share. For more information on the contract, see [Ansible contract](#ansible-contract).
-	* These services/instrumentations are created in **parallel**. 
+	* Handles installing, starting, and tearing down services and instrumentations
+	* The relationship between the deployer and a service/instrumentation is the Ansible contract they share. For more information on the contract, see [Ansible contract](#ansible-contract)
+	* These services/instrumentations are created in **parallel** 
 * Summary
-	* Output including IP addresses, URLs, instrumentation, and any other information pertinent to the deployment.
+	* Output including IP addresses, URLs, instrumentation, and any other information pertinent to the deployment
 
 ![Image of the deployer life cycle](v3-lifecycle.png)  
 
@@ -158,6 +156,8 @@ A `Tron` is type of application that can be deployed with the `demo-deployer` fo
 
 Current Trons
 * [Nodetron](https://github.com/newrelic/demo-nodetron)
+* [Javatron](https://github.com/newrelic/demo-javatron)
+* [Pythontron](https://github.com/newrelic/demo-pythontron)
 
 Each `Tron` can have various behavior defined.
 

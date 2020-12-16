@@ -2,6 +2,8 @@
 
 The user config mainly contains credentials (api keys, license keys, secrets and tokens). Those are typically user, or account, specific and need to be handled with care. Those are also often re-used for multiple deployments of a same user.
 
+We recommend placing this file in `$HOME/demo-deployer/configs` and naming it `user.credentials.local.json`. The deployer will automatically pick up the file if you follow these conventions. If you would like to name it or place it somewhere different you will need to pass the filepath to the deployer with a `-c` option.
+
 The structure of the user config is a list of credentials, for example:
 
 ```json

@@ -52,10 +52,9 @@ To create a .pem key file, and use it with the deployer, follow the steps below:
 * Select `pem` file format
 * Optional, add any tag by clicking on the `Add new tag` button
 * Click the `Create key pair` button. This will starts a file download on your browser. The file downloaded will be named for example `jsmithUsWest2.pem`.
-* Move the downloaded file to a secure folder on your machine, for example under `$HOME/configs`
+* Move the downloaded file to a secure folder on your machine, we recommend the same folder as the user configuration file `$HOME/demo-deployer/configs`
 * IMPORTANT, in order for the .pem key file to be used, the file permissions need to be restricted to User read-only. You can do so with this command `sudo chmod 0400 *.pem`
-* Get the absolute path of your .pem key file, this will be your user config credentials for secretKeyPath. For example `$HOME/configs/jsmithUsWest2.pem`
-* For user config running with docker, the .pem key path needs to be the absolute path in the docker image that is running. The deployer is located in `/mnt/deployer` and the .pem key should be stored in `/mnt/deployer/configs`. So if you're planning to use docker with this user config, an example of secretKeyPath to use would be `/mnt/deployer/configs/jsmithUsWest2.pem`. For more information regarding running the deployer with docker look at [Running the deployer with Docker](../../../docker/run/README.md)
+* Get the relative path of your .pem key file, this will be the value for the secretKeyPath field. For example `configs/jsmithUsWest2.pem`
 
 ## Create a new AWS account
 
