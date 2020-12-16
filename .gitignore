@@ -15,6 +15,7 @@
 /*/*.local
 *.pem
 /credentials/*
+*.pub
 
 # VS code user settings
 .vscode/*

@@ -50,8 +50,9 @@ The region configuration is typically use for creating Virtual Machine hosts. Yo
 
 In order to create and access GCP `Virtual Machines`, we need to create an SSH key pair. By default, those files are created in the ~/.ssh directory.
 
-* Use this command to create an RSA SSH key pair with a length of 4096 bits `ssh-keygen -m PEM -t rsa -b 4096 -N "" -C "compute-user"`
+* Use this command to create an RSA SSH key pair with a length of 4096 bits `ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/demo-deployer/configs/azrkey --N "" -C "compute-user"`. If you would like to create the key in a directory other than `HOME/demo-deployer/configs`, change the file path after the `-f` option. 
 * Write down the absolute path of the generated private key and put this absolute path in your user config credentials for gcp `secretKeyPath`.
+* Write down the relative path of the generated private key, which should be `configs/azrkey.pub` unless you provided your own file path.
 * Upload the public key content to the GCP Compute metadata to allow this SSH key to be used with your project using https://console.cloud.google.com/compute/metadata
 * Click `SSH Keys` tab
 * Click `Edit`
