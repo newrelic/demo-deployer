@@ -60,6 +60,12 @@ Each of these plays are run in sequence from top to bottom. If a play is not pro
 
 The deployer does not care about the contents of these plays. For example, the steps to start a service could be located in the `configure` Ansible play. However, please place steps in the plays that correspond to what they are doing. This will help with any future debugging.
 
+The values passed from the deployer to the Ansible plays are outlined in the files below:
+* [On host instrumentation](../../src/install/install_definitions/on_host_instrumentation_builder.rb#L38) (The infrastructure agent and related)
+* [Services](src/install/install_definitions/service_builder.rb#L49) (All services being deployed)
+* [Service instrumentation](src/install/install_definitions/service_instrumentation_builder.rb#L51) (Language agents)
+* [Global instrumentation](src/install/install_definitions/global_instrumentation_builder.rb#L35) (Cloud integrations, alert policies, workloads, etc.)
+
 ## Prerequisites
 
 To run the deployer locally, you'll want to install the dependencies below. Note, you may also refer to the root [Dockerfile](../../Dockerfile) to see an example on a Linux Ubuntu image.
