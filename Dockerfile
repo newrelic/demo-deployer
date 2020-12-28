@@ -56,4 +56,4 @@ RUN bundle install --clean --force
 # CMD [ "python", "--version"]
 # CMD [ "rake"]
 
-CMD [ "ruby", "main.rb"]
+ENTRYPOINT [ "ruby", "main.rb" ]
