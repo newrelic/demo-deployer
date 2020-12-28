@@ -27,6 +27,14 @@ module Common
         @params[key] = value
       end
 
+      def update(key, value)
+        if @params.key?(key)
+          @params[key] = value
+        else
+          add(key, value)
+        end
+      end
+
       def to_s()
         return "Params:#{@params}"
       end

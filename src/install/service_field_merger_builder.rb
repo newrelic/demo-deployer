@@ -43,6 +43,11 @@ module Install
         @field_merger_builder.create_definition(["service", id, "port"], port)
         display_name = service.get_display_name()
         @field_merger_builder.create_definition(["service", id, "display_name"], display_name)
+
+        params = service.get_params().get_all()
+        params.each do | key, value |
+          @field_merger_builder.create_definition(["service", id, "params", key], value)
+        end
       end
 
       return self

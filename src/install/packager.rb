@@ -20,6 +20,13 @@ module Install
         service_id = service.get_id()
         Common::Logger::LoggerFactory.get_logger().debug("Packaging service #{service_id}")
         service_path = service.get_source_path()
+
+        params = service.get_params()
+        params.get_all().each do | key, value |
+          merged_value = field_merger.merge(value)
+          params.update(key, merged_value) 
+        end
+
         service.get_files().each do |file|
           destination_filepath = file.get_destination_filepath()
           content = file.get_content()
