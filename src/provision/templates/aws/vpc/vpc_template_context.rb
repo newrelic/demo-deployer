@@ -31,6 +31,10 @@ module Provision
             template_context[:aws_access_key] = credential.get_access_key()
             template_context[:aws_secret_key] = credential.get_secret_key()
             template_context[:region] = credential.get_region()
+            availability_zone = credential.get_availability_zone()
+            unless availability_zone.nil?
+              template_context[:availability_zone] = availability_zone
+            end
           end
 
         end
