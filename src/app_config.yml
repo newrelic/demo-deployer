@@ -1,7 +1,7 @@
 ---
 deployerMajorVersion: "3"
 deployerMinorVersion: "1"
-deployerBuildVersion: "0"
+deployerBuildVersion: "1"
 
 #executionPath is where the files associated with your deploy will get created
 #and where you will find your deployment summary file.
@@ -20,7 +20,7 @@ serviceIdMaxLength: 10
 resourceIdMaxLength: 20
 
 #AWS-specific defaults. Where applicable, keep costs down by limiting size and quantity.
-awsEc2SupportedSizes: ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "t3.nano", "t3.micro", "t3.small", "t3.medium", "t3.large", "t3.xlarge", "t3a.nano", "t3a.micro", "t3a.small", "t3a.medium", "t3a.large", "t3a.xlarge"]
+awsEc2SupportedSizes: ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "t3.nano", "t3.micro", "t3.small", "t3.medium", "t3.large", "t3.xlarge", "t3a.nano", "t3a.micro", "t3a.small", "t3a.medium", "t3a.large", "t3a.xlarge", "t4g.nano", "t4g.micro", "t4g.small", "t4g.medium", "t4g.large", "t4g.xlarge"]
 awsElbPort: 80
 awsElbMaxListeners: 50
 awsApiGatewaySleepTimeSeconds: 35
