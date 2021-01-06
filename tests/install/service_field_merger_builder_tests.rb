@@ -125,10 +125,20 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[resource:host1:display_name]").must_equal("host1")
   end
 
-  def given_service(service_id, destinations, port = 5000, display_name = nil)
+  it "should build service field merger with params" do
+    given_ec2_resource("host1")
+    given_service("app1", ["host1"], 5001, "App 1", { "fruit": "apple" })
+    merger = given_builder()
+      .with_services(services(), provisioned_resources())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[service:app1:params:fruit]").must_equal("apple")
+  end
+
+  def given_service(service_id, destinations, port = 5000, display_name = nil, params = {})
     local_source_path = "src/path"
     deploy_script_path = "deploy"
-    context_builder.services().service(service_id, port, local_source_path, deploy_script_path, destinations, display_name)
+    context_builder.services().service(service_id, port, local_source_path, deploy_script_path, destinations, display_name, params)
   end
 
   def given_ec2_resource(id, display_name = nil)

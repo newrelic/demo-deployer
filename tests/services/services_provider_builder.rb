@@ -16,11 +16,12 @@ module Tests
         return @provider ||= createInstance(context)
       end
 
-      def service(id, port, local_source_path, deploy_script_path, reference_ids = nil, display_name = nil)
+      def service(id, port, local_source_path, deploy_script_path, reference_ids = nil, display_name = nil, params = {})
         service = create_new_service(id)
         service["port"] = port
         service["local_source_path"] = local_source_path
         service["deploy_script_path"] = deploy_script_path
+        service["params"] = params
         unless reference_ids.nil?
           destinations = get_or_create(service, "destinations", [])
           (reference_ids || []).compact().each do |reference_id|
