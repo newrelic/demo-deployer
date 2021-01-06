@@ -10,7 +10,7 @@ module Tests
         @arguments = []
         @provider = nil
       end
-      
+
       def user_config(filename)
         @arguments.push("-c")
         @arguments.push(filename)
