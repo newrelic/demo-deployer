@@ -1,4 +1,5 @@
 require 'optparse'
+require "./src/common/validation_error"
 
 module CommandLine
   class Parser
@@ -57,11 +58,14 @@ module CommandLine
 
     def find_user_config_path()
       path = @context.get_app_config_provider().get_user_default_config_path()
-      user_config_files = Dir[path]
-      if user_config_files.length == 1
+      user_config_files = Dir.glob path
+
+      if user_config_files.length == 0
+        raise Common::ValidationError.new("No user config file found in configs directory")
+      elsif user_config_files.length == 1
         return user_config_files.first
       else
-        raise "Too many user config files found: #{ user_config_files.join(", ")}\nTo fix either remove one of the user config files or specify which config file you want to use with the '-c' command line flag"
+        raise Common::ValidationError.new("Too many user config files found: #{ user_config_files.join(", ")}\nTo fix either remove one of the user config files or specify which config file you want to use with the '-c' command line flag")
       end
     end
   end
