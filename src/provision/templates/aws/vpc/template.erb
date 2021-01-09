@@ -26,6 +26,9 @@
           defaultForAz: "true"
           state: "available"
           vpc-id: "{{default_vpc}}"
+<% unless vpc[:availability_zone].nil? %>
+          availability-zone: <%= vpc[:availability_zone] %>
+<% end %>
       register: default_vpc_subnets
 
     - name: find first default subnet by AZ name order

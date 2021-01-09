@@ -10,7 +10,8 @@ The aws user configuration has the following schema:
       "apiKey": "my_api_key_value",
       "secretKey": "my_secret_key",
       "secretKeyPath": "my_secret_key_path",
-      "region": "my_region"
+      "region": "my_region",
+      "availability_zone": "a"
     }
 
   }
@@ -55,6 +56,11 @@ To create a .pem key file, and use it with the deployer, follow the steps below:
 * Move the downloaded file to a secure folder on your machine, we recommend the same folder as the user configuration file `$HOME/demo-deployer/configs`
 * IMPORTANT, in order for the .pem key file to be used, the file permissions need to be restricted to User read-only. You can do so with this command `sudo chmod 0400 *.pem`
 * Get the relative path of your .pem key file, this will be the value for the secretKeyPath field. For example `configs/jsmithUsWest2.pem`
+
+### availability_zone (optional)
+
+Some resources can be pin onto a specific availability zone. To do so provide the appropriate letter value to this parameter. Typically `a` or `b` or `c`.
+In the absence of this parameter, the first default availability zone is typically picked up, usually the `a` availability zone.
 
 ## Create a new AWS account
 

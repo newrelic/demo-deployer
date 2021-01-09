@@ -33,6 +33,15 @@ module UserConfig
         return query("region")
       end
 
+      def get_availability_zone()
+        region = get_region()
+        availability_zone = query("availability_zone")
+        unless availability_zone.nil?
+          return "#{region}#{availability_zone}"
+        end
+        return nil
+      end
+
       def to_h(key_prefix = @provider)
         items = {}
         add_if_exist(items, "access_key", get_access_key(), key_prefix)
