@@ -135,6 +135,17 @@ describe "Install::ServiceFieldMergerBuilder" do
     merger.merge("[service:app1:params:fruit]").must_equal("apple")
   end
 
+  it "should build service field merger with secrets credential values" do
+#    given_ec2_resource("host1")
+#    given_service("app1", ["host1"], 5001, "App 1")
+    given_secrets_credential("test_secret", "secret value")
+    merger = given_builder()
+      .with_user_credentials(context())
+      .build()
+    merger.wont_be_nil()
+    merger.merge("[credential:secrets:test_secret]").must_equal("secret value")
+  end
+
   def given_service(service_id, destinations, port = 5000, display_name = nil, params = {})
     local_source_path = "src/path"
     deploy_script_path = "deploy"
@@ -159,6 +170,10 @@ describe "Install::ServiceFieldMergerBuilder" do
 
   def given_new_relic_credential(licenseKey) 
     context_builder.user_config().with_new_relic(licenseKey)
+  end
+
+  def given_secrets_credential(key, value)
+    context_builder.user_config().with_secrets(key, value)
   end
 
   def given_app_config_url(region, name, url)
