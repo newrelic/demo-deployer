@@ -2,7 +2,6 @@
 roles:
   # New Relic
   - newrelic.newrelic_java_agent
-  - newrelic.newrelic-infra
 
 collections:
   # AWS
