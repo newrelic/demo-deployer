@@ -49,10 +49,24 @@ describe "UserAcceptanceTests::CommandLine::FailedValidation" do
 
   it "should fail on missing user configuration" do
     given_deploy_config()
-    error = assert_raises Common::ValidationError do
-      orchestrator.execute(arguments)
+    error = nil
+    Dir.stub(:glob, []) do
+      error = assert_raises Common::ValidationError do
+        orchestrator.execute(arguments)
+      end
     end
-    error.message.must_include("doesn't exist")
+    error.message.must_include("No user config file found")
+  end
+
+  it "should fail too many user configurations" do
+    given_deploy_config()
+    error = nil
+    Dir.stub(:glob, ['configs/one.configurations.local.json','configs/two.configurations.local.json']) do
+      error = assert_raises Common::ValidationError do
+        orchestrator.execute(arguments)
+      end
+    end
+    error.message.must_include("Too many user config files found")
   end
 
   def given_user_config()

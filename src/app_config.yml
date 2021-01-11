@@ -1,6 +1,7 @@
 ---
 deployerMajorVersion: "3"
 deployerMinorVersion: "1"
+deployerBuildVersion: "3"
 deployerBuildVersion: "2"
 
 #executionPath is where the files associated with your deploy will get created
@@ -9,7 +10,7 @@ executionPath: "/tmp"
 summaryFilename: "deploy_summary.txt"
 
 #defaultUserConfigPath is available to avoid having to pass one more mount for docker deploys
-defaultUserConfigPath: "configs/user.credentials.local.json"
+defaultUserConfigPath: "configs/*.credentials.local.json"
 
 ansibleRolesPath: "$HOME/.ansible/roles"
 
