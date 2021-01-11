@@ -34,6 +34,9 @@ RUN ansible-galaxy install newrelic.newrelic_java_agent
 RUN python3 -m pip install pywinrm
 RUN ansible-galaxy collection install ansible.windows
 
+# MySQL
+RUN ansible-galaxy collection install community.mysql
+
 # Others
 RUN apt-get update
 RUN apt-get install git -y

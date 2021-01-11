@@ -43,6 +43,11 @@ module Tests
         return @parent_builder
       end
 
+      def with_secrets(key, value)
+        with_credentials("secrets", { "#{key}" => "#{value}" })
+        return @parent_builder
+      end
+
       def with_credentials(provider, config)
         credentials = get_or_create(@content, "credentials", {})
         provider_content = get_or_create(credentials, provider, {})

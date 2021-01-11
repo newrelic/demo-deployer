@@ -4,6 +4,7 @@ require "./src/user_config/definitions/aws_credential"
 require "./src/user_config/definitions/azure_credential"
 require "./src/user_config/definitions/gcp_credential"
 require "./src/user_config/definitions/git_credential"
+require "./src/user_config/definitions/secrets_credential"
 
 module UserConfig
   class CredentialFactory
@@ -18,9 +19,9 @@ module UserConfig
 
     def create(config_credential, credential_key)
       repository = get_repository()
-      type = repository.get(credential_key)
-      unless type.nil?
-        return type.new(credential_key, CredentialFactory.get_credential_query_lambda(config_credential))
+      credential_class = repository.get(credential_key)
+      unless credential_class.nil?
+        return credential_class.new(credential_key, CredentialFactory.get_credential_query_lambda(config_credential))
       end
       return nil
     end
@@ -44,11 +45,14 @@ module UserConfig
         "aws" => UserConfig::Definitions::AwsCredential,
         "azure" => UserConfig::Definitions::AzureCredential,
         "gcp" => UserConfig::Definitions::GcpCredential,
-        "git" => UserConfig::Definitions::GitCredential
+        "git" => UserConfig::Definitions::GitCredential,
+        "secrets" => UserConfig::Definitions::SecretsCredential
       }
     end
 
-    def self.query(lookup, config_credential)
+    def self.query(lookup = nil, config_credential)
+      return config_credential if lookup.nil?
+
       current = config_credential
       parts = lookup.split(".")
       parts.each do |part|

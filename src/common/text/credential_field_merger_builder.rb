@@ -35,7 +35,19 @@ module Common
         end
         return self
       end
- 
+
+      def with_secrets(credentials)
+        unless credentials.nil?
+          no_provider_prefix = nil
+          secrets_credential = credentials.to_h(no_provider_prefix)
+
+          secrets_credential.each do | key, value |
+            add_field_merger_definition(["credential", "secrets", key], value)
+          end
+        end
+        return self
+      end
+
       def with_global(context)
         merger = GlobalFieldMergerBuilder.create(context)
         @field_merger_builder.append_definitions(merger.get_definitions())
@@ -58,6 +70,11 @@ module Common
         newrelic_credential = context.get_user_config_provider().get_new_relic_credential()
         unless newrelic_credential.nil?
           instance.with_new_relic(newrelic_credential)
+        end
+
+        secrets_credential = context.get_user_config_provider().get_secrets_credential()
+        unless secrets_credential.nil?
+          instance.with_secrets(secrets_credential)
         end
 
         merger = instance.build()

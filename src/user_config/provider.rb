@@ -28,6 +28,9 @@ module UserConfig
       return get_credential('git')
     end
 
+    def get_secrets_credential()
+      return get_credential('secrets')
+    end
   end
 end
 
