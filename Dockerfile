@@ -12,30 +12,6 @@ RUN apt-get install -y python3-pip python3-dev \
   && cd /usr/local/bin \
   && ln -s /usr/bin/python3 python \
   && pip3 install --upgrade pip
-RUN python3 -m pip install --upgrade setuptools
-
-# Install Ansible
-RUN python3 -m pip install ansible==2.9.9
-# AWS
-RUN python3 -m pip install boto3
-RUN python3 -m pip install botocore
-RUN python3 -m pip install boto
-RUN ansible-galaxy collection install community.aws
-# Azure
-RUN python3 -m pip install ansible[azure]
-RUN python3 -m pip install packaging
-RUN python3 -m pip install msrestazure
-# GCP
-RUN python3 -m pip install requests google-auth
-RUN ansible-galaxy collection install google.cloud
-# NewRelic
-RUN ansible-galaxy install newrelic.newrelic_java_agent
-# Windows
-RUN python3 -m pip install pywinrm
-RUN ansible-galaxy collection install ansible.windows
-
-# MySQL
-RUN ansible-galaxy collection install community.mysql
 
 # Others
 RUN apt-get update
@@ -54,6 +30,14 @@ ADD . /mnt/deployer
 WORKDIR /mnt/deployer
 
 RUN bundle install --clean --force
+
+# Install Python dependencies
+RUN python3 -m pip install -r requirements.python.txt
+
+# Install Ansible dependencies
+# Need two install steps while on v2.9 of Ansible. Next minor version introduces a single install command.
+RUN ansible-galaxy role install -r requirements.ansible.yml
+RUN ansible-galaxy collection install -r requirements.ansible.yml
 
 # CMD [ "ruby", "--version"]
 # CMD [ "python", "--version"]

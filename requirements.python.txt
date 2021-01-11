@@ -1,0 +1,21 @@
+# Generic
+setuptools
+
+# Ansible
+ansible==2.9.9
+
+# AWS
+boto3
+botocore
+boto
+
+# Azure
+ansible[azure]
+packaging
+msrestazure
+
+# GCP
+google-auth
+
+# Windows
+pywinrm

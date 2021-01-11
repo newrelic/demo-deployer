@@ -1,0 +1,17 @@
+---
+roles:
+  # New Relic
+  - newrelic.newrelic_java_agent
+
+collections:
+  # AWS
+  - community.aws
+
+  # GCP
+  - google.cloud
+
+  # Windows
+  - ansible.windows
+  
+  # MySQL
+  - community.mysql
