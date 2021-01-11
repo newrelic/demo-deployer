@@ -1,0 +1,8 @@
+---
+roles:
+  - newrelic.newrelic_java_agent
+
+collections:
+  - community.aws
+  - google.cloud
+  - ansible.windows

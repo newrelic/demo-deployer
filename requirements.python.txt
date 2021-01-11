@@ -1,0 +1,10 @@
+setuptools
+ansible==2.9.9
+boto3
+botocore
+boto
+ansible[azure]
+packaging
+msrestazure
+google-auth
+pywinrm
