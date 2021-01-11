@@ -1,8 +1,10 @@
 ---
 roles:
   - newrelic.newrelic_java_agent
+  - newrelic.newrelic-infra
 
 collections:
   - community.aws
   - google.cloud
   - ansible.windows
+  - community.mysql
