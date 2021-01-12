@@ -25,4 +25,6 @@ Your New Relic root account ID, if you have one. Example: `[credential:newrelic:
 ### region property
 Your New Relic region. Example: `[credential:newrelic:region]`
 
+## Secrets credential
 
+See [Secrets Credential](../../../user_config/secrets.md)
