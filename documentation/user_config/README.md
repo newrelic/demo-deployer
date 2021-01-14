@@ -43,7 +43,12 @@ The structure of the user config is a list of credentials, for example:
     },
 
     "git": {
-        "username": "my personal access token value"
+      "username": "my personal access token value"
+    },
+
+    "secrets": {
+      "secret1": "<value of secret1>",
+      "secret2": "<value of secret2>"
     }
   }
 }
@@ -58,3 +63,4 @@ The references below give more details regarding how to setup specific vendors. 
 * [Gcp](gcp.md)
 * [NewRelic](newrelic.md)
 * [GitHub](github.md)
+* [Secrets](secrets.md)
