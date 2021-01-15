@@ -1,8 +1,8 @@
 require './src/common/json_parser'
 
-module Footnote
+module Summary
   # Class responsible for validating the 'footnote' field of a deployment config.
-  class Validator
+  class FootnoteValidator
     # @param [Common::JsonParser] json
     def initialize(json = nil)
       @json = json || Common::JsonParser.new
@@ -34,7 +34,7 @@ module Footnote
         # footnote wasnt found in deploy config
         return true
       else
-        # not a string, or an array
+        # not a string, an array, or nil
         return false
       end
     end

@@ -2,14 +2,17 @@ require './src/common/validation_error'
 require './src/summary/composer'
 require './src/common/io/file_writer'
 require './src/common/logger/logger_factory'
+require './src/common/json_parser'
+require './src/install/service_field_merger_builder'
 
 module Summary
   class Orchestrator
-
+    # @param [Context] context
     def initialize(context)
       @context = context
       @summary_composer = Summary::Composer.new()
       @summary_file_path = nil
+      @json = Common::JsonParser.new
     end
 
     def execute()
@@ -34,6 +37,7 @@ module Summary
 
       summary = "Deployment successful!\n\n"
       summary += "#{composer_result}"
+      summary += "#{get_footnote}"
       return summary
     end
 
@@ -64,5 +68,41 @@ module Summary
       return "#{execution_path}/#{deployment_name}/#{filename}"
     end
 
+    # Get the complete text of the footnote, with merge fields subsituted for their values within the footnote.
+    # @return [String] footnote text with all merge fields substituted for their appropriate values.
+    def get_footnote()
+      deploy_config = @context.get_command_line_provider.get_deployment_config_content
+      raw_footnote = @json.get(deploy_config, 'footnote')
+      string_footnote = convert_to_string(raw_footnote)
+      final_footnote = get_field_merger.merge(string_footnote)
+
+      return final_footnote
+    end
+
+    # Convert raw_footnote into a string. The important transform is when footnate is an array, and the resulting string is concatenated with line breaks between sections.
+    # @param [String, Array<string>] raw_footnote
+    # @return [String] String representation of the raw footnote.
+    def convert_to_string(raw_footnote)
+      if raw_footnote.is_a?(String)
+        return raw_footnote
+      elsif raw_footnote.is_a?(Array)
+        raw_footnote.push("")
+        return raw_footnote.join("\n")
+      end
+    end
+
+    # Get an instance of [Common::Text::FieldMerger]
+    # @return [Common::Text::FieldMerger]
+    def get_field_merger()
+      services = @context.get_services_provider().get_services()
+      provisioned_resources = @context.get_provision_provider().get_all()
+      field_merger = Install::ServiceFieldMergerBuilder.new
+        .with_services(services, provisioned_resources)
+        .with_user_credentials(@context)
+        .with_app_config(@context)
+        .build()
+
+      return field_merger
+    end
   end
 end
