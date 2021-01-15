@@ -19,12 +19,9 @@ module Footnote
       deploy_config = @context.get_command_line_provider.get_deployment_config_content
       raw_footnote = @json.get(deploy_config, 'footnote')
       string_footnote = convert_to_string(raw_footnote)
-      temp_merge_fields = find_merge_fields(string_footnote)
-      field_merger = get_field_merger
-      merged_fields = field_merger.merge_values(temp_merge_fields)
-      final_footnote = get_final_form(string_footnote, merged_fields)
+      final_footnote = get_field_merger.merge(string_footnote)
 
-      @logger.info(final_footnote)
+      @logger.info(final_footnote) unless final_footnote.nil?
     end
 
     private
@@ -40,19 +37,6 @@ module Footnote
       end
     end
 
-    # Find all merge field substrings within string_footnote
-    # @param [String] string_footnote
-    # @return [Hash<string, string>] merge fields found
-    def find_merge_fields(string_footnote)
-      merge_fields = {}
-      matches = string_footnote.scan(/(\[[^\[\]:]+(?::[^\[\]:]+)+\])/)
-      matches.flatten.each do |match|
-        merge_fields[match] = match
-      end
-      
-      return merge_fields
-    end
-
     # Get an instance of [Common::Text::FieldMerger]
     # @return [Common::Text::FieldMerger]
     def get_field_merger()
@@ -63,22 +47,8 @@ module Footnote
         .with_user_credentials(@context)
         .with_app_config(@context)
         .build()
-      
+
       return field_merger
-    end
-
-    # Get the final form of the footnote -- all merge fields within are replaced with their corresponding values.
-    # @param [String] string_footnote
-    # @param [Hash<string,string>] merge_fields. Hash where (key, value) pair -> is (merge field, merged value).
-      # Example: ("[service:name:ip]", "192.168.1.1")
-    # @return [String] Footnote string with merge fields replaced.
-    def get_final_form(string_footnote, merge_fields)
-      merged_footnote = string_footnote.dup
-      merge_fields.each do | key, value |
-        merged_footnote.gsub!(key, value)
-      end
-
-      return merged_footnote
     end
   end
 end
