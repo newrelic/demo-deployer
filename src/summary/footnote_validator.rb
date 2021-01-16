@@ -11,7 +11,9 @@ module Summary
     # Run validation
     # @param [String] deploy_config - The content of the deployment config file represented as a JSON string.
     def execute(deploy_config)
-      raw_footnote = @json.get(deploy_config, 'footnote')
+      deploy_config_output = @json.get(deploy_config, 'output')
+      # if the output section is nil, footnote is nil. If it does exist, try get the footnote field.
+      raw_footnote = deploy_config_output.nil? ? nil : deploy_config_output['footnote']
       return "'footnote' field must be of type 'String' or 'Array<String>'" unless validate(raw_footnote)
     end
 
