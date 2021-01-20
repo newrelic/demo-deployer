@@ -30,6 +30,9 @@ module Footnote
           # empty array
           return true
         end
+      elsif raw_footnote.nil?
+        # footnote wasnt found in deploy config
+        return true
       else
         # not a string, or an array
         return false
