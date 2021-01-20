@@ -18,7 +18,7 @@ module Summary
 
     private
 
-    # Validate that raw_footnote is either a string, or an array of strings.
+    # Validate that raw_footnote is either nil, a string, or an array of strings.
     # @param [String, Array<string>] raw_footnote
     # @return [Boolean] value indicating whether input is valid. true indicates valid, false indicates invalid.
     def validate(raw_footnote)
