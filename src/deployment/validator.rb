@@ -69,7 +69,7 @@ module Deployment
       username = command_line_provider.get_user_config_name()
       deployname = command_line_provider.get_deploy_config_name()
       deploy_filepath = command_line_provider.get_deploy_config_filepath()
-      deploy_config = command_line_provider.get_deployment_config()
+      deploy_config_func = command_line_provider.method(:get_deployment_config)
       execution_path = app_config_provider.get_execution_path()
       resources = infrastructure_provider.get_all()
       resource_ids = infrastructure_provider.get_all_resource_ids()
@@ -97,7 +97,7 @@ module Deployment
         lambda { return @deploy_config_validator.execute(deploy_filepath) },
         lambda { return @service_instrumentor_item_validator.execute(service_instrumentors) },
         lambda { return @resource_instrumentor_item_validator.execute(resource_instrumentors) },
-        lambda { return @footnote_validator.execute(deploy_config) }
+        lambda { return @footnote_validator.execute(deploy_config_func) }
       ]
 
       provider_validators = get_provider_validators(resources, services, context)

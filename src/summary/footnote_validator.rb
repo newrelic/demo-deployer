@@ -9,8 +9,9 @@ module Summary
     end
 
     # Run validation
-    # @param [Hash] deploy_config - The content of the deployment config json file represented as a Hash.
-    def execute(deploy_config)
+    # @param [Method] deploy_config_func - Method which can be called to return the deploy_config represented as a [Hash].
+    def execute(deploy_config_func)
+      deploy_config = deploy_config_func.call
       raw_footnote = deploy_config.fetch('output', {})['footnote']
       return "'footnote' field must be of type 'String' or 'Array<String>'" unless validate(raw_footnote)
     end
