@@ -10,7 +10,7 @@ class Orchestrator
       context,
       configuration_orchestrator = nil, provision_orchestrator = nil,
       install_orchestrator = nil, teardown_orchestrator = nil,
-      summary_orchestrator = nil, footnote_orchestrator = nil)
+      summary_orchestrator = nil)
     @context = context
     @configuration_orchestrator = configuration_orchestrator || ConfigurationOrchestrator.new(context)
     @provision_orchestrator = provision_orchestrator || Provision::Orchestrator.new(context)
