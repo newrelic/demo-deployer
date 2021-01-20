@@ -11,7 +11,7 @@ require "./src/common/validators/validator"
 require "./src/common/validators/alpha_numeric"
 require "./src/common/validators/json_file_exist"
 require_relative "instrumentor_item_exist_validator"
-require './src/footnote/validator'
+require './src/summary/footnote_validator'
 
 require_relative "provider_validator_factory"
 
@@ -37,7 +37,7 @@ module Deployment
         deploy_config_validator = Common::Validators::JsonFileExist.new("No deploy config file defined"),
         service_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those service instrumentors are missing an `item_id` service field:"),
         resource_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those resource instrumentors are missing an `item_id` resource field:"),
-        footnote_validator = Footnote::Validator.new
+        footnote_validator = Summary::FootnoteValidator.new
       )
       @service_host_exist_validator = service_host_exist_validator
       @username_validator = username_validator
