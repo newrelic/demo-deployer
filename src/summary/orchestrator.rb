@@ -71,14 +71,12 @@ module Summary
     # Get the complete text of the footnote, with merge fields subsituted for their values within the footnote.
     # @return [String] footnote text with all merge fields substituted for their appropriate values.
     def get_footnote()
-      deploy_config = @context.get_command_line_provider.get_deployment_config_content
-      deploy_config_output = @json.get(deploy_config, 'output')
-      # if the output section is nil, footnote is nil. If it does exist, try get the footnote field.
-      raw_footnote = deploy_config_output.nil? ? nil : deploy_config_output['footnote'] 
+      deploy_config = @context.get_command_line_provider.get_deployment_config
+      raw_footnote = deploy_config.fetch('output', {})['footnote']
       string_footnote = convert_to_string(raw_footnote)
-      final_footnote = get_field_merger.merge(string_footnote)
+      merged_footnote = get_field_merger.merge(string_footnote)
 
-      return final_footnote
+      return merged_footnote
     end
 
     # Convert raw_footnote into a string. The important transform is when footnate is an array, and the resulting string is concatenated with line breaks between sections.
