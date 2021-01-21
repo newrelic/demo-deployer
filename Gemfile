@@ -7,4 +7,4 @@ gem 'mocha', '1.8.0'
 gem 'pastel', '~> 0.7.2'
 gem 'rake', '12.3.3'
 gem 'rubocop', require: false
-gem 'tty-spinner', '0.9.0'
+gem 'tty-spinner', '0.9.3'

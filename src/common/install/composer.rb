@@ -1,5 +1,6 @@
 require './src/common/logger/logger_factory'
 require './src/common/template_merger'
+require './src/common/Io/directory_service'
 
 require './src/common/install/templates/hosts_template_context'
 require './src/common/install/templates/ansible_template_context'
@@ -23,12 +24,12 @@ module Install
 
       install_definitions.each do |install_definition|
         provisioned_resource = install_definition.get_provisioned_resource()
+        service_id = install_definition.get_service_id()
         erb_input_path = install_definition.get_erb_input_path()
         yaml_output_path = install_definition.get_yaml_output_path()
         roles_path = install_definition.get_roles_path()
         action_vars = install_definition.get_action_vars()
         output_params = install_definition.get_output_params()
-
         base_role_path = roles_path.split(":")[0]
         action_directory_path = Common::Io::DirectoryService.combine_paths(
           base_role_path,
@@ -57,7 +58,7 @@ module Install
           action_context = Common::Install::Templates::ActionTemplateContext.new(action_name, erb_input_path, absolute_yaml_output_path, provisioned_resource, action_vars)
           template_contexts.push(action_context)
 
-          install_context = Common::Install::InstallContext.new(absolute_yaml_output_path, action_context, host_template_context, output_params)
+          install_context = Common::Install::InstallContext.new(service_id, absolute_yaml_output_path, action_context, host_template_context, output_params)
           install_contexts.push(install_context)
 
         else

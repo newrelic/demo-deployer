@@ -2,11 +2,16 @@ module Common
   module Install
     class InstallContext
 
-      def initialize(template_output_path, template_context, host_template_context, output_params = nil)
+      def initialize(service_id, template_output_path, template_context, host_template_context, output_params = nil)
+        @service_id = service_id
         @template_output_path = template_output_path
         @template_context = template_context
         @host_template_context = host_template_context
         @output_params = output_params
+      end
+
+      def get_service_id()
+        return @service_id
       end
 
       def get_host_file_path()

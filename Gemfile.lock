@@ -45,9 +45,9 @@ GEM
       parser (>= 2.7.1.4)
     ruby-progressbar (1.10.1)
     tty-color (0.4.3)
-    tty-cursor (0.6.1)
-    tty-spinner (0.9.0)
-      tty-cursor (~> 0.6.0)
+    tty-cursor (0.7.1)
+    tty-spinner (0.9.3)
+      tty-cursor (~> 0.7)
     unicode-display_width (1.7.0)
 
 PLATFORMS
@@ -61,7 +61,7 @@ DEPENDENCIES
   pastel (~> 0.7.2)
   rake (= 12.3.3)
   rubocop
-  tty-spinner (= 0.9.0)
+  tty-spinner (= 0.9.3)
 
 BUNDLED WITH
    1.17.3

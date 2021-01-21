@@ -32,7 +32,7 @@ module Install
         roles_path = get_roles_path(instrumentor)
         yaml_output_path = get_yaml_output_path(instrumentor, resource_id)
         action_vars_lambda = lambda { return get_action_vars(instrumentor, provisioned_resource, params) }
-        return Common::Install::Definitions::InstallDefinition.new(provisioned_resource, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda)
+        return Common::Install::Definitions::InstallDefinition.new(resource_id, provisioned_resource, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda)
       end
 
       def get_action_vars(instrumentor, provisioned_resource, params = {})

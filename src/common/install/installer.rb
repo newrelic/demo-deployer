@@ -85,7 +85,7 @@ module Common
           end
           Common::Logger::LoggerFactory.get_logger().debug("Installer() execution_path:#{action_execution_path} execution_path_exist:#{directory_exist} host_file_path:#{host_file_path} script_path:#{script_path} host_exist:#{host_exist}")
           if directory_exist == true
-            play = Common::Ansible::Play.new(script_path, host_file_path, action_execution_path, host_exist, on_executed_handlers)
+            play = Common::Ansible::Play.new("#{install_context.get_service_id()} -- #{action_name}", script_path, host_file_path, action_execution_path, host_exist, on_executed_handlers)
             player.stack(play)
           end
         end
@@ -102,9 +102,9 @@ module Common
       end
 
       def read_params_output(output_params, artifact_filename)
-        if File.exists?(artifact_filename) 
+        if File.exists?(artifact_filename)
           reader = Common::Install::ParamsReader.new(output_params)
-          reader.read_from_file(artifact_filename) 
+          reader.read_from_file(artifact_filename)
         end
       end
 

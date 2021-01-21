@@ -14,8 +14,8 @@ module Common
         @processs_output = nil
       end
 
-      def start(lambda_on_start = nil)
-        @thread ||= inner_start(lambda_on_start)
+      def start(lambda_on_start = nil, lambda_on_end = nil)
+        @thread ||= inner_start(lambda_on_start, lambda_on_end)
       end
 
       def wait_to_completion()
@@ -46,11 +46,11 @@ module Common
       end
 
       private
-      def inner_start(lambda_on_start = nil)
+      def inner_start(lambda_on_start = nil, lambda_on_end = nil)
         thread = Thread.new{
           processs_output = nil
           @time = Benchmark.measure {
-            processs_output = spawn_process(lambda_on_start)
+            processs_output = spawn_process(lambda_on_start, lambda_on_end)
           }
           processs_output
         }
@@ -58,7 +58,7 @@ module Common
         return thread
       end
 
-      def spawn_process(lambda_on_start = nil)
+      def spawn_process(lambda_on_start = nil, lambda_on_end = nil)
         rout, wout = IO.pipe
         rerr, werr = IO.pipe
 
@@ -81,6 +81,9 @@ module Common
         ensure
           wout.close
           werr.close
+          unless lambda_on_end.nil?
+            lambda_on_end.call(pid)
+          end
         end
 
         stdout = rout.readlines.join("")
