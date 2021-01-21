@@ -76,7 +76,9 @@ Config:
 Output:
 
 ```text
-An example footnote
+An
+example
+footnote
 ```
 
 ### Example 3 -- Footnote with Merge Fields
