@@ -11,6 +11,7 @@ require "./src/common/validators/validator"
 require "./src/common/validators/alpha_numeric"
 require "./src/common/validators/json_file_exist"
 require_relative "instrumentor_item_exist_validator"
+require './src/summary/footnote_validator'
 
 require_relative "provider_validator_factory"
 
@@ -35,7 +36,8 @@ module Deployment
         provider_validator_factory = nil,
         deploy_config_validator = Common::Validators::JsonFileExist.new("No deploy config file defined"),
         service_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those service instrumentors are missing an `item_id` service field:"),
-        resource_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those resource instrumentors are missing an `item_id` resource field:")
+        resource_instrumentor_item_validator = InstrumentorItemExistValidator.new("Those resource instrumentors are missing an `item_id` resource field:"),
+        footnote_validator = Summary::FootnoteValidator.new
       )
       @service_host_exist_validator = service_host_exist_validator
       @username_validator = username_validator
@@ -55,6 +57,7 @@ module Deployment
       @deploy_config_validator = deploy_config_validator
       @service_instrumentor_item_validator = service_instrumentor_item_validator
       @resource_instrumentor_item_validator = resource_instrumentor_item_validator
+      @footnote_validator = footnote_validator
     end
 
     def execute(context)
@@ -66,6 +69,7 @@ module Deployment
       username = command_line_provider.get_user_config_name()
       deployname = command_line_provider.get_deploy_config_name()
       deploy_filepath = command_line_provider.get_deploy_config_filepath()
+      deploy_config_func = command_line_provider.method(:get_deployment_config)
       execution_path = app_config_provider.get_execution_path()
       resources = infrastructure_provider.get_all()
       resource_ids = infrastructure_provider.get_all_resource_ids()
@@ -92,7 +96,8 @@ module Deployment
         lambda { return @service_resource_same_type_validator.execute(resources, services) },
         lambda { return @deploy_config_validator.execute(deploy_filepath) },
         lambda { return @service_instrumentor_item_validator.execute(service_instrumentors) },
-        lambda { return @resource_instrumentor_item_validator.execute(resource_instrumentors) }
+        lambda { return @resource_instrumentor_item_validator.execute(resource_instrumentors) },
+        lambda { return @footnote_validator.execute(deploy_config_func) }
       ]
 
       provider_validators = get_provider_validators(resources, services, context)

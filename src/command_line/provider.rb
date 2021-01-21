@@ -66,6 +66,11 @@ module CommandLine
       return @options[:logging_level].downcase()
     end
 
+    def get_deployment_config(object_class = Hash)
+      deploy_config_content = get_deployment_config_content || "{}"
+      return JSON.parse(deploy_config_content, object_class: object_class)
+    end
+
     private
     def download_file(url, filepath)
       Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{url} to #{filepath}")

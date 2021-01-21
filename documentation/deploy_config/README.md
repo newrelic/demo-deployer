@@ -23,6 +23,14 @@ The overall structure of a deploy config looks like this:
   "global_tags": {
     "my_tag_key": "my_tag_value",
     "another_tag_key": "another_tag_value"
+  },
+
+  "output": {
+    "footnote" : [
+      "First line of a footnote.",
+      "Second line of a footnote.",
+      "Third line of a footnote."
+    ]
   }
 
 }
@@ -34,6 +42,7 @@ Please refer to the sections below for more details.
 * [Services](services/README.md)
 * [Instrumentation](instrumentations/README.md)
 * [Global Tags](global_tags/README.md)
+* [Output](output/README.md)
 
 In addition, the deployer can dynamically replace some `merge fields` in the deploy config with their corresponding value which is determined at deploy time. For more information see the section below.
 
