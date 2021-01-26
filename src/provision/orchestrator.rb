@@ -26,7 +26,6 @@ module Provision
 
     def execute(is_provisioning_enabled = true)
       log_token = Common::Logger::LoggerFactory.get_logger().task_start("Provisioner")
-      @provisioner.set_info_logger_token(log_token)
       provider = Provision::Provider.new(get_infrastructure_provider())
       @context.set_provision_provider(provider)
       deployment_name = get_command_line_provider().get_deployment_name()

@@ -18,6 +18,8 @@ module Infrastructure
     end
 
     def execute(deploy_config_content = nil)
+      log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task('Validating resources')
+
       command_line_provider = @context.get_command_line_provider()
       if deploy_config_content.nil?
         deploy_config_content = command_line_provider.get_deployment_config_content()
@@ -26,11 +28,13 @@ module Infrastructure
       if @is_validation_enabled
         validation_errors = get_validator().execute(parsed_resources)
         unless validation_errors.empty?
+          log_token.error()
           raise Common::ValidationError.new("Infrastructure validation has failed", validation_errors)
         end
       end
       provider = Infrastructure::Provider.new(@context, parsed_resources)
       @context.set_infrastructure_provider(provider)
+      log_token.success()
       return provider
     end
 

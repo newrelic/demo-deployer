@@ -9,16 +9,11 @@ module Common
         @host_exist = host_exist
         @on_executed_handlers = on_executed_handlers
         @output_file_path = nil
-
-        @log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task_top(play_name)
+        @log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task(play_name)
       end
 
-      # def get_log_token
-      #   return @log_token
-      # end
-
       def start()
-        @log_token.get_ref().auto_spin()
+        @log_token.start()
       end
 
       def success()

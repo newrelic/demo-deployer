@@ -12,7 +12,7 @@ describe "Teardown::Actions::Post::Aws::FinalizeLambdaTeardown" do
   let(:resource) { m = mock(); m }
   let(:credential) { m = mock(); m }
   let(:action) { Teardown::Actions::Post::Aws::FinalizeLambdaTeardown.new(
-      context, 
+      context,
       api_gateway_client,
       lambda{ }) }
 
@@ -29,10 +29,13 @@ describe "Teardown::Actions::Post::Aws::FinalizeLambdaTeardown" do
 
   def given_logger()
     logger = mock()
+    sub_task = mock()
+    sub_task.stubs(:success)
     Common::Logger::LoggerFactory.stubs(:get_logger).returns(logger)
     logger.stubs(:debug)
+    logger.stubs(:add_sub_task).returns(sub_task)
   end
-  
+
   def given_resource(id, type)
     resource.stubs(:get_id).returns(id)
     resource.stubs(:get_type).returns(type)

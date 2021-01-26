@@ -1,6 +1,6 @@
 require './src/common/logger/logger_factory'
 require './src/common/template_merger'
-require './src/common/Io/directory_service'
+require './src/common/io/directory_service'
 
 require './src/common/install/templates/hosts_template_context'
 require './src/common/install/templates/ansible_template_context'

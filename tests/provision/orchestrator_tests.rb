@@ -30,7 +30,10 @@ describe "Provision::Orchestrator" do
   def given_logger()
     logger = mock()
     logger.stubs(:debug)
+    sub_task = mock()
+    sub_task.stubs(:success)
     Common::Logger::LoggerFactory.stubs(:get_logger).returns(logger)
     logger.expects(:task_start).returns(log_token)
+    logger.stubs(:add_sub_task).returns(sub_task)
   end
 end

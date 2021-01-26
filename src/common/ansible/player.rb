@@ -18,8 +18,6 @@ module Common
       def execute(isAsync = true)
         processes = []
         @plays.each do |play|
-           play.start()
-
           script_path = play.get_script_path()
           host_file_path = play.get_host_file_path()
           execution_path = play.get_execution_path()
@@ -79,7 +77,7 @@ module Common
           else
             message = "#{script_path} exit_code:#{exit_code}, executed in #{process.get_execution_time()}s"
             errors.push("#{message} output:#{output_content}")
-            @play.error()
+            play.error()
           end
 
         end
