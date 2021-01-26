@@ -110,12 +110,6 @@
       with_items: "{{ ec2_facts.instances }}"
 
     - block:
-      - name: wait for WinRM to answer on all hosts
-        wait_for:
-          port: 5986
-          host: "{{ ip_address }}"
-          timeout: 900
-
       - name: Wait for system to become reachable over WinRM
         wait_for_connection:
           timeout: 900
