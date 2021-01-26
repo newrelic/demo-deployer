@@ -52,6 +52,7 @@ module Infrastructure
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force\n
             $url = \"https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1\"\n
             $file = \"$env:temp\\ConfigureRemotingForAnsible.ps1\"\n
+            [Net.ServicePointManager]::SecurityProtocol = \"tls12, tls\"
             (New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)\n
             powershell.exe -ExecutionPolicy ByPass -File $file\n
           </powershell>"
