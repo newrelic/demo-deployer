@@ -45,11 +45,19 @@ module Common
           lambda_on_start = lambda do |pid|
               Common::Logger::LoggerFactory.get_logger().debug("Running 'ansible-playbook' with command: #{command} and execution_path: #{execution_path}, pid: #{pid}")
           end
-          pid = process.start(lambda_on_start)
+
+          lambda_on_end = lambda do |pid|
+            play.success()
+          end
+
+          pid = process.start(lambda_on_start, lambda_on_end)
           processes.push(process)
+
           unless isAsync
             process.wait_to_completion()
+            play.success()
           end
+
         end
 
         errors = []
@@ -69,6 +77,7 @@ module Common
           else
             message = "#{script_path} exit_code:#{exit_code}, executed in #{process.get_execution_time()}s"
             errors.push("#{message} output:#{output_content}")
+            play.error()
           end
 
         end

@@ -2,6 +2,7 @@ require "tty-spinner"
 require "pastel"
 require "./src/common/logger/logger"
 require "./src/common/logger/log_task_token"
+require "./src/common/logger/sub_task_logger"
 
 module Common
   module Logger
@@ -13,10 +14,17 @@ module Common
       end
 
       def task_start(task_name)
-        task_handler = TTY::Spinner.new("[:spinner] #{task_name}", format: :classic, success_mark: @pastel.green('✔'), error_mark: @pastel.red('✖'), output: $stdout)
-        task_handler.auto_spin()
-        @registered_spinners.push(task_handler)
-        return LogTaskToken.new( lambda { task_success(task_handler)}, lambda { task_error(task_handler)})
+        task_handler = TTY::Spinner::Multi.new("[:spinner] #{task_name}", format: :classic, success_mark: @pastel.green('✔'), error_mark: @pastel.red('✖'), output: $stdout)
+        @token = LogTaskToken.new(lambda {|sub_task| task_register(task_handler, sub_task) },
+                                 lambda { task_success(task_handler) },
+                                 lambda { task_error(task_handler) })
+        @registered_spinners.push(@token)
+        return @token
+      end
+
+      def add_sub_task(task_name)
+        sub = SubTaskLogger.new(@token)
+        return sub.task_start(task_name)
       end
 
       def info(message)
@@ -28,14 +36,23 @@ module Common
       end
 
       private
+      def task_register(task_handler, task)
+        task_handler.register(task)
+      end
+
       def task_success(task_handler)
         deregister_handler(task_handler)
-        task_handler.success(@pastel.green("success"))
+        task_handler.success()
+      end
+
+      def task_pause(task_handler)
+        deregister_handler(task_handler)
+        task_handler.pause()
       end
 
       def task_error(task_handler)
         deregister_handler(task_handler)
-        task_handler.error(@pastel.red("error"))
+        task_handler.error()
       end
 
       def deregister_handler(task_handler)

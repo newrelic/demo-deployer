@@ -18,6 +18,8 @@ module UserConfig
     end
 
     def execute(user_config_content = nil)
+      log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task('Validating user config')
+
       if user_config_content.nil?
         command_line_provider = @context.get_command_line_provider()
         user_config_content = command_line_provider.get_user_config_content()
@@ -26,13 +28,15 @@ module UserConfig
       if @is_validation_enabled
         validation_errors = @validator.execute(parsed_user_config)
         unless validation_errors.empty?
+          log_token.error()
           raise Common::ValidationError.new("User Configuration failed validation:", validation_errors)
         end
       end
       provider = UserConfig::Provider.new(parsed_user_config)
       @context.set_user_config_provider(provider)
+      log_token.success()
       return provider
     end
-    
+
   end
 end

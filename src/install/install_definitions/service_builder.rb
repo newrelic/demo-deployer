@@ -43,7 +43,8 @@ module Install
         yaml_output_path = get_yaml_output_path(service, resource_id)
         action_vars_lambda = lambda { return get_action_vars(service, provisioned_resource, params) }
         output_params = service.get_params()
-        return Common::Install::Definitions::InstallDefinition.new(provisioned_resource, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda, output_params)
+        service_id = service.get_id()
+        return Common::Install::Definitions::InstallDefinition.new(service_id, provisioned_resource, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda, output_params)
       end
 
       def get_action_vars(service, provisioned_resource, params)

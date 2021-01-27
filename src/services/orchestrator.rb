@@ -25,6 +25,8 @@ module Services
     end
 
     def execute(deploy_config_content = nil)
+      log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task('Validating services')
+
       command_line_provider = @context.get_command_line_provider()
       deployment_name = command_line_provider.get_deployment_name()
 
@@ -32,10 +34,10 @@ module Services
 
       app_config_provider = @context.get_app_config_provider()
       execution_path = app_config_provider.get_execution_path()
-      
+
       infrastructure_provider = @context.get_infrastructure_provider()
       resources = infrastructure_provider.get_all()
-      
+
       if deploy_config_content.nil?
         deploy_config_content = command_line_provider.get_deployment_config_content()
       end
@@ -43,6 +45,7 @@ module Services
       if @is_validation_enabled
         validation_errors = get_validator().execute(services, resources, app_config_provider)
         unless validation_errors.empty?
+          log_token.error()
           raise Common::ValidationError.new("Service definition validation has failed", validation_errors)
         end
       end
@@ -50,6 +53,7 @@ module Services
       source_paths_file = get_source_paths_file(services, execution_path, deployment_name)
       provider = Services::Provider.new(services, source_paths_file, tags_provider)
       @context.set_services_provider(provider)
+      log_token.success()
       return provider
     end
 
@@ -58,7 +62,7 @@ module Services
     def get_source_paths_file(services, execution_path, deployment_name)
       file = {}
       services.each do |service|
-        service_id = service["id"]           
+        service_id = service["id"]
         destination_path = "#{execution_path}/#{deployment_name}/#{service_id}"
 
         if service["local_source_path"]
@@ -67,7 +71,7 @@ module Services
           file[service_id] = full_source_path
         else
           source_repository = service["source_repository"]
-          cloned_source_path = get_git_proxy().clone(source_repository, destination_path) 
+          cloned_source_path = get_git_proxy().clone(source_repository, destination_path)
           file[service_id] = cloned_source_path
         end
       end

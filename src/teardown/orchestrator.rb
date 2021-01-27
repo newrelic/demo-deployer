@@ -19,7 +19,7 @@ module Teardown
         composer = nil,
         terminator = nil,
         summary = nil,
-        post_actions_orchestrator = nil, 
+        post_actions_orchestrator = nil,
         provision_orchestrator = nil,
         uninstall_orchestrator = nil
       )
@@ -34,12 +34,11 @@ module Teardown
     end
 
     def execute()
+      execute_provisioner()
       log_token = Common::Logger::LoggerFactory.get_logger().task_start("Terminating infrastructure")
 
-      execute_provisioner()
       target_provisioned_resources = get_resources_target()
       Common::Logger::LoggerFactory.get_logger().debug("Uninstalling on #{target_provisioned_resources.length} resources")
-
       provisioned_resources_by_group = partition_by_provision_group_descending(target_provisioned_resources)
       if provisioned_resources_by_group.any?
         provisioned_resources_by_group.each do |provisioned_resources|
@@ -53,11 +52,9 @@ module Teardown
       else
         get_uninstall_orchestrator().execute([])
       end
-
       get_post_actions_orchestrator().execute()
 
       log_token.success()
-
       get_summary().execute()
     end
 

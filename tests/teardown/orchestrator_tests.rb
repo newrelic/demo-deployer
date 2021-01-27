@@ -20,7 +20,7 @@ describe "Teardown::Orchestrator" do
   it "should create orchestrator" do
     when_orchestrator().wont_be_nil()
   end
-  
+
   it "should execute summary" do
     given_logger()
     summary.expects(:execute)
@@ -30,18 +30,22 @@ describe "Teardown::Orchestrator" do
   def given_logger()
     logger = mock()
     logger.stubs(:debug)
+    sub_task = mock()
+    sub_task.stubs(:success)
+
     Common::Logger::LoggerFactory.stubs(:get_logger).returns(logger)
     logger.expects(:task_start).returns(log_token)
+    logger.stubs(:add_sub_task).returns(sub_task)
   end
 
   def when_orchestrator()
     provision_provider = context.get_provision_provider()
     provision_orchestrator.stubs(:execute).returns(provision_provider)
     return Teardown::Orchestrator.new(
-      context, 
+      context,
       directory_service,
-      composer, 
-      terminator, 
+      composer,
+      terminator,
       summary,
       post_actions_orchestrator,
       provision_orchestrator)

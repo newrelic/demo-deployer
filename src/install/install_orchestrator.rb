@@ -38,7 +38,7 @@ module Install
       return install_definitions
     end
 
-    def execute_global_instrumentation_install(provisioned_resources) 
+    def execute_global_instrumentation_install(provisioned_resources)
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_global_instrumentations()
                                 .build()

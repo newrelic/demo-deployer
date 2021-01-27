@@ -29,7 +29,7 @@ module Install
         yaml_output_path = get_yaml_output_path(instrumentor)
         action_vars_lambda = lambda { return get_action_vars(instrumentor, params) }
         # Don't forget to pass the global instrumentationn to the install definition
-        return Common::Install::Definitions::InstallDefinition.new(nil, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda)
+        return Common::Install::Definitions::InstallDefinition.new(global_id, nil, get_erb_input_path(), yaml_output_path, roles_path, action_vars_lambda)
       end
 
       def get_action_vars(instrumentor, params = {})

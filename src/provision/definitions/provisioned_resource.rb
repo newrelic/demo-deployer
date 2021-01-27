@@ -41,7 +41,7 @@ module Provision
       def get_type()
         return @resource.get_type()
       end
-      
+
       def get_provider()
         return @resource.get_provider()
       end

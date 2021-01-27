@@ -12,6 +12,10 @@ module Common
 
       def error(message) end
 
+      def add_sub_task(task_name)
+        return LogTaskToken.new(lambda {}, lambda {}, lambda {})
+      end
+
       private
       def task_success(task_name) end
 

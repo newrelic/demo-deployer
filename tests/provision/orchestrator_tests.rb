@@ -8,8 +8,8 @@ require "./tests/context_builder"
 describe "Provision::Orchestrator" do
   let(:context) { Tests::ContextBuilder.new().build() }
   let(:directory_service) { m = mock(); m.stubs(:create_sub_directory).returns("/path"); m }
-  let(:provisioner) { m = mock(); m.stubs(:execute); m }
-  let(:composer) { m = mock(); m.stubs(:execute); m }    
+  let(:provisioner) { m = mock(); m.stubs(:execute); m.stubs(:set_info_logger_token); m }
+  let(:composer) { m = mock(); m.stubs(:execute); m }
   let(:log_token) { m = mock(); m.stubs(:success).returns(nil); m.stubs(:error).returns(nil);  m }
   let(:pre_actions_orchestrator) { m = mock(); m.stubs(:execute); m }
   let(:orchestrator) { Provision::Orchestrator.new(context, directory_service, provisioner, composer, pre_actions_orchestrator) }
@@ -30,7 +30,10 @@ describe "Provision::Orchestrator" do
   def given_logger()
     logger = mock()
     logger.stubs(:debug)
+    sub_task = mock()
+    sub_task.stubs(:success)
     Common::Logger::LoggerFactory.stubs(:get_logger).returns(logger)
     logger.expects(:task_start).returns(log_token)
+    logger.stubs(:add_sub_task).returns(sub_task)
   end
 end

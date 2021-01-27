@@ -21,6 +21,8 @@ module Instrumentation
     end
 
     def execute(deploy_config_content = nil)
+      log_token = Common::Logger::LoggerFactory.get_logger().add_sub_task('Validating deployment')
+
       app_config_provider = @context.get_app_config_provider()
       execution_path = app_config_provider.get_execution_path()
       command_line_provider = @context.get_command_line_provider()
@@ -29,7 +31,7 @@ module Instrumentation
       resource_ids = @context.get_infrastructure_provider().get_all_resource_ids()
       services = @context.get_services_provider().get_all()
       service_ids = @context.get_services_provider().get_all_service_ids()
-      
+
       if deploy_config_content.nil?
         deploy_config_content = command_line_provider.get_deployment_config_content()
       end
@@ -38,6 +40,7 @@ module Instrumentation
       if @is_validation_enabled
         validation_errors = get_validator().execute(parsed_instrumentors, resource_ids, service_ids)
         unless validation_errors.empty?
+          log_token.error()
           raise Common::ValidationError.new("Instrumentation validation has failed", validation_errors)
         end
       end
@@ -47,6 +50,7 @@ module Instrumentation
       git_proxy = get_git_proxy()
       provider = Instrumentation::Provider.new(@context, parsed_instrumentors, destination_path, resources, services, git_proxy)
       @context.set_instrumentation_provider(provider)
+      log_token.success()
       return provider
     end
 
@@ -59,7 +63,7 @@ module Instrumentation
     def get_validator()
       return @validator ||= Instrumentation::Validator.new(@context)
     end
-    
+
     def get_git_proxy()
       return @git_proxy ||= Common::Io::GitProxy.new(@context)
     end

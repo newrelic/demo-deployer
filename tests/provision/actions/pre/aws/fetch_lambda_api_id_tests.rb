@@ -26,10 +26,14 @@ describe "Provision::Actions::Pre::Aws::FetchLambdaApiId" do
 
   def given_logger()
     logger = mock()
+    sub_task = mock()
+    sub_task.stubs(:success)
+
     Common::Logger::LoggerFactory.stubs(:get_logger).returns(logger)
     logger.stubs(:debug)
+    logger.stubs(:add_sub_task).returns(sub_task)
   end
-  
+
   def given_resource(id, type)
     context_builder.infrastructure().with_resource(id, {"provider" => "aws", "type" => "#{type}"})
     resource.stubs(:get_id).returns(id)
@@ -41,7 +45,7 @@ describe "Provision::Actions::Pre::Aws::FetchLambdaApiId" do
   def when_action()
     context = context_builder.build()
     return Provision::Actions::Pre::Aws::FetchLambdaApiId.new(
-      context, 
+      context,
       api_gateway_client)
   end
 end
