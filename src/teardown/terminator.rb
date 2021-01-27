@@ -23,7 +23,7 @@ module Teardown
         end
         Common::Logger::LoggerFactory.get_logger().debug("Terminator() execution_path:#{execution_path} execution_path_exist:#{directory_exist}")
         if directory_exist == true
-          play = Common::Ansible::Play.new("#{template_context.get_resource_id()} :: teardown", script_path, nil, execution_path, nil, on_executed_handlers)
+          play = Common::Ansible::Play.new("#{template_context.get_resource_id()} running teardown", script_path, nil, execution_path, nil, on_executed_handlers)
           player.stack(play)
         end
       end

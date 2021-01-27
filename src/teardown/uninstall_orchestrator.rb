@@ -38,7 +38,7 @@ module Teardown
       execute_install(install_definitions, "Services and instrumentations")
     end
 
-    def execute_global_instrumentation_install(provisioned_resources) 
+    def execute_global_instrumentation_install(provisioned_resources)
       install_definitions = get_install_definitions_builder(provisioned_resources)
                                 .with_global_instrumentations()
                                 .build()
@@ -47,9 +47,7 @@ module Teardown
 
     def execute_install(install_definitions, target_installation)
       unless install_definitions.empty?
-        @log_token = Common::Logger::LoggerFactory.get_logger().task_start("Uninstalling #{target_installation}")
         (@installer || get_installer()).execute(install_definitions)
-        @log_token.success()
       end
     end
 
