@@ -31,7 +31,7 @@ jobs:
         run: docker build -t deployer .
 
       - name: Cloud Provider Tests (AWS)
-        run: docker run -i -v user_acceptance_tests/uat-ca.pem:/mnt/deployer/configs/uat-ca.pem --entrypoint bundle deployer exec rake test:uat:aws
+        run: docker run -i -v $GITHUB_WORKSPACE/user_acceptance_tests/uat-ca.pem:/mnt/deployer/configs/uat-ca.pem --entrypoint bundle deployer exec rake test:uat:aws
 
   slack-notify:
     runs-on: ubuntu-latest
