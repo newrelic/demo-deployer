@@ -10,9 +10,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Build the docker image
-        run: docker build -t deployer .
-
       - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
 
@@ -30,8 +27,11 @@ jobs:
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
 
+      - name: Build the docker image
+        run: docker build -t deployer .
+
       - name: Cloud Provider Tests (AWS)
-        run: docker run -i --entrypoint bundle deployer exec rake test:uat:aws
+        run: docker run -i -v user_acceptance_rests/uat-ca.pem:/mnt/deployer/configs/uat-ca.pem --entrypoint bundle deployer exec rake test:uat:aws
 
   slack-notify:
     runs-on: ubuntu-latest
