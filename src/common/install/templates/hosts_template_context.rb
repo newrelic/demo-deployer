@@ -44,7 +44,6 @@ module Common
           unless @provisioned_resource.nil?
             destination_remote_user = @provisioned_resource.get_user_name()
             destination_ip = @provisioned_resource.get_ip()
-
             if @provisioned_resource.get_resource().is_windows?()
               keyvalues["ansible_password"] = @provisioned_resource.get_param("win_password")
               keyvalues["ansible_port"] = "5986"
