@@ -7,7 +7,7 @@ module Common
 
       def task_start(task_name)
         puts "Task '#{task_name}': - Started"
-        return LogTaskToken.new(lambda {}, lambda {}, lambda { return task_success(task_name)}, lambda { return task_error(task_name)})
+        return LogTaskToken.new(lambda {}, lambda { return task_success(task_name)}, lambda { return task_error(task_name)})
       end
 
       def debug(message)
