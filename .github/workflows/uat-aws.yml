@@ -10,33 +10,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.4
-          bundler-cache: true
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-
-      - name: Cache Python Packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-aws-pip-${{ hashFiles('**/test.yml') }}
-          restore-keys: ${{ runner.os }}-pip-
-
-      - name: Install Python Packages
-        run: |
-          python -m pip install --upgrade pip setuptools
-          python3 -m pip install ansible==2.9.9
-          python3 -m pip install ansible boto3 botocore boto
-          python3 -m pip install pywinrm
-          ansible-galaxy collection install community.aws
-          ansible-galaxy collection install ansible.windows
-
-      - name: Install Ansible Galaxy Plugins
-        run: ansible-galaxy install newrelic.newrelic_java_agent
+      - name: Build the docker image
+        run: docker build -t deployer .
 
       - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
@@ -56,7 +31,7 @@ jobs:
           echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
 
       - name: Cloud Provider Tests (AWS)
-        run: bundle exec rake test:uat:aws
+        run: docker run -i --entrypoint bundle deployer exec rake test:uat:aws
 
   slack-notify:
     runs-on: ubuntu-latest
