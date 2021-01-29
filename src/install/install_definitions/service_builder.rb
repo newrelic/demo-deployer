@@ -55,6 +55,7 @@ module Install
         vars["service_id"] = service.get_id()
         vars["service_port"] = service.get_port()
         vars["remote_user"] = provisioned_resource.get_user_name()
+        vars["service_display_name"] = service.get_display_name()
         vars["dependencies"] = dependencies
         vars["endpoints"] = get_endpoints(service)
         vars["deployment_name"] = deployment_name
