@@ -27,9 +27,6 @@ jobs:
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/aws/uat${{ github.run_id }}.json.local
 
-      - name: Pull the docker image
-        run: docker pull ghcr.io/newrelic/deployer:latest
-
       - name: Build the docker image
         run: docker build -t deployer .
 

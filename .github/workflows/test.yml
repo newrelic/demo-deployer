@@ -54,10 +54,10 @@ jobs:
         env:
           AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
         run: |
-          rm -f user_acceptance_tests/uat-ca.pem
-          echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/secret_file.pem
+          rm -f $GITHUB_WORKSPACE/configs/uat-ca.pem
+          echo "$AWS_PEM" > $GITHUB_WORKSPACE/configs/uat-ca.pem
+          sudo chmod 400 $GITHUB_WORKSPACE/configs/uat-ca.pem
+          sudo chmod 400 $GITHUB_WORKSPACE/configs/secret_file.pem
 
       - name: Write UAT JSON to file
         env:
