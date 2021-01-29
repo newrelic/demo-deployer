@@ -10,41 +10,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.4
-          bundler-cache: true
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-
-      - name: Cache Python Packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-azure-pip-${{ hashFiles('**/test.yml') }}
-          restore-keys: ${{ runner.os }}-pip-
-
-      - name: Install Python Packages
-        run: |
-          python -m pip install --upgrade pip setuptools
-          python3 -m pip install ansible==2.9.9
-          python3 -m pip install 'ansible[azure]' packaging msrestazure
-
-      - name: Install Ansible Galaxy Plugins
-        run: ansible-galaxy install newrelic.newrelic_java_agent
-
       - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
-
-      - name: Write AWS Certificate to File
-        env:
-          AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
-        run: |
-          rm -f user_acceptance_tests/uat-ca.pem
-          echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/uat-ca.pem
 
       - name: Write UAT JSON to file
         env:
@@ -52,8 +19,11 @@ jobs:
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/azure/uat${{ github.run_id }}.json.local
 
+      - name: Build the docker image
+        run: docker build -t deployer .
+
       - name: Cloud Provider Tests (Azure)
-        run: bundle exec rake test:uat:azure
+        run: docker run -i -v $HOME/.ssh:/mnt/deployer/configs/.ssh --entrypoint bundle deployer exec rake test:uat:azure
 
   slack-notify:
     runs-on: ubuntu-latest

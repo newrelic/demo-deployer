@@ -26,10 +26,13 @@ RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bion
 RUN apt-get update && apt-get install terraform -y
 
 RUN mkdir /mnt/deployer
-ADD . /mnt/deployer
 WORKDIR /mnt/deployer
 
+COPY Gemfile Gemfile.lock /mnt/deployer/
+
 RUN bundle install --clean --force
+
+COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
 
 # Install Python dependencies
 RUN python3 -m pip install -r requirements.python.txt
@@ -39,6 +42,7 @@ RUN python3 -m pip install -r requirements.python.txt
 RUN ansible-galaxy role install -r requirements.ansible.yml
 RUN ansible-galaxy collection install -r requirements.ansible.yml
 
+COPY . /mnt/deployer/
 # CMD [ "ruby", "--version"]
 # CMD [ "python", "--version"]
 # CMD [ "rake"]

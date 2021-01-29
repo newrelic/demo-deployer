@@ -18,7 +18,8 @@ module Install
           resource_id = resource_instrumentor.get_resource().get_id()
           if is_resource_included(resource_id)
             Common::Logger::LoggerFactory.get_logger().debug("OnHostInstrumentationBuilder building definitions for resource #{resource_id}")
-            instrumentor_install_definition = assemble_install_definition(resource_instrumentor)
+            params = collect_params([resource_id])
+            instrumentor_install_definition = assemble_install_definition(resource_instrumentor, params)
             install_definitions.push(instrumentor_install_definition)
           end
         end
@@ -45,6 +46,8 @@ module Install
         vars["remote_user"] = provisioned_resource.get_user_name()
         vars["resource_display_name"] = provisioned_resource.get_resource().get_display_name()
         vars["deployment_name"] = deployment_name
+
+
         vars["deployment_path"] = get_deployment_path()
         vars["resource_deployment_name"] = "#{deployment_name}_#{resource_id}"
         vars["tags"] = tags
@@ -59,6 +62,7 @@ module Install
         vars = vars.merge(params)
         instrumentor_params = instrumentor.get_params().get_all()
         vars = vars.merge(instrumentor_params)
+
         return vars
       end
 

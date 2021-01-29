@@ -21,7 +21,8 @@ module Install
             service.get_destinations().each do |resource_id|
               if is_resource_included(resource_id)
                 Common::Logger::LoggerFactory.get_logger().debug("ServiceInstrumentationBuilder building definitions for service #{service.get_id()} on resource #{resource_id}")
-                install_definition = assemble_install_definition(service_instrumentor, resource_id)
+                params = collect_params(service.get_destinations())
+                install_definition = assemble_install_definition(service_instrumentor, resource_id, params)
                 install_definitions.push(install_definition)
               end
             end

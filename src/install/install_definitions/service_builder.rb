@@ -20,7 +20,8 @@ module Install
             service.get_destinations().each do |resource_id|
               if is_resource_included(resource_id)
                 Common::Logger::LoggerFactory.get_logger().debug("ServiceBuilder building definitions for service #{service.get_id()} on resource #{resource_id}")
-                service_install_definition = assemble_install_definition(service, resource_id)
+                params = collect_params(service.get_destinations())
+                service_install_definition = assemble_install_definition(service, resource_id, params)
                 install_definitions.push(service_install_definition)
               end
             end
@@ -59,6 +60,7 @@ module Install
         vars["deployment_name"] = deployment_name
         vars["deployment_path"] = get_deployment_path()
         vars["service_deployment_name"] = "#{deployment_name}_#{service.get_id()}"
+
         credential = get_service_credential(service)
         unless (credential.nil?)
           vars = vars.merge(credential.to_h())

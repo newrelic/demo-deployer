@@ -10,45 +10,16 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.4
-          bundler-cache: true
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-
-      - name: Cache Python Packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-gcp-pip-${{ hashFiles('**/test.yml') }}
-          restore-keys: ${{ runner.os }}-pip-
-
-      - name: Install Python Packages
-        run: |
-          python -m pip install --upgrade pip setuptools
-          python3 -m pip install ansible==2.9.9
-          python3 -m pip install requests google-auth
-          ansible-galaxy collection install google.cloud
-
-      - name: Install Ansible Galaxy Plugins
-        run: ansible-galaxy install newrelic.newrelic_java_agent
-
-      - name: Generate Default SSH Keypair
-        run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
-
       - name: Write GCP files
         env:
           UAT_GCP_PEM_FILE: ${{ secrets.UAT_GCP_PEM_FILE }}
           UAT_GCP_SERVICEACCOUNT_FILE: ${{ secrets.UAT_GCP_SERVICEACCOUNT_FILE }}
         run: |
-          rm -f compute-user.pem
-          echo "$UAT_GCP_PEM_FILE" > user_acceptance_tests/compute-user.pem
-          sudo chmod 400 user_acceptance_tests/compute-user.pem
-          rm -f demo-newrelic-staging-gcp-service-account.json
-          echo "$UAT_GCP_SERVICEACCOUNT_FILE" > user_acceptance_tests/demo-newrelic-staging-gcp-service-account.json
+          rm -f $GITHUB_WORKSPACE/configs/compute-user.pem
+          echo "$UAT_GCP_PEM_FILE" > $GITHUB_WORKSPACE/configs/compute-user.pem
+          sudo chmod 400 $GITHUB_WORKSPACE/configs/compute-user.pem
+          rm -f $GITHUB_WORKSPACE/configs/demo-newrelic-staging-gcp-service-account.json
+          echo "$UAT_GCP_SERVICEACCOUNT_FILE" > $GITHUB_WORKSPACE/configs/demo-newrelic-staging-gcp-service-account.json
 
       - name: Write UAT JSON to file
         env:
@@ -56,8 +27,11 @@ jobs:
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/gcp/uat${{ github.run_id }}.json.local
 
+      - name: Build the docker image
+        run: docker build -t deployer .
+
       - name: Cloud Provider Tests (GCP)
-        run: bundle exec rake test:uat:gcp
+        run: docker run -i --entrypoint bundle deployer exec rake test:uat:gcp
 
 
   slack-notify:

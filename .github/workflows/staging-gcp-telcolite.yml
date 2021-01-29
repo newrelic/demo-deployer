@@ -14,11 +14,11 @@ jobs:
         UAT_GCP_PEM_FILE: ${{ secrets.UAT_GCP_PEM_FILE }}
         UAT_GCP_SERVICEACCOUNT_FILE: ${{ secrets.UAT_GCP_SERVICEACCOUNT_FILE }}
       run: |
-        rm -f compute-user.pem
-        echo "$UAT_GCP_PEM_FILE" > compute-user.pem
-        sudo chmod 400 compute-user.pem
-        rm -f demo-newrelic-staging-gcp-service-account.json
-        echo "$UAT_GCP_SERVICEACCOUNT_FILE" > demo-newrelic-staging-gcp-service-account.json
+        rm -f $GITHUB_WORKSPACE/configs/compute-user.pem
+        echo "$UAT_GCP_PEM_FILE" > $GITHUB_WORKSPACE/configs/compute-user.pem
+        sudo chmod 400 $GITHUB_WORKSPACE/configs/compute-user.pem
+        rm -f $GITHUB_WORKSPACE/configs/demo-newrelic-staging-gcp-service-account.json
+        echo "$UAT_GCP_SERVICEACCOUNT_FILE" > $GITHUB_WORKSPACE/configs/demo-newrelic-staging-gcp-service-account.json
 
     - name: Write UAT JSON to file
       env:

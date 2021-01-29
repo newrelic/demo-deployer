@@ -20,6 +20,10 @@ module Infrastructure
           return @api_id
         end
 
+        def is_windows?()
+          false
+        end
+
         def set_api_id(value)
           @api_id = value
         end
