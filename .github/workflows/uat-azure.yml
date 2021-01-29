@@ -23,7 +23,7 @@ jobs:
         run: docker build -t deployer .
 
       - name: Cloud Provider Tests (Azure)
-        run: docker run -i -v $HOME/.shh:/mnt/deployer/configs/.ssh --entrypoint bundle deployer exec rake test:uat:azure
+        run: docker run -i -v $HOME/.ssh:/mnt/deployer/configs/.ssh --entrypoint bundle deployer exec rake test:uat:azure
 
   slack-notify:
     runs-on: ubuntu-latest
