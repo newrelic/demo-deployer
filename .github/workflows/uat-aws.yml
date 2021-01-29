@@ -17,9 +17,9 @@ jobs:
         env:
           AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
         run: |
-          rm -f user_acceptance_tests/uat-ca.pem
-          echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/uat-ca.pem
+          rm -f $GITHUB_WORKSPACE/configs/uat-ca.pem
+          echo "$AWS_PEM" > $GITHUB_WORKSPACE/configs/uat-ca.pem
+          sudo chmod 400 $GITHUB_WORKSPACE/configs/uat-ca.pem
 
       - name: Write UAT JSON to file
         env:
@@ -31,7 +31,7 @@ jobs:
         run: docker build -t deployer .
 
       - name: Cloud Provider Tests (AWS)
-        run: docker run -i -v $GITHUB_WORKSPACE/user_acceptance_tests/uat-ca.pem:/mnt/deployer/configs/uat-ca.pem --entrypoint bundle deployer exec rake test:uat:aws
+        run: docker run -i --entrypoint bundle deployer exec rake test:uat:aws
 
   slack-notify:
     runs-on: ubuntu-latest

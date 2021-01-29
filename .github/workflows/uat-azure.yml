@@ -10,19 +10,8 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Build the docker image
-        run: docker build -t deployer .
-
       - name: Generate Default SSH Keypair
         run: ssh-keygen -m PEM -t rsa -b 4096 -f $HOME/.ssh/id_rsa -q -N ""
-
-      - name: Write AWS Certificate to File
-        env:
-          AWS_PEM: ${{ secrets.UAT_AWS_PEM_FILE }}
-        run: |
-          rm -f user_acceptance_tests/uat-ca.pem
-          echo "$AWS_PEM" > user_acceptance_tests/uat-ca.pem
-          sudo chmod 400 user_acceptance_tests/uat-ca.pem
 
       - name: Write UAT JSON to file
         env:
@@ -30,8 +19,11 @@ jobs:
         run: |
           echo "$UAT_JSON" > user_acceptance_tests/azure/uat${{ github.run_id }}.json.local
 
+      - name: Build the docker image
+        run: docker build -t deployer .
+
       - name: Cloud Provider Tests (Azure)
-        run: docker run -i --entrypoint bundle deployer exec rake test:uat:azure
+        run: docker run -i -v $HOME/.shh:/mnt/deployer/configs/.ssh --entrypoint bundle deployer exec rake test:uat:azure
 
   slack-notify:
     runs-on: ubuntu-latest
