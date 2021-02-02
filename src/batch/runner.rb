@@ -62,6 +62,16 @@ module Batch
       return execute(partition, is_teardown)
     end
 
+    def has_deployment_succeeded?(process_succeeded, output_content)
+      if process_succeeded == false && output_content.length()>0
+        if / Deployment successful!/.match(output_content)
+          Common::Logger::LoggerFactory.get_logger().info("output has content indicating success, assuming success")
+          return true
+        end
+      end
+      return process_succeeded
+    end
+
     private
     def default_deploy_complete(errors)
       unless errors.empty?
@@ -105,11 +115,13 @@ module Batch
         deployment = process.get_context()
         exit_code = process_output.get_exit_code()
         succeeded = process_output.succeeded?(0, 255)
+        stdout = process_output.get_stdout()
+        succeeded = has_deployment_succeeded?(succeeded, stdout)
         if succeeded == true
           Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
         else
           message = "'deployer' for deployment_name: #{deployment} FAILED with exit_code:#{exit_code}, executed in #{process.get_execution_time()}s"
-          errors.push("#{message} output:#{process_output.get_stdout()} error_message:#{process_output.get_error_message()}")
+          errors.push("#{message} output:#{stdout} error_message:#{process_output.get_error_message()}")
         end
       end
       return errors.compact()
