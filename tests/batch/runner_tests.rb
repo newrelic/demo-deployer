@@ -110,6 +110,18 @@ describe "Batch::Runner" do
     errors.length().must_equal(2)
   end
 
+  it "should not detect failure when process output indicates success" do
+    given_logger()
+    succeeded = runner.has_deployment_succeeded?(false, "something whatever but Deployment successful! so this is ok")
+    succeeded.must_equal(true)
+  end
+
+  it "should detect failure when process output does NOT indicates success" do
+    given_logger()
+    succeeded = runner.has_deployment_succeeded?(false, "something without any indication of success.")
+    succeeded.must_equal(false)
+  end
+
   def given_success_deployment(user, deploy, partition = nil)
     partition = partition || given_partition()
     deployment = given_deployment(user, deploy, partition)
