@@ -1,5 +1,6 @@
 require './src/common/validation_error'
 require './src/summary/composer'
+require './src/summary/json_composer'
 require './src/common/io/file_writer'
 require './src/common/logger/logger_factory'
 require './src/common/json_parser'
@@ -10,14 +11,23 @@ module Summary
     def initialize(context)
       @context = context
       @summary_composer = Summary::Composer.new()
+      @json_composer = Summary::JSONComposer.new()
       @summary_file_path = nil
       @json = Common::JsonParser.new
     end
 
     def execute()
       summary = get_results()
+      summary_file_path = create_summary_file_path()
       write_console_message(summary)
-      write_summary_file(summary)
+      write_summary_file(summary_file_path, summary)
+
+      json_file_path = create_summary_file_path_json()
+      unless json_file_path.nil?
+        json_summary = get_results_json()
+        write_summary_file(json_file_path, json_summary)
+      end
+
       return summary
     end
 
@@ -40,6 +50,20 @@ module Summary
       return summary
     end
 
+    def get_results_json()
+      provisioned_resources = @context.get_provision_provider().get_all()
+      installed_services = @context.get_install_provider().get_all()
+
+      instrumentation_provider = @context.get_instrumentation_provider()
+      resource_instrumentors = instrumentation_provider.get_all_resource_instrumentors()
+      service_instrumentors = instrumentation_provider.get_all_service_instrumentors()
+      global_intrumentors = instrumentation_provider.get_all_global_instrumentors()
+
+      json_composer_results = @json_composer.execute(provisioned_resources, installed_services, resource_instrumentors, service_instrumentors, global_intrumentors)
+
+      return json_composer_results
+    end
+
     def write_console_message(summary)
       Common::Logger::LoggerFactory.get_logger.info("#{summary}")
       Common::Logger::LoggerFactory.get_logger.info("This deployment summary can also be found in:\n")
@@ -47,8 +71,14 @@ module Summary
       return nil
     end
 
-    def write_summary_file(summary)
-      full_path = get_summary_file_path()
+    def write_summary_file(file_path, summary)
+      file_writer = Common::Io::FileWriter.new(file_path, summary)
+      file_writer.execute()
+      return nil
+    end
+
+    def write_json_summary_file(summary)
+      full_path = create_summary_file_path_json()
       file_writer = Common::Io::FileWriter.new(full_path, summary)
       file_writer.execute()
       return nil
@@ -65,6 +95,15 @@ module Summary
       command_line_provider = @context.get_command_line_provider()
       deployment_name = command_line_provider.get_deployment_name()
       return "#{execution_path}/#{deployment_name}/#{filename}"
+    end
+
+    def create_summary_file_path_json()
+      command_line_provider = @context.get_command_line_provider()
+      output_file_path = command_line_provider.get_output_file_path()
+      if output_file_path.nil?
+        return nil
+      end
+      return File.absolute_path(output_file_path)
     end
 
     def get_footnote()

@@ -1,4 +1,5 @@
 require 'time'
+require 'json'
 
 module Summary
   class JSONComposer
@@ -12,7 +13,8 @@ module Summary
 
       summary["services"] = get_service_summary(installed_services, provisioned_resources, service_instrumentors) unless installed_services.nil?
       summary["completed_at"] = Time.now()
-      return summary
+
+      return summary.to_json()
     end
 
     private
@@ -23,7 +25,7 @@ module Summary
         entry = {}
         identity = global_instrumentor.get_id()
         provider = global_instrumentor.get_provider()
-        entry["identity"] = identity
+        entry["id"] = identity
         entry["provider"] = provider
         output.push(entry)
       end
@@ -45,7 +47,7 @@ module Summary
         entry["type"] = type
         entry["access_point"] = access_point unless access_point.empty?
         entry["services"] = resource_services_summary unless installed_services.nil? || resource_services_summary.empty?
-        entry["instrumentation"] = unless resource_instrumentors.nil? || instrumentation_summary.empty?
+        entry["instrumentation"] = instrumentation_summary unless resource_instrumentors.nil? || instrumentation_summary.empty?
         output.push(entry)
       end
       return output
@@ -58,8 +60,9 @@ module Summary
         service_id = installed_service.get_id()
         instrumentation_summary = get_instrumentation_summary(service_id, service_instrumentors)
         entry["id"] = service_id
-        entry["urls"] = intalled_service.get_urls()
+        entry["urls"] = installed_service.get_urls()
         entry["instrumentation"] = instrumentation_summary unless service_instrumentors.nil? || instrumentation_summary.empty?
+        output.push(entry)
       end
       return output
     end
@@ -91,13 +94,12 @@ module Summary
       end
 
       unless provisioned_resource.get_listeners().empty?
-        output["listeners"] = provisioned_resources.get_listeners()
+        output["listeners"] = provisioned_resource.get_listeners()
       end
       return output
     end
 
     def get_instrumentation_summary(id, instrumentors)
-      output = ""
       output = []
       instrumentors.each do |instrumentor|
         if instrumentor.get_item_id() == id
@@ -106,11 +108,10 @@ module Summary
           entry["provider"] = instrumentor.get_provider()
           version = instrumentor.get_version()
           entry["version"] = version unless version.nil?
-          output.push(output)
+          output.push(entry)
         end
       end
       return output
     end
-
   end
 end
