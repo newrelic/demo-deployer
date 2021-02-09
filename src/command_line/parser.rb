@@ -53,6 +53,10 @@ module CommandLine
         options[:is_teardown] = true
       end
 
+      @opts.on('-o', '--output JSON_FILE_PATH', 'The location to output the deployment summary as JSON. Must be a file path.') do |file_path|
+        options[:output_file_path] = file_path
+      end
+
       return options
     end
 

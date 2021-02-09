@@ -71,6 +71,10 @@ module CommandLine
       return JSON.parse(deploy_config_content, object_class: object_class)
     end
 
+    def get_output_file_path()
+      return @options[:output_file_path]
+    end
+
     private
     def download_file(url, filepath)
       Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{url} to #{filepath}")
