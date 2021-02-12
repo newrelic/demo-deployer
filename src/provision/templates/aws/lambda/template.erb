@@ -120,9 +120,11 @@
         memory_size: "{{ memory_size }}"
         tags: "{{ tags }}"
       register: lambda_function
-      retries: 6
+      retries: 30
       delay: 10
-      until: lambda_function is not failed
+      until: 
+        - lambda_function is not failed
+        - "lambda_function.configuration.state == 'Active'"
 
     - name: Create lambda function policy
       lambda_policy:
