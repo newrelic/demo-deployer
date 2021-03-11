@@ -33,3 +33,4 @@ Possible Behaviors
 * [Throw](throw/README.md)
 * [Compute](compute/README.md)
 * [Memory Allocation](malloc/README.md)
+* [Invalid Query](invalid_query/README.md)
