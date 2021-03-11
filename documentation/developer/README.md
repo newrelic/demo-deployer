@@ -48,9 +48,9 @@ Each of these plays are run in sequence from top to bottom. If a play is not pro
 * upload - parallel
 * instrument - serial
 * configure - serial
-* onbeforestart - serial
+* onbeforestart - parallel
 * start - parallel
-* onafterstart - serial
+* onafterstart - parallel
 
 #### Teardown
 * stop - parallel

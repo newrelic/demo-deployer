@@ -67,9 +67,9 @@ module Install
         .queue_step("upload", parallel)
         .queue_step("instrument", serial)
         .queue_step("configure", serial)
-        .queue_step("onbeforestart", serial)
+        .queue_step("onbeforestart", parallel)
         .queue_step("start", parallel)
-        .queue_step("onafterstart", serial)
+        .queue_step("onafterstart", parallel)
       return @installer
     end
 
