@@ -25,15 +25,23 @@ module Common
 
         def get_template_binding()
           template_binding = Kernel.binding()
-
-          template_binding.local_variable_set('output_path', get_execution_path())
           template_binding.local_variable_set('action_name', @action_name)
-          template_binding.local_variable_set('action_vars', @action_vars)
-          params = {}
+
+          all_vars = {
+            output_path: get_execution_path()
+          }
+
+          all_vars.merge(@action_vars)
+
           unless @provisioned_resource.nil?
-            @provisioned_resource.get_params().get_all()
+            params = @provisioned_resource.get_params().get_all()
+            all_vars.merge(params)
           end
-          template_binding.local_variable_set('params', params)
+
+          # windows password should not be passed as action param (not yaml encoded, and not needed)
+          all_vars.delete('win_password')
+
+          template_binding.local_variable_set('action_vars', all_vars)
           return template_binding
         end
 
