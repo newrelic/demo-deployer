@@ -31,11 +31,11 @@ module Common
             output_path: get_execution_path()
           }
 
-          all_vars.merge(@action_vars)
+          all_vars = all_vars.merge(@action_vars)
 
           unless @provisioned_resource.nil?
             params = @provisioned_resource.get_params().get_all()
-            all_vars.merge(params)
+            all_vars = all_vars.merge(params)
           end
 
           # windows password should not be passed as action param (not yaml encoded, and not needed)
