@@ -2,8 +2,7 @@
 
 - hosts: <%= action_name %>
   vars:
-    output_path: <%= output_path %><% action_vars.each do |key,value| %>
-    <%= key %>: <%= value %><% end %><% params.each do |key,value| %>
-    <%= key %>: <%= value%><% end %>
+    <% action_vars.each do |key,value| %>
+    <%= key %>: <%= value %><% end %>
   roles:
   - <%= action_name %>
