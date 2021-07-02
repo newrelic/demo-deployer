@@ -46,7 +46,8 @@ module Common
               Common::Logger::LoggerFactory.get_logger().debug("Running 'ansible-playbook' with command: #{command} and execution_path: #{execution_path}, pid: #{pid}")
           end
 
-          lambda_on_end = lambda do |pid|
+          lambda_on_end = lambda do |pid, exit_code, error_message|
+            Common::Logger::LoggerFactory.get_logger().debug("Process 'ansible-playbook' completed exit_code: #{exit_code} error_message: #{error_message}")
             play.success()
           end
 

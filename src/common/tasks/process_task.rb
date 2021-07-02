@@ -82,7 +82,7 @@ module Common
           wout.close
           werr.close
           unless lambda_on_end.nil?
-            lambda_on_end.call(pid)
+            lambda_on_end.call(pid, exit_code, error_message)
           end
         end
 

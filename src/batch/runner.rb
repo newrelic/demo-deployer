@@ -64,7 +64,7 @@ module Batch
 
     def has_deployment_succeeded?(process_succeeded, output_content)
       if process_succeeded == false && output_content.length()>0
-        if / Deployment successful!/.match(output_content)
+        if /Deployment successful!/.match(output_content)
           Common::Logger::LoggerFactory.get_logger().info("output has content indicating success, assuming success")
           return true
         end
@@ -105,7 +105,10 @@ module Batch
         lambda_on_start = lambda do |pid|
             Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} with command: #{command} and execution_path: #{execution_path}, pid: #{pid}")
         end
-        pid = process.start(lambda_on_start)
+        lambda_on_end = lambda do |pid, exit_code, error_message|
+          Common::Logger::LoggerFactory.get_logger().debug("Process 'deployer' completed for deployment_name: #{deployment} exit_code: #{exit_code} error_message: #{error_message}")
+        end
+        pid = process.start(lambda_on_start, lambda_on_end)
         processes.push(process)
       end
 
