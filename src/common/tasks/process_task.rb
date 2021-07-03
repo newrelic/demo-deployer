@@ -78,6 +78,9 @@ module Common
         rescue Errno::ENOENT => e
           exit_code = 255
           error_message = e.message
+        rescue
+          exit_code = 254
+          error_message = "unknown error"
         ensure
           wout.close
           werr.close
