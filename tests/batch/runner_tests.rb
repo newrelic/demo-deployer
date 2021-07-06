@@ -15,8 +15,10 @@ describe "Batch::Runner" do
   let(:launch_count) { [] }
   let(:process_launcher) { m = mock(); m }
   let(:context){ Tests::Batch::ContextBuilder.new().build() }
-  let(:runner) { Batch::Runner.new(context, process_launcher) }
-  let(:on_complete_lambda) { lambda { |all| errors.concat(all)}}
+  let(:get_output_lambda) { lambda { |deployment| return get_output(deployment)} }
+  let(:runner) { Batch::Runner.new(context, process_launcher, get_output_lambda) }
+  let(:on_complete_lambda) { lambda { |all| errors.concat(all)} }
+  let(:outputs) { m = mock(); m }
 
   it "should create runner" do
     runner.wont_be_nil()
@@ -30,8 +32,8 @@ describe "Batch::Runner" do
 
   it "should deploy once" do
     given_logger()
-    given_deployment("user1.json", "deploy.json")
-    given_process_success()
+    deployment = given_deployment("user1.json", "deploy.json")
+    given_process_success(deployment)
     runner.deploy(partitions, on_complete_lambda)
     launch_count.length().must_equal(1)
     errors.length().must_equal(0)
@@ -74,8 +76,8 @@ describe "Batch::Runner" do
 
   it "should teardown once" do
     given_logger()
-    given_deployment("user1.json", "deploy.json")
-    given_process_success()
+    deployment = given_deployment("user1.json", "deploy.json")
+    given_process_success(deployment)
     runner.teardown(partitions, on_complete_lambda)
     launch_count.length().must_equal(1)
     errors.length().must_equal(0)
@@ -112,13 +114,13 @@ describe "Batch::Runner" do
 
   it "should not detect failure when process output indicates success" do
     given_logger()
-    succeeded = runner.has_deployment_succeeded?(false, "something whatever but Deployment successful! so this is ok")
+    succeeded = runner.has_deployment_succeeded?("something whatever but Deployment successful! so this is ok")
     succeeded.must_equal(true)
   end
 
   it "should detect failure when process output does NOT indicates success" do
     given_logger()
-    succeeded = runner.has_deployment_succeeded?(false, "something without any indication of success.")
+    succeeded = runner.has_deployment_succeeded?("something without any indication of success.")
     succeeded.must_equal(false)
   end
 
@@ -142,12 +144,18 @@ describe "Batch::Runner" do
 
   def given_process_success(deployment = nil)
     exit_code = 0
-    given_process(exit_code)
+    outputs.stubs(:get).with(deployment).returns(" Deployment successful! ")
+    given_process(exit_code, deployment)
   end
 
   def given_process_error(deployment = nil)
     exit_code = 2
-    given_process(exit_code)
+    outputs.stubs(:get).with(deployment).returns("Something went wrong")
+    given_process(exit_code, deployment)
+  end
+
+  def get_output(deployment)
+    return outputs.get(deployment)
   end
 
   def given_process(exit_code, deployment = nil)
@@ -190,4 +198,5 @@ describe "Batch::Runner" do
     log_token.stubs(:error)
     logger.stubs(:task_start).returns(log_token)
   end
+
 end

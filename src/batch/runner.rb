@@ -8,9 +8,10 @@ require "./src/common/tasks/process_task"
 module Batch
   class Runner
 
-    def initialize(context, process_launcher_lambda = nil)
+    def initialize(context, process_launcher_lambda = nil, get_output_lambda = nil)
       @context = context
       @process_launcher_lambda = process_launcher_lambda || lambda { |command, execution_path, error_message, deployment| return Common::Tasks::ProcessTask.new(command, execution_path, error_message, deployment) }
+      @get_output_lambda = get_output_lambda || lambda { |deployment| return get_output(deployment) }
     end
 
     def deploy(partitions, on_complete_lambda = nil)
@@ -87,6 +88,7 @@ module Batch
 
     def output_log_files(error_files, is_error)
       error_files.each do |error_file|
+        output = get_output()
         if File.exist?(error_file)
           error = File.read(error_file)
           if is_error
@@ -132,7 +134,7 @@ module Batch
         process_output = process.wait_to_completion()
         deployment = process.get_context()
         exit_code = process_output.get_exit_code()
-        output = get_output(deployment)
+        output = @get_output_lambda.call(deployment)
         succeeded = has_deployment_succeeded?(output)
         if succeeded == true
           Common::Logger::LoggerFactory.get_logger().debug("'deployer' for deployment_name: #{deployment.get_deployment_name()} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
