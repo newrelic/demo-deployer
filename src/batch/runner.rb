@@ -11,7 +11,7 @@ module Batch
     def initialize(context, process_launcher_lambda = nil, get_output_lambda = nil)
       @context = context
       @process_launcher_lambda = process_launcher_lambda || lambda { |command, execution_path, error_message, deployment| return Common::Tasks::ProcessTask.new(command, execution_path, error_message, deployment) }
-      @get_output_lambda = get_output_lambda || lambda { |deployment| return get_output(deployment) }
+      @get_output_lambda = get_output_lambda || lambda { |deployment| return get_output_from_deployment(deployment) }
     end
 
     def deploy(partitions, on_complete_lambda = nil)
@@ -88,7 +88,7 @@ module Batch
 
     def output_log_files(error_files, is_error)
       error_files.each do |error_file|
-        output = get_output()
+        output = get_output_from_file(error_file)
         if File.exist?(error_file)
           error = File.read(error_file)
           if is_error
@@ -153,8 +153,12 @@ module Batch
       return "/tmp/deployer/#{deployment.get_deployment_name()}.output"
     end
 
-    def get_output(deployment)
+    def get_output_from_deployment(deployment)
       output_file_path = get_deployment_output(deployment)
+      return get_output_from_file(output_file_path)
+    end
+
+    def get_output_from_file(output_file_path)
       if File.exist?(output_file_path)
         output = File.read(output_file_path)
         return output
