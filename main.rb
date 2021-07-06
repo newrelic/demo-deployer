@@ -13,7 +13,7 @@ rescue Exception => e
   unless e.message.downcase() == "exit"
     Common::Logger::LoggerFactory.get_logger.error(e)
     Common::Logger::LoggerFactory.get_logger.error(e.backtrace)
-    exit(1)
   end
+  exit!(1)
 end
 exit(0)

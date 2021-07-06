@@ -8,9 +8,10 @@ require "./src/common/tasks/process_task"
 module Batch
   class Runner
 
-    def initialize(context, process_launcher_lambda = nil)
+    def initialize(context, process_launcher_lambda = nil, get_output_lambda = nil)
       @context = context
       @process_launcher_lambda = process_launcher_lambda || lambda { |command, execution_path, error_message, deployment| return Common::Tasks::ProcessTask.new(command, execution_path, error_message, deployment) }
+      @get_output_lambda = get_output_lambda || lambda { |deployment| return get_output_from_deployment(deployment) }
     end
 
     def deploy(partitions, on_complete_lambda = nil)
@@ -36,25 +37,25 @@ module Batch
     end
 
     def teardown(partitions, on_complete_lambda = nil)
-      all_errors = []
-      on_complete_lambda = on_complete_lambda || lambda { |errors| return default_teardown_complete(errors) }
+      all_error_files = []
+      on_complete_lambda = on_complete_lambda || lambda { |error_files| return default_teardown_complete(error_files) }
       partitions.each do |partition|
         ignore_error_message = ""
         if is_ignore_teardown_errors?()
           ignore_error_message = " (ignore any errors)"
         end
         log_token = Common::Logger::LoggerFactory.get_logger().task_start("Tearing down:#{partition}#{ignore_error_message}")
-        errors = single_teardown(partition)
-        if errors.empty?
+        error_files = single_teardown(partition)
+        if error_files.empty?
           log_token.success()
         else
-          all_errors.concat(errors)
+          all_error_files.concat(error_files)
           log_token.error()
         end
       end
 
-      on_complete_lambda.call(all_errors)
-      return all_errors
+      on_complete_lambda.call(all_error_files)
+      return all_error_files
     end
 
     def single_teardown(partition)
@@ -62,31 +63,41 @@ module Batch
       return execute(partition, is_teardown)
     end
 
-    def has_deployment_succeeded?(process_succeeded, output_content)
-      if process_succeeded == false && output_content.length()>0
-        if /Deployment successful!/.match(output_content)
-          Common::Logger::LoggerFactory.get_logger().info("output has content indicating success, assuming success")
-          return true
-        end
+    def has_deployment_succeeded?(output_content)
+      if output_content.length()>0 && /Deployment successful!/.match(output_content)
+        return true
       end
-      return process_succeeded
+      return false
     end
 
     private
-    def default_deploy_complete(errors)
-      unless errors.empty?
-        raise errors.join("\n")
+    def default_deploy_complete(error_files)
+      output_log_files(error_files, true)
+      unless error_files.empty?
+        exit!(1)
       end
     end
 
-    def default_teardown_complete(errors)
-      unless errors.empty?
-        if is_ignore_teardown_errors?()
-          errors.each do |error|
+    def default_teardown_complete(error_files)
+      if is_ignore_teardown_errors?()
+        output_log_files(error_files, false)
+      else
+        default_deploy_complete(error_files)
+      end
+    end
+
+    def output_log_files(error_files, is_error)
+      error_files.each do |error_file|
+        output = get_output_from_file(error_file)
+        if File.exist?(error_file)
+          error = File.read(error_file)
+          if is_error
+            Common::Logger::LoggerFactory.get_logger().error(error)
+          else
             Common::Logger::LoggerFactory.get_logger().debug(error)
           end
         else
-          raise errors.join("\n")
+          Common::Logger::LoggerFactory.get_logger().error("Cannot read file #{error_file} to display error output")
         end
       end
     end
@@ -96,39 +107,64 @@ module Batch
       base_command = "ruby main.rb"
       execution_path = Dir.pwd
 
+      if File.exist?("/tmp/deployer") == false
+        FileUtils.mkdir_p("/tmp/deployer")
+      end
+
       partition.get_all_deployments().each do |deployment|
         command = base_command +" -c #{deployment.get_user_config_filepath()}" +" -d #{deployment.get_deploy_config_filepath()}" +" -l #{get_logging_level()}"
         if is_teardown == true
           command += " -t"
         end
+        output_file_path = get_deployment_output(deployment)
+        if File.exist?(output_file_path)
+          File.delete(output_file_path)
+        end
+        command += " > #{output_file_path} 2>&1"
         process = @process_launcher_lambda.call(command, execution_path, "[ERROR]: Running 'deployer' for #{command} FAILED", deployment)
         lambda_on_start = lambda do |pid|
-            Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} with command: #{command} and execution_path: #{execution_path}, pid: #{pid}")
+            Common::Logger::LoggerFactory.get_logger().debug("Starting 'deployer' for deployment_name: #{deployment} with command: #{command} and execution_path: #{execution_path}, pid: #{pid}")
         end
-        lambda_on_end = lambda do |pid, exit_code, error_message|
-          Common::Logger::LoggerFactory.get_logger().debug("Process 'deployer' completed for deployment_name: #{deployment} exit_code: #{exit_code} error_message: #{error_message}")
-        end
-        pid = process.start(lambda_on_start, lambda_on_end)
+        pid = process.start(lambda_on_start)
         processes.push(process)
       end
 
-      errors = []
+      error_files = []
       processes.each do |process|
         process_output = process.wait_to_completion()
         deployment = process.get_context()
         exit_code = process_output.get_exit_code()
-        succeeded = process_output.succeeded?(0, 255)
-        stdout = process_output.get_stdout()
-        succeeded = has_deployment_succeeded?(succeeded, stdout)
+        output = @get_output_lambda.call(deployment)
+        succeeded = has_deployment_succeeded?(output)
         if succeeded == true
-          Common::Logger::LoggerFactory.get_logger().debug("Running 'deployer' for deployment_name: #{deployment} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
+          Common::Logger::LoggerFactory.get_logger().debug("'deployer' for deployment_name: #{deployment.get_deployment_name()} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
         else
-          message = "'deployer' for deployment_name: #{deployment} FAILED with exit_code:#{exit_code}, executed in #{process.get_execution_time()}s"
-          errors.push("#{message} output:#{stdout} error_message:#{process_output.get_error_message()}")
+          message = "'deployer' for deployment_name: #{deployment.get_deployment_name()} FAILED in #{process.get_execution_time()}s with exit_code:#{exit_code}"
+          Common::Logger::LoggerFactory.get_logger().error(message)
+          error_file = get_deployment_output(deployment)
+          error_files.push(error_file)
         end
       end
-      return errors.compact()
+      return error_files.compact()
 
+    end
+
+    def get_deployment_output(deployment)
+      return "/tmp/deployer/#{deployment.get_deployment_name()}.output"
+    end
+
+    def get_output_from_deployment(deployment)
+      output_file_path = get_deployment_output(deployment)
+      return get_output_from_file(output_file_path)
+    end
+
+    def get_output_from_file(output_file_path)
+      if File.exist?(output_file_path)
+        output = File.read(output_file_path)
+        return output
+      else
+        Common::Logger::LoggerFactory.get_logger().error("Cannot read file #{output_file_path}")
+      end
     end
 
     def is_ignore_teardown_errors?()
