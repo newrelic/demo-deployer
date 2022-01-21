@@ -32,15 +32,32 @@ COPY Gemfile Gemfile.lock /mnt/deployer/
 
 RUN bundle install --clean --force
 
-COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
-
 # Install Python dependencies
-RUN python3 -m pip install -r requirements.python.txt
+RUN python3 -m pip install setuptools
+# Ansible
+RUN python3 -m pip install ansible==2.9.9
+# AWS
+RUN python3 -m pip install boto3
+RUN python3 -m pip install botocore
+RUN python3 -m pip install boto
+# Azure
+RUN python3 -m pip install ansible[azure]
+RUN python3 -m pip install packaging
+RUN python3 -m pip install msrestazure
+# GCP
+RUN python3 -m pip install google-auth
+# Windows
+RUN python3 -m pip install pywinrm
+
 
 # Install Ansible dependencies
-# Need two install steps while on v2.9 of Ansible. Next minor version introduces a single install command.
-RUN ansible-galaxy role install -r requirements.ansible.yml
-RUN ansible-galaxy collection install -r requirements.ansible.yml
+RUN ansible-galaxy role install newrelic.newrelic-infra
+RUN ansible-galaxy role install newrelic.newrelic_java_agent
+
+RUN ansible-galaxy collection install community.aws
+RUN ansible-galaxy collection install google.cloud
+RUN ansible-galaxy collection install ansible.windows
+RUN ansible-galaxy collection install community.mysql
 
 COPY . /mnt/deployer/
 # CMD [ "ruby", "--version"]
