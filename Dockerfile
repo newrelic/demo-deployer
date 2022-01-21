@@ -35,7 +35,7 @@ RUN bundle install --clean --force
 # Install Python dependencies
 RUN python3 -m pip install setuptools
 # Ansible
-RUN python3 -m pip install ansible==2.9.9
+RUN python3 -m pip install ansible
 # AWS
 RUN python3 -m pip install boto3
 RUN python3 -m pip install botocore
