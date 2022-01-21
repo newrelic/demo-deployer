@@ -63,9 +63,12 @@ module Batch
       return execute(partition, is_teardown)
     end
 
-    def has_deployment_succeeded?(output_content)
-      if output_content.length()>0 && /Deployment successful!/.match(output_content)
-        return true
+    def has_deployment_succeeded?(output_content, is_teardown)
+      if output_content.length()>0
+        if is_teardown
+          return /Teardown successful!/.match(output_content) != nil
+        end
+        return /Deployment successful!/.match(output_content) != nil
       end
       return false
     end
@@ -135,7 +138,7 @@ module Batch
         deployment = process.get_context()
         exit_code = process_output.get_exit_code()
         output = @get_output_lambda.call(deployment)
-        succeeded = has_deployment_succeeded?(output)
+        succeeded = has_deployment_succeeded?(output, is_teardown)
         if succeeded == true
           Common::Logger::LoggerFactory.get_logger().debug("'deployer' for deployment_name: #{deployment.get_deployment_name()} SUCCEED in #{process.get_execution_time()}s with exit code:#{exit_code}")
         else
