@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get clean all
-RUN apt-get update
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
 
 # Install Ruby
 RUN apt-get install ruby-full -y
