@@ -18,12 +18,11 @@ RUN apt-get update
 RUN apt-get install git -y
 RUN apt-get install rsync -y
 
-# Install Terraform (used in newrelic instrumentations for alerts)
-RUN apt-get update
-RUN apt-get install software-properties-common curl -y
+# # Install Terraform (used in newrelic instrumentations for alerts)
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install software-properties-common curl -y
 RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
 RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bionic main"
-RUN apt-get update && apt-get install terraform -y
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install terraform -y
 
 RUN mkdir /mnt/deployer
 WORKDIR /mnt/deployer
@@ -32,32 +31,13 @@ COPY Gemfile Gemfile.lock /mnt/deployer/
 
 RUN bundle install --clean --force
 
-# Install Python dependencies
-RUN python3 -m pip install setuptools
-# Ansible
-RUN python3 -m pip install ansible
-# AWS
-RUN python3 -m pip install boto3
-RUN python3 -m pip install botocore
-RUN python3 -m pip install boto
-# Azure
-RUN python3 -m pip install ansible[azure]
-RUN python3 -m pip install packaging
-RUN python3 -m pip install msrestazure
-# GCP
-RUN python3 -m pip install google-auth
-# Windows
-RUN python3 -m pip install pywinrm
+COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
 
+RUN python3 -m pip install -r requirements.python.txt
 
 # Install Ansible dependencies
-RUN ansible-galaxy role install newrelic.newrelic-infra
-RUN ansible-galaxy role install newrelic.newrelic_java_agent
-
-RUN ansible-galaxy collection install community.aws
-RUN ansible-galaxy collection install google.cloud
-RUN ansible-galaxy collection install ansible.windows
-RUN ansible-galaxy collection install community.mysql
+RUN ansible-galaxy role install -r requirements.ansible.yml
+RUN ansible-galaxy collection install -r requirements.ansible.yml
 
 COPY . /mnt/deployer/
 # CMD [ "ruby", "--version"]
