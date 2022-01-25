@@ -3,6 +3,7 @@ require './src/provision/orchestrator'
 require './src/install/orchestrator'
 require './src/teardown/orchestrator'
 require './src/summary/orchestrator'
+require './src/common/logger/logger_factory'
 
 class Orchestrator
 
@@ -24,8 +25,11 @@ class Orchestrator
     if is_teardown?()
       return @teardown_orchestrator.execute()
     else
+      Common::Logger::LoggerFactory.get_logger().debug("provision_orchestrator.execute()")
       @provision_orchestrator.execute()
+      Common::Logger::LoggerFactory.get_logger().debug("install_orchestrator.execute()")
       @install_orchestrator.execute()
+      Common::Logger::LoggerFactory.get_logger().debug("summary_orchestrator.execute()")
       return @summary_orchestrator.execute()
     end
   end
