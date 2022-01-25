@@ -16,6 +16,8 @@ module Common
       end
 
       def execute(isAsync = true)
+        Common::Logger::LoggerFactory.get_logger().debug("Player.execute(#{isAsync})")
+
         processes = []
         @plays.each do |play|
           script_path = play.get_script_path()
@@ -51,10 +53,12 @@ module Common
             play.success()
           end
 
+          Common::Logger::LoggerFactory.get_logger().debug("Player process.start()")
           pid = process.start(lambda_on_start, lambda_on_end)
           processes.push(process)
 
           unless isAsync
+            Common::Logger::LoggerFactory.get_logger().debug("Player process.wait_to_completion()")
             process.wait_to_completion()
             play.success()
           end
@@ -63,13 +67,19 @@ module Common
 
         errors = []
         processes.each do |process|
+          Common::Logger::LoggerFactory.get_logger().debug("Player process(item).wait_to_completion()")
           process_output = process.wait_to_completion()
           exit_code = process_output.get_exit_code()
+          Common::Logger::LoggerFactory.get_logger().debug("Player process(item) exit_code:#{exit_code}")
           play = process.get_context()
           on_executed_handlers = play.get_on_executed_handlers()
           script_path = play.get_script_path()
+          # output_content = File.read(play.get_output_file_path(), :encoding => "UTF-8")
           output_content = File.read(play.get_output_file_path())
-          succeeded = has_ansible_succeeded?(process_output.succeeded?, output_content, script_path)
+          process_output_succeeded = process_output.succeeded?()
+          Common::Logger::LoggerFactory.get_logger().debug("Player process(item) process_output_succeeded:#{process_output_succeeded}")
+          succeeded = has_ansible_succeeded?(process_output_succeeded, output_content, script_path)
+          Common::Logger::LoggerFactory.get_logger().debug("Player process(item) succeeded:#{succeeded}")
           if succeeded == true
             (on_executed_handlers || []).each do |handler|
               handler.call()
@@ -82,7 +92,9 @@ module Common
           end
 
         end
-        return errors.compact()
+        errors = errors.compact()
+        Common::Logger::LoggerFactory.get_logger().debug("Player errors:#{errors}")
+        return errors
       end
 
       def has_ansible_succeeded?(process_succeeded, output_content, script_path)
