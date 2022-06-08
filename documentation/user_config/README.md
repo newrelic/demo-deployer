@@ -54,6 +54,23 @@ The structure of the user config is a list of credentials, for example:
 }
 ```
 
+Note, any credential value can also be passed through environment variable, using the syntax `[env:MY_ENV_PROVIDED]`, for example, here is a set of AWS credentials with the actual values provided by the OS environment variable
+
+```json
+{
+  "credentials": {
+
+    "aws": {
+      "apiKey": "[env:AWS_ACCESS_KEY_ID]",
+      "secretKey": "[env:AWS_SECRET_ACCESS_KEY]",
+      "secretKeyPath": "[env:AWS_SECRET_PEM_KEY_PATH]",
+      "region": "[env:AWS_REGION]"
+    }
+  }
+}
+```
+
+
 ## Credentials
 
 The references below give more details regarding how to setup specific vendors. Typically, tutorials use AWS and NewRelic.
