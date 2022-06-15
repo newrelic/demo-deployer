@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:bionic
 
 RUN apt-get clean all
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
@@ -26,15 +26,31 @@ RUN apt-get install git -y
 RUN apt-get install rsync -y
 
 # # Install Terraform (used in newrelic instrumentations for alerts)
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install software-properties-common curl -y
-RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-RUN apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bionic main"
-RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install terraform -y
+
+# Download terraform for linux
+
+RUN \
+# Update
+apt-get update -y && \
+# Install Unzip
+apt-get install unzip -y && \
+# need wget
+apt-get install wget -y
+
+RUN wget https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip
+
+# Unzip
+RUN unzip terraform_0.11.11_linux_amd64.zip
+
+# Move to local bin
+RUN mv terraform /usr/local/bin/
 
 RUN mkdir /mnt/deployer
 WORKDIR /mnt/deployer
 
 COPY Gemfile Gemfile.lock /mnt/deployer/
+
+RUN gem install rexml -v '3.2.5' --source 'https://rubygems.org/'
 
 RUN bundle install --clean --force
 
