@@ -22,6 +22,7 @@ RUN apt-get install -y python3-pip python3-dev \
 
 # Others
 RUN apt-get update
+RUN apt-get install curl -y
 RUN apt-get install git -y
 RUN apt-get install rsync -y
 
