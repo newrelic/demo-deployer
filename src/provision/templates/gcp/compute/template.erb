@@ -102,5 +102,5 @@
       delegate_to: localhost
 
     - name: wait for SSH to come up
-      local_action: wait_for host={{ address.address }} port=22 delay=60 timeout=320 state=started search_regex="OpenSSH"
+      local_action: wait_for host={{ address.address }} port=22 delay=60 timeout=900 state=started search_regex="OpenSSH"
 
