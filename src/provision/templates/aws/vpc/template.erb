@@ -1,7 +1,7 @@
 ---
 - block:
     - name: Get VPC Facts
-      ec2_vpc_net_facts:
+      amazon.aws.ec2_vpc_net_info:
         aws_access_key: <%= vpc[:aws_access_key] %>
         aws_secret_key: <%= vpc[:aws_secret_key] %>
         region: <%= vpc[:region] %>
@@ -18,7 +18,7 @@
       when: default_vpc is not defined
 
     - name: get VPC subnets
-      ec2_vpc_subnet_facts:
+      amazon.aws.ec2_vpc_subnet_info:
         aws_access_key: <%= vpc[:aws_access_key] %>
         aws_secret_key: <%= vpc[:aws_secret_key] %>
         region: <%= vpc[:region] %>

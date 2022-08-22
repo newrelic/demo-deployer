@@ -53,7 +53,7 @@
         log_group_name: "/aws/lambda/{{ lambda_function_name }}"
 
     - name: Gather group facts
-      ec2_group_facts:
+      amazon.aws.ec2_group_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"

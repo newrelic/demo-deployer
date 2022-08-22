@@ -23,7 +23,7 @@
     - include_tasks: vpc.yml
 
     - name: Determine AMI ID for EC2 instance
-      ec2_ami_facts:
+      amazon.aws.ec2_ami_info:
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
         region: "{{ region }}"
@@ -89,7 +89,7 @@
 <% end %>
       register: ec2
 
-    - ec2_instance_facts:
+    - amazon.aws.ec2_instance_info:
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
         region: "{{ region }}"
