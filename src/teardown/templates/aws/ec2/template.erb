@@ -12,7 +12,7 @@
 
   tasks:
     - name: Gather instance facts
-      ec2_instance_facts:
+      amazon.aws.ec2_instance_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"
@@ -32,7 +32,7 @@
       when: ec2_facts is defined
 
     - name: Gather group facts
-      ec2_group_facts:
+      amazon.aws.ec2_group_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"

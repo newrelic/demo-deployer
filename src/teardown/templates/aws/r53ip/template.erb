@@ -39,7 +39,7 @@
       when: ips is defined and ips is not none and record is defined and record.set is defined and record.set.value is defined
 
     - name: Get load balancer fact
-      elb_application_lb_facts:
+      community.aws.elb_application_lb_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{region}}"

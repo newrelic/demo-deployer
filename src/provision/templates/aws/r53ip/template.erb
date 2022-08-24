@@ -31,7 +31,7 @@
       when: ips is defined and ips is not none
 
     - name: Get load balancer fact
-      elb_application_lb_facts:
+      community.aws.elb_application_lb_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{region}}"

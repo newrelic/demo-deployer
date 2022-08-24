@@ -22,7 +22,7 @@
   tasks:
     - include_tasks: vpc.yml
 
-    - ec2_instance_facts:
+    - amazon.aws.ec2_instance_info:
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
         region: "{{ region }}"
