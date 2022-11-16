@@ -23,7 +23,7 @@ module Infrastructure
 
           case config_resource["type"]
             when "ec2"
-              ec2_resource = Ec2Resource.new(resource_id, credential, config_resource["size"], user_name, tags, config_resource["cpu_credit_specification"])
+              ec2_resource = Ec2Resource.new(resource_id, credential, config_resource["size"], user_name, tags, config_resource["cpu_credit_specification"], config_resource["instance_role"])
               ami_name = config_resource["ami_name"]
               unless (ami_name.nil? || ami_name.empty?)
                 ec2_resource.set_ami_name(ami_name)

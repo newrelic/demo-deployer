@@ -87,6 +87,9 @@
 <% unless ec2[:user_data].nil? %>
          user_data: <%= ec2[:user_data] %>
 <% end %>
+<% unless ec2[:instance_role].nil? %>
+         instance_role: <%= ec2[:instance_role] %>
+<% end %>
       register: ec2
 
     - amazon.aws.ec2_instance_info:
