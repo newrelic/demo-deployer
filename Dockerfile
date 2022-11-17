@@ -61,9 +61,9 @@ COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
 RUN python3 -m pip install -r requirements.python.txt
 
 # Azure
-RUN python3 -m pip install ansible[azure]
-RUN python3 -m pip install packaging
-RUN python3 -m pip install msrestazure
+# RUN python3 -m pip install ansible[azure]
+# RUN python3 -m pip install packaging
+# RUN python3 -m pip install msrestazure
 
 # Install Ansible dependencies
 RUN ansible-galaxy role install -r requirements.ansible.yml
