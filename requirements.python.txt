@@ -12,6 +12,7 @@ boto
 # Azure dependencies
 msrest
 msrestazure
+ansible[azure]
 
 # GCP
 google-auth
