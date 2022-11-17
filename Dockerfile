@@ -14,12 +14,6 @@ ENV LANG en_US.UTF-8
 RUN apt-get install ruby-full -y
 RUN gem install bundler -v 1.17.3
 
-# Install Python
-# RUN apt-get install -y python3-pip python3-dev \
-#   && cd /usr/local/bin \
-#   && ln -s /usr/bin/python3 python \
-#   && pip3 install --upgrade pip
-
 # Others
 RUN apt-get update
 RUN apt-get install curl -y
@@ -27,10 +21,7 @@ RUN apt-get update
 RUN apt-get install git -y
 RUN apt-get install rsync -y
 
-# # Install Terraform (used in newrelic instrumentations for alerts)
-
-# Download terraform for linux
-
+# Terraform
 RUN \
 # Update
 apt-get update -y && \
@@ -38,12 +29,9 @@ apt-get update -y && \
 apt-get install unzip -y && \
 # need wget
 apt-get install wget -y
-
 RUN wget https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip
-
 # Unzip
 RUN unzip terraform_0.11.11_linux_amd64.zip
-
 # Move to local bin
 RUN mv terraform /usr/local/bin/
 
@@ -62,11 +50,6 @@ RUN python3 -m pip install -r requirements.python.txt
 
 RUN curl -O https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt
 RUN python3 -m pip install -r requirements-azure.txt
-
-# Azure
-# RUN python3 -m pip install ansible[azure]
-# RUN python3 -m pip install packaging
-# RUN python3 -m pip install msrestazure
 
 # Install Ansible dependencies
 RUN ansible-galaxy role install -r requirements.ansible.yml
