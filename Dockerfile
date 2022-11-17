@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM python:latest
 
 RUN apt-get clean all
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
@@ -15,10 +15,10 @@ RUN apt-get install ruby-full -y
 RUN gem install bundler -v 1.17.3
 
 # Install Python
-RUN apt-get install -y python3-pip python3-dev \
-  && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python \
-  && pip3 install --upgrade pip
+# RUN apt-get install -y python3-pip python3-dev \
+#   && cd /usr/local/bin \
+#   && ln -s /usr/bin/python3 python \
+#   && pip3 install --upgrade pip
 
 # Others
 RUN apt-get update
@@ -59,6 +59,11 @@ RUN bundle install --clean --force
 COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
 
 RUN python3 -m pip install -r requirements.python.txt
+
+# Azure
+RUN python3 -m pip install ansible[azure]
+RUN python3 -m pip install packaging
+RUN python3 -m pip install msrestazure
 
 # Install Ansible dependencies
 RUN ansible-galaxy role install -r requirements.ansible.yml
