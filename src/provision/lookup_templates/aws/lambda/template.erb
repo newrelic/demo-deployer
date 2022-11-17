@@ -29,7 +29,7 @@
     - include_tasks: vpc.yml
 
     - name: Get lambda config facts
-      lambda_facts:
+      community.aws.lambda_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"
