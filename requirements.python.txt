@@ -10,7 +10,6 @@ botocore
 boto
 
 # Azure dependencies
-azure
 msrest
 msrestazure
 
