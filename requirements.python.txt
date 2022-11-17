@@ -9,6 +9,9 @@ boto3
 botocore
 boto
 
+# Azure dependencies
+msrestazure
+
 # GCP
 google-auth
 
