@@ -13,6 +13,7 @@ boto
 msrest
 msrestazure
 ansible[azure]
+azure-cli-core
 
 # GCP
 google-auth
