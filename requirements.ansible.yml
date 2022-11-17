@@ -26,8 +26,8 @@ collections:
   - name: community.mysql
     version: 3.5.1
 
+  # Global
   - name: ansible.posix
     version: 1.4.0
-
   - name: community.general
     version: 5.8.0
