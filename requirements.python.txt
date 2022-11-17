@@ -9,12 +9,6 @@ boto3
 botocore
 boto
 
-# Azure dependencies
-msrest
-msrestazure
-ansible[azure]
-azure-cli-core
-
 # GCP
 google-auth
 

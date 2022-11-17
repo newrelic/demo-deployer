@@ -60,6 +60,9 @@ COPY requirements.python.txt requirements.ansible.yml /mnt/deployer/
 
 RUN python3 -m pip install -r requirements.python.txt
 
+RUN curl -O https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt
+RUN python3 -m pip install -r requirements-azure.txt
+
 # Azure
 # RUN python3 -m pip install ansible[azure]
 # RUN python3 -m pip install packaging
