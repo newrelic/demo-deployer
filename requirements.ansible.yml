@@ -12,6 +12,7 @@ collections:
     # version: 3.5.0
   
   - name: azure.azcollection
+  - name: msrestazure
 
   # GCP
   - google.cloud
