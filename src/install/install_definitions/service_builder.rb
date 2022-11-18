@@ -51,6 +51,7 @@ module Install
       def get_action_vars(service, provisioned_resource, params)
         dependencies = get_relationships(service).to_json()
         deployment_name = get_deployment_name()
+        tags = service.get_tags().to_json()
         vars = {}
         vars["service_id"] = service.get_id()
         vars["service_port"] = service.get_port()
@@ -61,6 +62,7 @@ module Install
         vars["deployment_name"] = deployment_name
         vars["deployment_path"] = get_deployment_path()
         vars["service_deployment_name"] = "#{deployment_name}_#{service.get_id()}"
+        vars["tags"] = tags
 
         credential = get_service_credential(service)
         unless (credential.nil?)
