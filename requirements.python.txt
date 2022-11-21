@@ -2,17 +2,12 @@
 setuptools
 
 # Ansible
-ansible==2.9.9
+ansible-core==2.13.4
 
 # AWS
 boto3
 botocore
 boto
-
-# Azure
-ansible[azure]
-packaging
-msrestazure
 
 # GCP
 google-auth

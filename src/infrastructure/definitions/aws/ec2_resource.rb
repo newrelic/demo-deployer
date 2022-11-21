@@ -5,7 +5,7 @@ module Infrastructure
     module Aws
       class Ec2Resource < AwsResource
 
-        def initialize (id, credential, size, user_name, tags, cpu_credit_specification=nil)
+        def initialize (id, credential, size, user_name, tags, cpu_credit_specification=nil, instance_role=nil)
           super(id, "ec2", credential, AwsResource::EC2_GROUP_ID)
 
           @size = size
@@ -14,6 +14,7 @@ module Infrastructure
           @is_windows = false
           @tags = tags
           @cpu_credit_specification = cpu_credit_specification
+          @instance_role = instance_role
         end
 
         def get_size()
@@ -44,6 +45,10 @@ module Infrastructure
 
         def get_cpu_credit_specification()
           return @cpu_credit_specification
+        end
+
+        def get_instance_role()
+          return @instance_role
         end
 
         def get_user_data()

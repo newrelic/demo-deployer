@@ -146,7 +146,7 @@
         log_group_name: "/aws/lambda/{{ lambda_function_name }}"
 
     - name: Get lambda config facts
-      lambda_facts:
+      community.aws.lambda_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         region: "{{ region }}"
@@ -154,9 +154,13 @@
         function_name: "{{ lambda_function_name }}"
       register: lambda_function_details
 
+    - name: lambda_function_details 2
+      debug:
+        msg: "lambda_function_details:{{lambda_function_details}}"
+
     - name: Get lambda arn
       set_fact:
-        lambda_arn: "{{lambda_function_details.ansible_facts['lambda_facts']['function'][lambda_function_name]['function_arn']}}"
+        lambda_arn: "{{lambda_function_details['function'][lambda_function_name]['function_arn']}}"
       when: lambda_function_details is defined
 
     - name: Create lambda uri

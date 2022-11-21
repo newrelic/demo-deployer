@@ -10,7 +10,8 @@ To define an EC2 resource type, the following field are required:
             "provider": "aws",
             "type": "ec2",
             "size": "t3.micro",
-            "cpu_credit_specification": "standard"
+            "cpu_credit_specification": "standard",
+            "instance_role": "my_role_name"
         }
     ]
 }
@@ -49,6 +50,10 @@ For example `t3.micro` is a possible instance size.
 ### cpu_credit_specification
 
 This field is **optional**, it specifies if T2 instances should buy more CPU credits when they runs out. The available values are "standard" and "unlimited".
+
+### instance_role
+
+This field is **optional**, it specifies the instance role name to associate to the EC2 instance upon creation.
 
 ## Windows
 

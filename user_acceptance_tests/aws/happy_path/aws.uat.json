@@ -69,14 +69,6 @@
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/linux/roles",
         "version": "1.12.2" 
-      },
-      {
-        "id": "nr_lambda",
-        "resource_ids": ["lambdahost"],
-        "provider": "newrelic",
-        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
-        "deploy_script_path": "deploy/lambda_monitoring/roles",
-        "version": "5.16.2.147"
       }
     ],
     "services": [
@@ -87,14 +79,6 @@
         "source_repository": "-b main https://github.com/newrelic/demo-newrelic-instrumentation.git",
         "deploy_script_path": "deploy/node/linux/roles",
         "version": "6.11.0"
-      },
-      {
-        "id": "nr_lambda_python",
-        "service_ids": ["uat7"],
-        "provider": "newrelic",
-        "source_repository": "https://github.com/newrelic/demo-newrelic-instrumentation.git",
-        "deploy_script_path": "deploy/python/lambda/roles",
-        "version": "5.16.2.147"
       }
     ]
   }
