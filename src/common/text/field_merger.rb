@@ -2,8 +2,9 @@ module Common
   module Text
     class FieldMerger
 
-      def initialize(definitions = nil)
+      def initialize(definitions = nil, env_lambda = nil)
         @definitions = definitions || Hash.new()
+        @env_lambda = env_lambda || lambda { |name| return ENV[name] }
         @matches = {}
         @finders = []
       end
@@ -28,10 +29,22 @@ module Common
         @matches = {}
         unless text.nil?
           @definitions.each do |key, value|
-            if text.kind_of?(String) && text.include?(key) && value.nil? == false
-              addMatch(key, value)
-              text = text.gsub(key, value)
+            continue = true
+            while continue
+              continue = false
+              if text.kind_of?(String) && key.include?("[env:*]") && text.include?("[env:")
+                env_var_name = get_matching_env_or_nil(text)
+                unless env_var_name.nil?
+                  newKey = "[env:#{env_var_name}]"
+                  newValue = @env_lambda.call(env_var_name)
+                  text = replace_text(text, newKey, newValue)
+                  continue = true
+                  next
+                end
+              end
+              text = replace_text(text, key, value)
             end
+
           end
         end
         @finders.each do |finder|
@@ -74,6 +87,26 @@ module Common
           keys = @matches["keys"] || []
           keys.push(key)
           @matches["keys"] = keys
+        end
+
+        def replace_text(text, key, value)
+          if text.kind_of?(String) && text.include?(key) && value.nil? == false
+            addMatch(key, value)
+            text = text.gsub(key, value)
+          end
+          return text
+        end
+
+        def get_matching_env_or_nil(value)
+          env_regex = /\[(?i)env\:(\w+)\]/
+          matches = env_regex.match(value)
+          unless matches.nil?
+            captures = matches.captures
+            if captures.length > 0
+              return captures[0]
+            end
+          end
+          return nil
         end
 
     end

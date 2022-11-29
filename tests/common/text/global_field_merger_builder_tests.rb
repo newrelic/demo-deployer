@@ -23,6 +23,11 @@ describe "Common::Text::GlobalFieldMergerBuilder" do
     then_has_field(merger, "[global:deploy_name]").must_equal(true)
   end
 
+  it "should have env var merge field" do
+    merger = when_create()
+    then_has_field(merger, "[env:*]").must_equal(true)
+  end
+
   it "should not have invalid merge field" do
     merger = when_create()
     then_has_field(merger, "not a valid field name").must_equal(false)
