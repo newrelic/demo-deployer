@@ -22,9 +22,14 @@ module Common
         @field_merger_builder.create_definition(["global","deploy_name"], deployname)
       end
 
+      def with_env_var(context)
+        @field_merger_builder.create_definition(["env","*"], "")
+      end
+
       def self.create(context)
         instance = GlobalFieldMergerBuilder.new()
         instance.with_deployment_names(context)
+        instance.with_env_var(context)
         return instance.build()
       end
 
