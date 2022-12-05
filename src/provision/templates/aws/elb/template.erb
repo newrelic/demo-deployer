@@ -88,6 +88,7 @@
         port: 80
         vpc_id: "{{ default_vpc_id }}"
         health_check_path: /
+        health_check_protocol: http
         health_check_interval: 60
         successful_response_codes: "200"
         targets: "{{ targets | list }}"
