@@ -26,12 +26,12 @@ module Common
         rescue JSON::ParserError => e
           raise Common::ValidationError.new("Could not read a valid JSON: #{e}.")
         end
-        # if content.key?("params")
-        #   content["params"].each do |key,value|
-        #     Common::Logger::LoggerFactory.get_logger().debug("ParamsReader, reading key #{key} with value #{value}")
-        #     @params.add(key, value)
-        #   end
-        # end
+        if content.key?("params")
+          content["params"].each do |key,value|
+            # Common::Logger::LoggerFactory.get_logger().debug("ParamsReader, reading key #{key} with value #{value}")
+            @params.add(key, value)
+          end
+        end
       end
 
     end
