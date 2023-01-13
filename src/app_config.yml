@@ -1,6 +1,6 @@
 ---
 deployerMajorVersion: "3"
-deployerMinorVersion: "6"
+deployerMinorVersion: "7"
 deployerBuildVersion: "2"
 
 #executionPath is where the files associated with your deploy will get created
