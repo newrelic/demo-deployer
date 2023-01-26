@@ -31,7 +31,7 @@ module Summary
       if @context.get_command_line_provider().is_output_ini?()
         ini_summary = get_results_ini()
         execution_path = @context.get_app_config_provider.get_execution_path()
-        deployment_name = @context.get_app_config_provider.get_deployment_name()
+        deployment_name = @context.get_command_line_provider.get_deployment_name()
         ini_filename = @context.get_app_config_provider.get_summary_ini_filename()
         ini_file_path = File.absolute_path("#{execution_path}/#{deployment_name}/#{ini_filename}")
         write_summary_file(ini_file_path, ini_summary)

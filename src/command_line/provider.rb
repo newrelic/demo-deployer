@@ -76,7 +76,7 @@ module CommandLine
     end
 
     def is_output_ini?()
-      return @options[:output_ini]
+      return @options[:is_output_ini]
     end
   
     private
