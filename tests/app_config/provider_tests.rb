@@ -12,6 +12,7 @@ describe "AppConfig::Provider" do
       "executionPath"=>"path",
       "defaultUserConfigPath"=>"path/config.json",
       "summaryFilename"=>"filename.txt",
+      "summaryIniFilename"=>"hosts.ini",
       "serviceIdMaxLength"=>99,
       "resourceIdMaxLength"=>99,
       "awsEc2SupportedSizes"=>["t2.nino", "t2.micra", "t2.smallz", "t2.mediums"],
@@ -33,6 +34,12 @@ describe "AppConfig::Provider" do
   describe "get_summary_filename" do
     it "should get summary filename if it exists" do
       expect(provider.get_summary_filename()).must_equal("filename.txt")
+    end
+  end
+
+  describe "get_summary_ini_filename" do
+    it "should get summary ini filename if it exists" do
+      expect(provider.get_summary_ini_filename()).must_equal("hosts.ini")
     end
   end
 

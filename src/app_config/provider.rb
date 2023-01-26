@@ -23,6 +23,11 @@ module AppConfig
       return filename
     end
 
+    def get_summary_ini_filename()
+      filename = @config_file["summaryIniFilename"]
+      return filename
+    end
+
     def get_user_default_config_path()
       user_config_path = @config_file["defaultUserConfigPath"]
       return user_config_path

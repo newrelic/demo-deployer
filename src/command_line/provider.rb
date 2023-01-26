@@ -75,6 +75,10 @@ module CommandLine
       return @options[:output_file_path]
     end
 
+    def is_output_ini?()
+      return @options[:output_ini]
+    end
+  
     private
     def download_file(url, filepath)
       Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{url} to #{filepath}")

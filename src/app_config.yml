@@ -1,12 +1,13 @@
 ---
 deployerMajorVersion: "3"
-deployerMinorVersion: "7"
+deployerMinorVersion: "8"
 deployerBuildVersion: "0"
 
 #executionPath is where the files associated with your deploy will get created
 #and where you will find your deployment summary file.
 executionPath: "/tmp"
 summaryFilename: "deploy_summary.txt"
+summaryIniFilename: "hosts.ini"
 
 #defaultUserConfigPath is available to avoid having to pass one more mount for docker deploys
 defaultUserConfigPath: "configs/*.credentials.local.json"

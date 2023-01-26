@@ -87,6 +87,12 @@ describe "Summary::Composure" do
     summary.must_include("id2 (#{instrumentation_provider})")
   end
 
+  it "should compose hosts ini" do
+    given_provisioned_resource(host_resource)
+    summary = composer.compose_resources(provisioned_resources)
+    summary.must_include("#{host_resource.get_ip()}")
+  end
+
   let(:composer) { Summary::Composer.new() }
 
   it "should verify composer is created with no errors" do
