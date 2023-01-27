@@ -57,7 +57,7 @@ module CommandLine
       end
 
       @opts.on('-n', '--output-ini', FalseClass, 'Specify to write an ini file with the details about the provisioned hosts.') do |config|
-        options[:output_ini] = true
+        options[:is_output_ini] = true
       end
 
       return options
