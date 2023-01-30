@@ -40,7 +40,6 @@ module CommandLine
         options[:user_config] = config
       end
 
-
       @opts.on('-l', '--logging LEVEL', String, 'Logging level used during deployment or teardown. debug, info (default), error') do |logging|
         options[:logging_level] = logging
       end
@@ -55,6 +54,10 @@ module CommandLine
 
       @opts.on('-o', '--output JSON_FILE_PATH', 'The location to output the deployment summary as JSON. Must be a file path.') do |file_path|
         options[:output_file_path] = file_path
+      end
+
+      @opts.on('-n', '--output-ini', FalseClass, 'Specify to write an ini file with the details about the provisioned hosts.') do |config|
+        options[:is_output_ini] = true
       end
 
       return options

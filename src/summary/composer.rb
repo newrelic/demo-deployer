@@ -18,7 +18,42 @@ module Summary
       return summary
     end
 
+    def compose_resources(provisioned_resources)
+      output = ""
+      provisioned_resources.each do |provisioned_resource|
+        ip = provisioned_resource.get_ip()
+        unless ip.nil?
+          output += "#{provisioned_resource.get_ip()}"
+          resource = provisioned_resource.get_resource()
+          user_name = get_resource_user_name(resource)
+          unless user_name.nil?
+            output += " ansible_user=#{user_name}"
+          end
+          if resource.respond_to?(:is_windows?)
+            if resource.is_windows?()
+              win_password = provisioned_resource.get_param("win_password")
+              unless win_password.nil?
+                output += " ansible_password=#{win_password}"
+              end
+              output += " ansible_port=5986"
+              output += " ansible_connection=winrm"
+              output += " ansible_winrm_server_cert_validation=ignore"
+            end
+          end
+          output += "\n"
+        end
+      end
+      return output
+    end
+
     private
+
+    def get_resource_user_name(resource)
+      user_name = nil
+      if resource.respond_to?(:get_user_name)
+        user_name = resource.get_user_name()
+      end
+    end
 
     def get_global_summary(global_instrumentors)
       output = "Global Instrumentation:\n\n"

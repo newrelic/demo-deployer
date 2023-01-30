@@ -28,6 +28,15 @@ module Summary
         write_summary_file(json_file_path, json_summary)
       end
 
+      if @context.get_command_line_provider().is_output_ini?()
+        ini_summary = get_results_ini()
+        execution_path = @context.get_app_config_provider.get_execution_path()
+        deployment_name = @context.get_command_line_provider.get_deployment_name()
+        ini_filename = @context.get_app_config_provider.get_summary_ini_filename()
+        ini_file_path = File.absolute_path("#{execution_path}/#{deployment_name}/#{ini_filename}")
+        write_summary_file(ini_file_path, ini_summary)
+      end
+
       return summary
     end
 
@@ -62,6 +71,12 @@ module Summary
       json_composer_results = @json_composer.execute(provisioned_resources, installed_services, resource_instrumentors, service_instrumentors, global_intrumentors)
 
       return json_composer_results
+    end
+
+    def get_results_ini()
+      provisioned_resources = @context.get_provision_provider().get_all()
+      ini_results = @summary_composer.compose_resources(provisioned_resources)
+      return ini_results
     end
 
     def write_console_message(summary)
