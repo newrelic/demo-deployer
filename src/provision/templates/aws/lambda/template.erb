@@ -11,6 +11,7 @@
     apigw_api_id: <%= lambda_function[:api_gateway_api_id] %>
     aws_access_key: <%= lambda_function[:aws_access_key] %>
     aws_secret_key: <%= lambda_function[:aws_secret_key] %>
+    aws_session_token: <%= lambda_function[:aws_session_token] %>
     region: <%= lambda_function[:aws_region] %>
     iam_policy_name: <%= lambda_function[:iam_policy_name] %>
     iam_role_name: <%= lambda_function[:iam_role_name] %>
@@ -32,6 +33,7 @@
       iam_role:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         name: "{{ iam_role_name }}"
         state: present
@@ -55,6 +57,7 @@
       iam_policy:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         iam_type: role
         iam_name: "{{ iam_role_name }}"
@@ -109,6 +112,7 @@
         name: "{{ lambda_function_name }}"
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         role: "{{ iam_role_name }}"
         handler: "{{ handler_name }}"
@@ -130,6 +134,7 @@
       lambda_policy:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: "{{ state | default('present') }}"
         function_name: "{{ lambda_function_name }}"
@@ -140,6 +145,7 @@
     - cloudwatchlogs_log_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: present
         retention: 3653
@@ -149,6 +155,7 @@
       community.aws.lambda_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         query: config
         function_name: "{{ lambda_function_name }}"
@@ -177,6 +184,7 @@
       aws_api_gateway:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: present
         api_id: "{{ apigw_api_id }}"
@@ -216,6 +224,7 @@
                 'aws_access_key': aws_access_key,
                 'iam_role_name': iam_role_name,
                 'aws_secret_key': aws_secret_key,
+                'aws_session_token': aws_session_token,
                 'aws_region': region,
                 'lambda_arn': lambda_arn,
                 'lambda_uri': lambda_uri,

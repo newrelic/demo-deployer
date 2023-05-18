@@ -4,6 +4,7 @@
       amazon.aws.ec2_vpc_net_info:
         aws_access_key: <%= vpc[:aws_access_key] %>
         aws_secret_key: <%= vpc[:aws_secret_key] %>
+        aws_session_token: <%= vpc[:aws_session_token] %>
         region: <%= vpc[:region] %>
       register: vpcs_instances
 
@@ -21,6 +22,7 @@
       amazon.aws.ec2_vpc_subnet_info:
         aws_access_key: <%= vpc[:aws_access_key] %>
         aws_secret_key: <%= vpc[:aws_secret_key] %>
+        aws_session_token: <%= vpc[:aws_session_token] %>
         region: <%= vpc[:region] %>
         filters:
           defaultForAz: "true"

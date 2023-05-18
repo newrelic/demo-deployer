@@ -11,6 +11,7 @@
     apigw_api_id: <%= lambda_function[:api_gateway_api_id] %>
     aws_access_key: <%= lambda_function[:aws_access_key] %>
     aws_secret_key: <%= lambda_function[:aws_secret_key] %>
+    aws_session_token: <%= lambda_function[:aws_session_token] %>
     region: <%= lambda_function[:aws_region] %>
     iam_policy_name: <%= lambda_function[:iam_policy_name] %>
     iam_role_name: <%= lambda_function[:iam_role_name] %>
@@ -32,6 +33,7 @@
       community.aws.lambda_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         query: config
         function_name: "{{ lambda_function_name }}"
@@ -80,6 +82,7 @@
                 'aws_access_key': aws_access_key,
                 'iam_role_name': iam_role_name,
                 'aws_secret_key': aws_secret_key,
+                'aws_session_token': aws_session_token,
                 'aws_region': region,
                 'lambda_arn': lambda_arn,
                 'lambda_uri': lambda_uri,

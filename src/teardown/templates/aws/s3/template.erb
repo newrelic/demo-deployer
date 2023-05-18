@@ -6,6 +6,7 @@
   vars:
     access_key: <%= s3[:aws_access_key] %>
     secret_key: <%= s3[:aws_secret_key] %>
+    session_token: <%= s3[:aws_session_token] %>
     region: <%= s3[:region] %>
 
     resource_id: <%= s3[:resource_id] %>
@@ -19,6 +20,7 @@
       s3_bucket:
          aws_access_key: "{{ access_key }}"
          aws_secret_key: "{{ secret_key }}"
+         aws_session_token: "{{ session_token }}"
          region: "{{ region }}"
          name: "{{ bucket_name }}"
          tags: "{{ tags }}"

@@ -7,6 +7,7 @@
   vars:
     aws_access_key: <%= ec2[:aws_access_key] %>
     aws_secret_key: <%= ec2[:aws_secret_key] %>
+    aws_session_token: <%= ec2[:aws_session_token] %>
     region: <%= ec2[:region] %>
     resource_name: <%= ec2[:resource_name] %>
 
@@ -15,6 +16,7 @@
       amazon.aws.ec2_instance_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         filters:
           "tag:Name": "{{ resource_name }}"
@@ -25,6 +27,7 @@
       ec2_instance:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: 'absent'
         instance_ids: '{{ item.instance_id }}'
@@ -35,6 +38,7 @@
       amazon.aws.ec2_group_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         filters:
           "tag:Name": "{{ resource_name }}"
@@ -49,6 +53,7 @@
       ec2_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: absent
         group_id: "{{ item['group_id'] }}"
