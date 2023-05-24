@@ -6,22 +6,24 @@ require "./src/user_config/validators/aws_validator"
 
 describe "UserConfig::Validators::AwsValidator" do
   let(:aws_configs) { [] }
-  let(:api_key_validator) { m = mock(); m.stubs(:execute); m }
+  let(:api_key_exist_validator) { m = mock(); m.stubs(:execute); m }
   let(:secret_key_validator) { m = mock(); m.stubs(:execute); m }
   let(:region_validator) { m = mock(); m.stubs(:execute); m }
+  let(:api_key_validator) { m = mock(); m.stubs(:execute); m }
   let(:validator) { UserConfig::Validators::AwsValidator.new(
-    api_key_validator,
+    api_key_exist_validator,
     secret_key_validator,
-    region_validator
+    region_validator,
+    api_key_validator
     ) }
 
   it "should create validator" do
     validator.wont_be_nil
   end
 
-  it "should execute api_key_validator" do
+  it "should execute api_key_exist_validator" do
     given_aws_credential("my api key", "my secret key", "my secret key path", "my region")
-    api_key_validator.expects(:execute)
+    api_key_exist_validator.expects(:execute)
     validator.execute(aws_configs)
   end
 
@@ -34,6 +36,12 @@ describe "UserConfig::Validators::AwsValidator" do
   it "should execute region_validator" do
     given_aws_credential("my api key", "my secret key", "my secret key path", "my region")
     region_validator.expects(:execute)
+    validator.execute(aws_configs)
+  end
+
+  it "should execute api_key_validator" do
+    given_aws_credential("my api key", "my secret key", "my secret key path", "my region")
+    api_key_validator.expects(:execute)
     validator.execute(aws_configs)
   end
 
