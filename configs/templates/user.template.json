@@ -3,6 +3,7 @@
     "aws": {
       "apiKey": "AWS_ACCESS_ID",
       "secretKey": "AWS_SECRETKEY",
+      "sessionToken": "AWS_SESSION_TOKEN",
       "secretKeyPath": "AWS_SECRET_KEYPATH",
       "region": "AWS_REGION"
     },
