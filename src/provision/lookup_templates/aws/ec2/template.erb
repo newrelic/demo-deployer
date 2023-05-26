@@ -7,6 +7,7 @@
   vars:
     access_key: <%= ec2[:aws_access_key] %>
     secret_key: <%= ec2[:aws_secret_key] %>
+    session_token: <%= ec2[:aws_session_token] %>
     secret_key_name: <%= ec2[:secret_key_name] %>
     secret_key_path: <%= ec2[:secret_key_path] %>
     ami_name:  <%= ec2[:ami_name] %>
@@ -25,6 +26,7 @@
     - amazon.aws.ec2_instance_info:
         aws_access_key: "{{ access_key }}"
         aws_secret_key: "{{ secret_key }}"
+        aws_session_token: "{{ session_token }}"
         region: "{{ region }}"
         filters:
           "tag:Name": "{{ resource_name }}"
@@ -42,6 +44,7 @@
         community.aws.ec2_win_password:
           aws_access_key: "{{ access_key }}"
           aws_secret_key: "{{ secret_key }}"
+          aws_session_token: "{{ session_token }}"
           region: "{{ region }}"
           instance_id: "{{ instance_id }}"
           key_file: "{{ secret_key_path }}"

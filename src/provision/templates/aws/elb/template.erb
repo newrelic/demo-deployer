@@ -13,6 +13,7 @@
     targets: []
     aws_access_key: <%= elb[:aws_access_key] %>
     aws_secret_key: <%= elb[:aws_secret_key] %>
+    aws_session_token: <%= elb[:aws_session_token] %>
     region: <%= elb[:aws_region] %>
     deployment_name: <%= elb[:deployment_name] %>
     tags: <%= elb[:tags] %>
@@ -23,6 +24,7 @@
       amazon.aws.ec2_vpc_net_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         filters:
           isDefault: "true"
@@ -36,6 +38,7 @@
       amazon.aws.ec2_vpc_subnet_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         filters:
           defaultForAz: "true"
@@ -51,6 +54,7 @@
       amazon.aws.ec2_instance_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         filters:
           "tag:Name": '{{item}}'
@@ -82,6 +86,7 @@
       elb_target_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         name: "{{ deployment_name }}-{{ resource_id }}"
         protocol: http
@@ -100,6 +105,7 @@
       ec2_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         name: "{{ deployment_name }}-{{ resource_id }}"
         description: "security group for the {{ resource_id }} load balancer"
@@ -118,6 +124,7 @@
       elb_application_lb:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         name: "{{ deployment_name }}-{{ resource_id }}"
         subnets: "{{ subnet_ids }}"

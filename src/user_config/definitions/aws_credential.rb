@@ -17,6 +17,10 @@ module UserConfig
         return query("secretKey")
       end
 
+      def get_session_token()
+        return query ("sessionToken")
+      end
+
       def get_secret_key_name()
         secrect_key_path = get_secret_key_path()
         unless secrect_key_path.nil?
@@ -46,6 +50,7 @@ module UserConfig
         items = {}
         add_if_exist(items, "access_key", get_access_key(), key_prefix)
         add_if_exist(items, "secret_key", get_secret_key(), key_prefix)
+        add_if_exist(items, "session_token", get_session_token(), key_prefix)
         add_if_exist(items, "secret_key_name", get_secret_key_name(), key_prefix)
         add_if_exist(items, "secret_key_path", get_secret_key_path(), key_prefix)
         add_if_exist(items, "region", get_region(), key_prefix)

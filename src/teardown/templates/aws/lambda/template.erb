@@ -9,6 +9,7 @@
     lambda_function_name: <%= lambda_function[:lambda_function_name] %>
     aws_access_key: <%= lambda_function[:aws_access_key] %>
     aws_secret_key: <%= lambda_function[:aws_secret_key] %>
+    aws_session_token: <%= lambda_function[:aws_session_token] %>
     region: <%= lambda_function[:aws_region] %>
     iam_policy_name: <%= lambda_function[:iam_policy_name] %>
     iam_role_name: <%= lambda_function[:iam_role_name] %>
@@ -20,6 +21,7 @@
       iam_policy:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         iam_type: role
         iam_name: "{{ iam_role_name }}"
@@ -31,6 +33,7 @@
       iam_role:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         name: "{{ iam_role_name }}"
         state: absent
@@ -41,6 +44,7 @@
         name: "{{ lambda_function_name }}"
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: absent
       register: lambda_result
@@ -48,6 +52,7 @@
     - cloudwatchlogs_log_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: absent
         log_group_name: "/aws/lambda/{{ lambda_function_name }}"
@@ -56,6 +61,7 @@
       amazon.aws.ec2_group_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         filters:
           "tag:Name": "{{ vpc_security_group_name }}"
@@ -70,6 +76,7 @@
       ec2_group:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{ region }}"
         state: 'absent'
         group_id: "{{ item['group_id'] }}"

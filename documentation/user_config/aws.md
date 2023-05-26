@@ -9,6 +9,7 @@ The aws user configuration has the following schema:
     "aws": {
       "apiKey": "my_api_key_value",
       "secretKey": "my_secret_key",
+      "sessionToken": "my optional session token",
       "secretKeyPath": "my_secret_key_path",
       "region": "my_region",
       "availability_zone": "a"
@@ -37,6 +38,10 @@ To set each of the value referenced above, follow the steps below.
 * Click `Create User`
 * Copy both the `Access key ID` which will be your apiKey value, and the `Secret access key` which will be your secretKey value.
 * Put both values in your user config credentials for aws apiKey and secretKey
+
+### sessionToken
+
+In case you use STS to get temporary credential, you can use this field to input your token.
 
 ### secretKeyPath and region
 

@@ -13,6 +13,7 @@
     targets: []
     aws_access_key: <%= elb[:aws_access_key] %>
     aws_secret_key: <%= elb[:aws_secret_key] %>
+    aws_session_token: <%= elb[:aws_session_token] %>
     region: <%= elb[:aws_region] %>
     deployment_name: <%= elb[:deployment_name] %>
     tags: <%= elb[:tags] %>
@@ -23,6 +24,7 @@
       community.aws.elb_application_lb_info:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
+        aws_session_token: "{{ aws_session_token }}"
         region: "{{region}}"
         names:
           - "{{ deployment_name }}-{{ resource_id }}"

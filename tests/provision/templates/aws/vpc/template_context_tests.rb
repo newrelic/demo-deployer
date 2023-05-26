@@ -35,9 +35,9 @@ describe "Provision::Templates::Aws::Vpc" do
     return_value.local_variable_get("vpc").wont_be_empty
   end
 
-  it "should execute and return 3 values" do
+  it "should execute and return 4 values" do
     return_value= when_template_context().get_template_binding()
-    return_value.local_variable_get("vpc").count.must_equal(3)
+    return_value.local_variable_get("vpc").count.must_equal(4)
   end
 
   def get_resource()
