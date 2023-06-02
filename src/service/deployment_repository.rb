@@ -1,6 +1,6 @@
 require './src/common/io/file_writer'
 require './src/command_line/orchestrator'
-require_relative "definitions/deployment"
+require "./src/common/definitions/deployment"
 
 require 'aws-sdk-sqs'
 
@@ -37,7 +37,7 @@ module Service
                 })
                 user_config_filename = @context.get_command_line_provider().get_user_config_filepath()
                 deploy_config_filename = write_deploy_config(message_id, body)
-                deployment = Definitions::Deployment.new(user_config_filename, deploy_config_filename)
+                deployment = Common::Definitions::Deployment.new(user_config_filename, deploy_config_filename)
                 return deployment
             end
             sleep 1

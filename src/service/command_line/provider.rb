@@ -23,6 +23,10 @@ module Service
         return @options[:logging_level].downcase()
       end
 
+      def get_notification_table_name()
+        return @options[:notification_table_name]
+      end
+
     end
   end
 end

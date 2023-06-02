@@ -1,6 +1,6 @@
 require "fileutils"
-require_relative "definitions/deployment"
-require_relative "definitions/partition"
+require "./src/common/definitions/deployment"
+require "./src/common/definitions/partition"
 
 module Batch
   class Provider

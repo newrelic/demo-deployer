@@ -4,11 +4,11 @@ require "mocha/minitest"
 
 require "./tests/batch/context_builder"
 require "./src/common/tasks/process_output"
-require "./src/batch/definitions/deployment"
-require "./src/batch/definitions/partition"
-require "./src/batch/runner"
+require "./src/common/definitions/deployment"
+require "./src/common/definitions/partition"
+require './src/common/tasks/runner'
 
-describe "Batch::Runner" do
+describe "Common::Tasks::Runner" do
   let(:errors) { [] }
   let(:deployments) { [] }
   let(:partitions ) { [] }
@@ -16,7 +16,7 @@ describe "Batch::Runner" do
   let(:process_launcher) { m = mock(); m }
   let(:context){ Tests::Batch::ContextBuilder.new().build() }
   let(:get_output_lambda) { lambda { |deployment| return get_output(deployment)} }
-  let(:runner) { Batch::Runner.new(context, process_launcher, get_output_lambda) }
+  let(:runner) { Common::Tasks::Runner.new(context, process_launcher, get_output_lambda) }
   let(:on_complete_lambda) { lambda { |all| errors.concat(all)} }
   let(:outputs) { m = mock(); m }
 

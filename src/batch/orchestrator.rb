@@ -1,7 +1,7 @@
 require './src/command_line/orchestrator'
 require './src/app_config/orchestrator'
+require './src/common/tasks/runner'
 require_relative 'provider'
-require_relative 'runner'
 require_relative 'command_line/parser'
 require_relative 'command_line/provider'
 require_relative 'command_line/validator'
@@ -69,7 +69,7 @@ module Batch
     end
 
     def get_runner()
-      return @runner ||= Runner.new(@context)
+      return @runner ||= Common::Tasks::Runner.new(@context)
     end
 
     def get_app_config_orchestrator()

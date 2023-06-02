@@ -2,7 +2,7 @@ require "json"
 require "./src/common/io/directory_service"
 require "./src/common/install/params"
 
-module Service
+module Common
   module Definitions
     class Deployment
 
@@ -10,6 +10,7 @@ module Service
         @user_config_filepath = user_config_filepath
         @deploy_config_filepath = deploy_config_filepath
       end
+
 
       def get_user_config_filepath()
         return @user_config_filepath
