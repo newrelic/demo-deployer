@@ -192,13 +192,13 @@ describe "Common::Tasks::Runner" do
   end
 
   def given_partition(max_capacity = 10)
-    partition = Batch::Definitions::Partition.new(partitions.length+1, max_capacity)
+    partition = Common::Definitions::Partition.new(partitions.length+1, max_capacity)
     partitions.push(partition)
     return partition
   end
 
   def given_deployment(user, deploy, partition = nil)
-    deployment = Batch::Definitions::Deployment.new(user, deploy)
+    deployment = Common::Definitions::Deployment.new(user, deploy)
     deployments.push(deployment)
     partition = partition || given_partition()
     partition.add_deployment(deployment)
