@@ -1,5 +1,6 @@
 require './src/command_line/orchestrator'
 require './src/app_config/orchestrator'
+require './src/user_config/orchestrator'
 require './src/common/tasks/runner'
 
 require_relative 'deployment_repository'
@@ -15,6 +16,7 @@ module Service
         context,
         command_line_orchestrator = nil,
         app_config_orchestrator = nil,
+        user_config_orchestrator = nil,
         deployment_repository = nil,
         notifier = nil,
         runner = nil
@@ -22,6 +24,7 @@ module Service
       @context = context
       @command_line_orchestrator = command_line_orchestrator
       @app_config_orchestrator = app_config_orchestrator
+      @user_config_orchestrator = user_config_orchestrator
       @deployment_repository = deployment_repository
       @notifier = notifier
       @runner = runner
@@ -30,6 +33,7 @@ module Service
     def execute(arguments = ARGV)
       get_command_line_orchestrator().execute(arguments)
       get_app_config_orchestrator().execute()
+      get_user_config_orchestrator().execute()
       log_token = init_logging()
 
       Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}")
@@ -72,6 +76,10 @@ module Service
           Service::CommandLine::Parser.new(),
           Service::CommandLine::Validator.new(),
           Service::CommandLine::Provider)
+    end
+
+    def get_user_config_orchestrator
+      return @user_config_provider ||= ::UserConfig::Orchestrator.new(@context)
     end
 
     def get_deployment_repository()

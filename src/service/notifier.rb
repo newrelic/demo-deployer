@@ -11,7 +11,7 @@ module Service
         dynamodb_client_lambda = nil
         )
       @context = context
-      @dynamodb_client_lambda ||= lambda {return Aws::DynamoDB::Client.new()}
+      @dynamodb_client_lambda ||= lambda {return create_dynamodb_client()}
       @dynamodb_client = nil
     end
 
@@ -43,6 +43,13 @@ module Service
     def get_dynamodb_client()
         @dynamodb_client ||= @dynamodb_client_lambda.call()
         return @dynamodb_client
+    end
+
+    def create_dynamodb_client()
+      aws_credential = @context.get_user_config_provider().get_aws_credential()
+      credential = Aws::Credentials.new(aws_credential.get_access_key(), aws_credential.get_secret_key(), aws_credential.get_session_token())
+      client = Aws::DynamoDB::Client.new({region: aws_credential.get_region(), credentials: credential})
+      return client
     end
 
   end

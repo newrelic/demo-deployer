@@ -12,7 +12,7 @@ module Service
         sqs_client_lambda = nil
         )
       @context = context
-      @sqs_client_lambda ||= lambda {return Aws::SQS::Client.new()}
+      @sqs_client_lambda ||= lambda {return create_sqs_client()}
       @sql_client = nil
     end
 
@@ -45,6 +45,10 @@ module Service
     end
 
     private
+    def get_user_config_provider()
+      return @context.get_user_config_provider()
+    end
+
     def get_command_line_provider()
       return @context.get_command_line_provider()
     end
@@ -52,6 +56,13 @@ module Service
     def get_sqs_client()
         @sqs_client ||= @sqs_client_lambda.call()
         return @sqs_client
+    end
+
+    def create_sqs_client()
+      aws_credential = @context.get_user_config_provider().get_aws_credential()
+      credential = Aws::Credentials.new(aws_credential.get_access_key(), aws_credential.get_secret_key(), aws_credential.get_session_token())
+      client = Aws::SQS::Client.new({region: aws_credential.get_region(), credentials: credential})
+      return client
     end
 
     def write_deploy_config(message_id, content)

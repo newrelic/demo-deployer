@@ -21,5 +21,13 @@ module Service
       @context[:app_config_provider]
     end
 
+    def set_user_config_provider(provider)
+      @context[:user_config_provider] = provider
+    end
+  
+    def get_user_config_provider()
+      @context[:user_config_provider]
+    end
+
   end
 end
