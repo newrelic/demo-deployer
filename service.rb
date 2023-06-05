@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative 'src/service/orchestrator'
-require_relative 'src/service/context'
+require_relative './src/service/orchestrator'
+require_relative './src/service/context'
 require "./src/common/logger/logger_factory"
 
 begin
