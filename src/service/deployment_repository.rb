@@ -44,7 +44,6 @@ module Service
         end
     end
 
-    private
     def get_user_config_provider()
       return @context.get_user_config_provider()
     end
@@ -69,13 +68,13 @@ module Service
       options = {}
       region = aws_credential.get_region()
       if is_not_empty?(region)
-        options.merge({region: region})
+        options = options.merge({region: region})
       end
       access_key = aws_credential.get_access_key()
       secret_key = aws_credential.get_secret_key()
       if is_not_empty?(access_key) && is_not_empty?(secret_key)
         credential = Aws::Credentials.new(access_key, secret_key, aws_credential.get_session_token())
-        options.merge({credentials: credential})
+        options = options.merge({credentials: credential})
       end
       return options
     end
