@@ -47,9 +47,33 @@ module Service
 
     def create_dynamodb_client()
       aws_credential = @context.get_user_config_provider().get_aws_credential()
-      credential = Aws::Credentials.new(aws_credential.get_access_key(), aws_credential.get_secret_key(), aws_credential.get_session_token())
-      client = Aws::DynamoDB::Client.new({region: aws_credential.get_region(), credentials: credential})
+      options = get_aws_options(aws_credential)
+      client = Aws::DynamoDB::Client.new(options)
       return client
+    end
+
+    def get_aws_options(aws_credential)
+      options = {}
+      region = aws_credential.get_region()
+      if is_not_empty?(region)
+        options.merge({region: region})
+      end
+      access_key = aws_credential.get_access_key()
+      secret_key = aws_credential.get_secret_key()
+      if is_not_empty?(access_key) && is_not_empty?(secret_key)
+        credential = Aws::Credentials.new(access_key, secret_key, aws_credential.get_session_token())
+        options.merge({credentials: credential})
+      end
+      return options
+    end
+
+    def is_not_empty?(value)
+      unless value.nil?
+        unless value.empty?
+          return true
+        end
+      end
+      return false
     end
 
   end
