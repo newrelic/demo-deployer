@@ -12,17 +12,20 @@ module Service
       def initialize(
           invalid_wait_time_seconds_validator = nil,
           user_file_or_directory_validator = nil,
-          user_file_exist_validator = nil
+          user_file_exist_validator = nil,
+          invalid_batch_size_validator = nil
         )
         @invalid_wait_time_seconds_validator = invalid_wait_time_seconds_validator || IsIntegerValidator.new(lambda {|input| return input>=1 && input <= 20}, "WaitTimeSeconds should be a number between 1 and 20, but got:")
         @user_file_or_directory_validator = user_file_or_directory_validator
         @user_file_exist_validator = user_file_exist_validator || Common::Validators::NotNullOrEmptyValidator.new("A User config file or directory is required")
+        @invalid_batch_size_validator = invalid_batch_size_validator || IsIntegerValidator.new(lambda {|input| return input>=0}, "Batch size should be a number greater or equal to 0, but got:")
       end
 
       def execute(options)
         validators = [
           lambda { return @invalid_wait_time_seconds_validator.execute(options[:wait_time_seconds]) },
           lambda { return @user_file_exist_validator.execute(options[:user_config]) },
+          lambda { return @invalid_batch_size_validator.execute(options[:batch_size]) },
         ]
         split_or_input(options[:user_config], ',').each do |user_config|
           validators.push(lambda { return get_user_config_validator(user_config).execute() } )

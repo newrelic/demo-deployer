@@ -39,20 +39,29 @@ module Service
       batch_size = @context.get_command_line_provider().get_batch_size()
       Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}, batchSize:#{batch_size}")
 
-      count = 0
-      threads = []
-      batch_size.times do |i|
-        threads[i] = Thread.new {
-          Thread.current["mycount"] = count
-          count += 1
-          loop_single_listener()
-        }
-     end
-
-      threads.each do |t|
-        t.join
-        log.info("Thread:#{t["mycount"]} terminating")
+      if batch_size == 0
+        id = 0
+        single_listener(id)
+      else
+        count = 0
+        threads = []
+        batch_size.times do |i|
+          threads[i] = Thread.new {
+            count += 1
+            id = count
+            Thread.current["id"] = id
+            while true
+              single_listener(id)
+              sleep 1
+            end
+          }
+        end
+        threads.each do |t|
+          t.join
+          log.info("T#{t["id"]}-terminating")
+        end
       end
+
       Common::Logger::LoggerFactory.get_logger().info("Service terminating")
 
       log_token.success()
@@ -60,22 +69,19 @@ module Service
 
     private
 
-    def loop_single_listener()
-      while true
-        Common::Logger::LoggerFactory.get_logger().info("waiting next")
+    def single_listener(id)
+        Common::Logger::LoggerFactory.get_logger().info("T#{id}-waiting next")
         deployment = get_deployment_repository().wait_next()
-        Common::Logger::LoggerFactory.get_logger().info("Receive deployment request:#{deployment}")
+        Common::Logger::LoggerFactory.get_logger().info("T#{id}-Receive deployment request:#{deployment}")
         partition = Common::Definitions::Partition.new(1,1)
         partition.add_deployment(deployment)
         errors = get_runner().single_deploy(partition)
         noError = errors.empty?
-        Common::Logger::LoggerFactory.get_logger().info("deployment completed errors:#{errors}")
+        Common::Logger::LoggerFactory.get_logger().info("T#{id}-deployment completed errors:#{errors}")
         get_notifier().execute(deployment, (noError ? 0 : 1))
-        Common::Logger::LoggerFactory.get_logger().info("notification completed")
+        Common::Logger::LoggerFactory.get_logger().info("T#{id}-notification completed")
         get_runner().single_teardown(partition)
-        Common::Logger::LoggerFactory.get_logger().info("teardown completed")
-        sleep 1
-      end
+        Common::Logger::LoggerFactory.get_logger().info("T#{id}-teardown completed")
     end
 
     def init_logging()
