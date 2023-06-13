@@ -36,8 +36,28 @@ module Service
       get_user_config_orchestrator().execute()
       log_token = init_logging()
 
-      Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}")
+      batch_size = @context.get_command_line_provider().get_batch_size()
+      Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}, batchSize:#{batch_size}")
 
+      count = 0
+      threads = []
+      batch_size.times do |i|
+        threads[i] = Thread.new {
+          Thread.current["mycount"] = count
+          count += 1
+          loop_single_listener()
+        }
+     end
+
+      threads.each {|t| t.join; log.info("Thread terminating #{t["mycount"]}"), ", " }
+      Common::Logger::LoggerFactory.get_logger().info("Service terminating")
+
+      log_token.success()
+    end
+
+    private
+
+    def loop_single_listener()
       while true
         Common::Logger::LoggerFactory.get_logger().info("waiting next")
         deployment = get_deployment_repository().wait_next()
@@ -53,13 +73,7 @@ module Service
         Common::Logger::LoggerFactory.get_logger().info("teardown completed")
         sleep 1
       end
-
-      Common::Logger::LoggerFactory.get_logger().info("Service terminating")
-
-      log_token.success()
     end
-
-    private
 
     def init_logging()
       logging_level = @context.get_command_line_provider().get_logging_level()

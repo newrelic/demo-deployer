@@ -27,6 +27,7 @@ module Service
       def create_options()
         options = {
             wait_time_seconds: 10,
+            batch_size: 10,
             logging_level: "info",
             notification_table_name: "",
         }
@@ -51,6 +52,10 @@ module Service
 
         @opts.on('-l', '--logging level', String, 'Logging level used during deployment or teardown. debug, info (default), error') do |logging|
           options[:logging_level] = logging
+        end
+
+        @opts.on('-s', '--batch_size integer', Integer, 'Specify how many concurrent listeners and deployers to instantiate, default to 10') do |value|
+          options[:batch_size] = value
         end
 
         return options

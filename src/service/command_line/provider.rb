@@ -20,6 +20,10 @@ module Service
         return @options[:wait_time_seconds]
       end
 
+      def get_batch_size()
+        return @options[:batch_size]
+      end
+
       def get_logging_level()
         return @options[:logging_level].downcase()
       end
