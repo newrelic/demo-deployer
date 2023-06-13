@@ -49,7 +49,10 @@ module Service
         }
      end
 
-      threads.each {|t| t.join; log.info("Thread terminating #{t["mycount"]}"), ", " }
+      threads.each do |t|
+        t.join
+        log.info("Thread:#{t["mycount"]} terminating")
+      end
       Common::Logger::LoggerFactory.get_logger().info("Service terminating")
 
       log_token.success()
