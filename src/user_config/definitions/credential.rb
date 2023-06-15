@@ -44,7 +44,11 @@ module UserConfig
           unless matches.nil?
             captures = matches.captures
             if captures.length > 0
-              return captures[0]
+              unless captures[0].nil?
+                unless captures[0].empty?
+                  return captures[0]
+                end
+              end
             end
           end
           return nil
