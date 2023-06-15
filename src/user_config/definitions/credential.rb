@@ -60,7 +60,10 @@ module UserConfig
 
         def aws_ssm_param_lookup(name)
           # rely on default from aws configuration methods
-          options = {}
+          instance_credentials = Aws::InstanceProfileCredentials.new()
+          options = {
+            credentials: instance_credentials
+          }
           client = Aws::SSM::Client.new(options)
           resp = client.get_parameter({
             name: name,
