@@ -60,22 +60,12 @@ module UserConfig
 
         def aws_ssm_param_lookup(name)
           # rely on default from aws configuration methods
-          options = {}
-          client = Aws::SSM::Client.new(options)
           parameters = {
             name: name,
             with_decryption: true,
           }
-          begin
-            resp = client.get_parameter(parameters)
-          rescue Exception => e
-            # 2nd attempt with InstanceProfile if defined
-            options = {
-              credentials: Aws::InstanceProfileCredentials.new()
-            }
-            client = Aws::SSM::Client.new(options)
-            resp = client.get_parameter(parameters)
-          end
+          client = Aws::SSM::Client.new()
+          resp = client.get_parameter(parameters)
           return resp.parameter.value
         end
 
