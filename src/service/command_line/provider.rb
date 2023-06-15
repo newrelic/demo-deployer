@@ -42,12 +42,33 @@ module Service
         return config_name
       end
 
+      def get_deployment_name()
+        username = get_user_config_name()
+        deployname = get_deploy_config_name()
+        return "#{username}-#{deployname}"
+      end
+
       def get_user_config_content()
         filepath = @options[:user_config]
         @user_file_content ||= @config_loader_lambda.call(filepath)
         return @user_file_content
       end
 
+      def is_delete_tmp?()
+        return @options[:delete_tmp] == true
+      end
+
+      def get_deployment_path()
+        return @deployment_path ||= "#{get_execution_path()}/#{get_deployment_name()}"
+      end
+
+      private
+      def download_file(url, filepath)
+        Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{url} to #{filepath}")
+        download = open(url)
+        IO.copy_stream(download, filepath)
+      end
+  
       def get_file_content(input)
         unless input.nil?
           filepath = input
@@ -59,7 +80,30 @@ module Service
         end
         return nil
       end
-
+  
+      def get_local_path_for_remote(input)
+        filename = get_local_name_for_remote(input)
+        deployment_path = get_deployment_path()
+        directory_service = Common::Io::DirectoryService.new(deployment_path)
+        directory = directory_service.create_sub_directory("downloads")
+        filepath = "#{directory}/#{filename}"
+        return filepath
+      end
+  
+      def get_local_name_for_remote(input)
+        filename = input.split('/').last
+        return filename
+      end
+  
+      def strip_to_name(filepath)
+        unless filepath.nil?
+          filename = File.basename(filepath)
+          split = filename.split('.').first
+          return split
+        end
+        return nil
+      end
+  
       def is_url?(input)
         if input!=nil && input.downcase().start_with?("http")
           return true
@@ -67,8 +111,8 @@ module Service
         return false
       end
   
-      def is_delete_tmp?()
-        return @options[:delete_tmp] == true
+      def get_execution_path()
+        return @execution_path ||= @context.get_app_config_provider().get_execution_path()
       end
 
     end
