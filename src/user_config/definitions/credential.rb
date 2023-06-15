@@ -59,17 +59,15 @@ module UserConfig
         end
 
         def aws_ssm_param_lookup(name)
-          # rely on default from aws configuration methods
-          instance_credentials = Aws::InstanceProfileCredentials.new()
           options = {
-            credentials: instance_credentials
+            credentials: Aws::CredentialProviderChain.new.resolve
           }
           client = Aws::SSM::Client.new(options)
           resp = client.get_parameter({
             name: name,
             with_decryption: true,
           })
-          return resp
+          return resp.parameter.value
         end
 
         def ensure_created(deployment_path)
