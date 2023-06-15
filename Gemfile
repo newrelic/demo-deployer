@@ -14,3 +14,5 @@ gem "aws-sdk-core", "~> 3.55"
 gem "aws-sdk-sqs", "~> 1.16"
 
 gem "aws-sdk-dynamodb", "~> 1.30"
+
+gem "aws-sdk-ssm", "~> 1.49"

@@ -1,11 +1,15 @@
+require 'aws-sdk-core'
+require 'aws-sdk-ssm'
+
 module UserConfig
   module Definitions
       class Credential
 
-        def initialize (provider, user_config_query_lambda, env_lambda = nil)
+        def initialize (provider, user_config_query_lambda, env_lambda = nil, ssm_param_lambda = nil)
             @provider = provider
             @user_config_query_lambda = user_config_query_lambda
-            @env_lambda = env_lambda || lambda { |name| return ENV[name] }
+            @env_lambda = env_lambda || lambda { |name| return env_value_lookup(name) }
+            @ssm_param_lambda = ssm_param_lambda || lambda { |name| return aws_ssm_param_lookup(name) }
         end
 
         def add_if_exist(items, name, value, key_prefix = nil)
@@ -24,16 +28,19 @@ module UserConfig
             if value == "" || value.kind_of?(Array) || value.kind_of?(Hash)
               return value
             end
-            env_var_name = get_matching_env_or_nil(value)
-            if env_var_name.nil?
-              return value
+            env_var_name = get_matching_or_nil(/\[(?i)env\:(\w+)\]/, value)
+            unless env_var_name.nil?
+              return @env_lambda.call(env_var_name)
             end
-            return @env_lambda.call(env_var_name)
+            aws_ssm_param_name = get_matching_or_nil(/\[(?i)aws_ssm_param\:([a-zA-Z0-9_\/]+)\]/, value)
+            unless aws_ssm_param_name.nil?
+              return @ssm_param_lambda.call(aws_ssm_param_name)
+            end
+            return value
         end
 
-        def get_matching_env_or_nil(value)
-          env_regex = /\[(?i)env\:(\w+)\]/
-          matches = env_regex.match(value)
+        def get_matching_or_nil(regex, value)
+          matches = regex.match(value)
           unless matches.nil?
             captures = matches.captures
             if captures.length > 0
@@ -43,6 +50,21 @@ module UserConfig
           return nil
         end
 
+        def env_value_lookup(name)
+          return ENV[name]
+        end
+
+        def aws_ssm_param_lookup(name)
+          # rely on default from aws configuration methods
+          options = {}
+          client = Aws::SSM::Client.new(options)
+          resp = client.get_parameter({
+            name: name,
+            with_decryption: true,
+          })
+          return resp
+        end
+  
     end
   end
 end
