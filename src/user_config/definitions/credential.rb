@@ -60,13 +60,21 @@ module UserConfig
 
         def aws_ssm_param_lookup(name)
           # rely on default from aws configuration methods
-          parameters = {
-            name: name,
-            with_decryption: true,
-          }
-          client = Aws::SSM::Client.new()
-          resp = client.get_parameter(parameters)
-          return resp.parameter.value
+          # parameters = {
+          #   name: name,
+          #   with_decryption: true,
+          # }
+          # client = Aws::SSM::Client.new()
+          # resp = client.get_parameter(parameters)
+          # return resp.parameter.value
+
+          task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption", "./")
+          processs_output = task.wait_to_completion()
+          if processs_output.succeeded?
+            command_output = processs_output.get_stdout()
+            return command_output
+          end
+          return nil
         end
 
         def ensure_created(deployment_path)

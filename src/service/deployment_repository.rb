@@ -58,25 +58,25 @@ module Service
     end
 
     def create_sqs_client()
-      aws_credential = @context.get_user_config_provider().get_aws_credential()
-      options = get_aws_options(aws_credential)
-      client = Aws::SQS::Client.new(options)
+      # aws_credential = @context.get_user_config_provider().get_aws_credential()
+      # options = get_aws_options(aws_credential)
+      client = Aws::SQS::Client.new()
       return client
     end
 
     def get_aws_options(aws_credential)
-      options = {}
-      region = aws_credential.get_region()
-      if is_not_empty?(region)
-        options = options.merge({region: region})
-      end
-      access_key = aws_credential.get_access_key()
-      secret_key = aws_credential.get_secret_key()
-      if is_not_empty?(access_key) && is_not_empty?(secret_key)
-        credential = Aws::Credentials.new(access_key, secret_key, aws_credential.get_session_token())
-        options = options.merge({credentials: credential})
-      end
-      return options
+    #   options = {}
+      # region = aws_credential.get_region()
+      # if is_not_empty?(region)
+      #   options = options.merge({region: region})
+      # end
+      # access_key = aws_credential.get_access_key()
+      # secret_key = aws_credential.get_secret_key()
+      # if is_not_empty?(access_key) && is_not_empty?(secret_key)
+      #   credential = Aws::Credentials.new(access_key, secret_key, aws_credential.get_session_token())
+      #   options = options.merge({credentials: credential})
+      # end
+      # return options
     end
 
     def is_not_empty?(value)
