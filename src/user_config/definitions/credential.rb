@@ -32,7 +32,7 @@ module UserConfig
             unless env_var_name.nil?
               return @env_lambda.call(env_var_name)
             end
-            aws_ssm_param_name = get_matching_or_nil(/\[(?i)aws_ssm_param\:([a-zA-Z0-9_\/]+)\]/, value)
+            aws_ssm_param_name = get_matching_or_nil(/\[(?i)aws_ssm_param\:([a-zA-Z0-9_\-\/]+)\]/, value)
             unless aws_ssm_param_name.nil?
               return @ssm_param_lambda.call(aws_ssm_param_name)
             end
