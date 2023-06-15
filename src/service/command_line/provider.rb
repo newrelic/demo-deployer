@@ -44,8 +44,7 @@ module Service
 
       def get_deployment_name()
         username = get_user_config_name()
-        deployname = get_deploy_config_name()
-        return "#{username}-#{deployname}"
+        return "#{username}-service"
       end
 
       def get_user_config_content()
