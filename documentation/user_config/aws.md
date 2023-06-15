@@ -62,6 +62,10 @@ To create a .pem key file, and use it with the deployer, follow the steps below:
 * IMPORTANT, in order for the .pem key file to be used, the file permissions need to be restricted to User read-only. You can do so with this command `sudo chmod 0400 *.pem`
 * Get the relative path of your .pem key file, this will be the value for the secretKeyPath field. For example `configs/jsmithUsWest2.pem`
 
+#### secretKeyName and secretKeyData alternative
+
+If the pem key should be dynamically generated, you can use the fields `secretKeyName` and `secretKeyData` to define the pem key name and data to use. To do so, `secretKeyPath` should not be provided
+
 ### availability_zone (optional)
 
 Some resources can be pin onto a specific availability zone. To do so provide the appropriate letter value to this parameter. Typically `a` or `b` or `c`.

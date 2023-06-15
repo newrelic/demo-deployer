@@ -79,6 +79,14 @@ module CommandLine
       return @options[:is_output_ini]
     end
   
+    def get_deployment_path()
+      return @deployment_path ||= "#{get_execution_path()}/#{get_deployment_name()}"
+    end
+
+    def is_delete_tmp?()
+      return @options[:delete_tmp] == true
+    end
+
     private
     def download_file(url, filepath)
       Common::Logger::LoggerFactory.get_logger().debug("Downloading from #{url} to #{filepath}")
@@ -128,13 +136,8 @@ module CommandLine
       return false
     end
 
-
     def get_execution_path()
       return @execution_path ||= @context.get_app_config_provider().get_execution_path()
-    end
-
-    def get_deployment_path()
-      return @deployment_path ||= "#{get_execution_path()}/#{get_deployment_name()}"
     end
 
   end

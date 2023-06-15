@@ -1,3 +1,4 @@
+require "fileutils"
 require './src/configuration_orchestrator'
 require './src/provision/orchestrator'
 require './src/install/orchestrator'
@@ -22,20 +23,42 @@ class Orchestrator
 
   def execute(arguments = ARGV)
     @configuration_orchestrator.execute(arguments)
+    output = nil
     if is_teardown?()
-      return @teardown_orchestrator.execute()
+      output = @teardown_orchestrator.execute()
     else
       Common::Logger::LoggerFactory.get_logger().debug("provision_orchestrator.execute()")
       @provision_orchestrator.execute()
       Common::Logger::LoggerFactory.get_logger().debug("install_orchestrator.execute()")
       @install_orchestrator.execute()
       Common::Logger::LoggerFactory.get_logger().debug("summary_orchestrator.execute()")
-      return @summary_orchestrator.execute()
+      output = @summary_orchestrator.execute()
+    end    
+    if is_delete_tmp?()
+      deployment_path = get_deployment_path()
+      FileUtils.remove_entry_secure(deployment_path, true)
     end
+    return output
   end
 
   def is_teardown?()
     return @context.get_command_line_provider().is_teardown?()
+  end
+
+  def is_delete_tmp?()
+    return @context.get_command_line_provider().is_delete_tmp?()
+  end
+
+  def get_execution_path()
+    return @execution_path ||= @context.get_app_config_provider().get_execution_path()
+  end
+
+  def get_deployment_name()
+    return @deployment_name ||= @context.get_command_line_provider().get_deployment_name()
+  end
+
+  def get_deployment_path()
+    return @deployment_path ||= "#{get_execution_path()}/#{get_deployment_name()}"
   end
 
 end

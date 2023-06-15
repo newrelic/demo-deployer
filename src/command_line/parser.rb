@@ -31,7 +31,8 @@ module CommandLine
     private
     def create_options()
       options = {
-          logging_level: "info"
+          logging_level: "info",
+          delete_tmp: false
       }
 
       @opts.banner = "Usage: config"
@@ -58,6 +59,10 @@ module CommandLine
 
       @opts.on('-n', '--output-ini', FalseClass, 'Specify to write an ini file with the details about the provisioned hosts.') do |config|
         options[:is_output_ini] = true
+      end
+
+      @opts.on('-z', '--delete_tmp', FalseClass, 'Upon completion, delete the entire deployment_path tmp folder (default false)') do |config|
+        options[:delete_tmp] = true
       end
 
       return options

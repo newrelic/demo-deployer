@@ -64,6 +64,9 @@ module UserConfig
           })
           return resp
         end
+
+        def ensure_created(deployment_path)
+        end
   
     end
   end

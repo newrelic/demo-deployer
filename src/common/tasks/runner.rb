@@ -120,6 +120,9 @@ module Common
           if is_teardown == true
             command += " -t"
           end
+          if is_delete_tmp?()
+            command += " -z"
+          end
           output_file_path = get_deployment_output(deployment)
           if File.exist?(output_file_path)
             File.delete(output_file_path)
@@ -173,6 +176,10 @@ module Common
 
       def is_ignore_teardown_errors?()
         return @context.get_command_line_provider().is_ignore_teardown_errors?()
+      end
+
+      def is_delete_tmp?()
+        return @context.get_command_line_provider().is_delete_tmp?()
       end
 
       def get_logging_level()

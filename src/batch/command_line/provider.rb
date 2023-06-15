@@ -36,6 +36,10 @@ module Batch
         return @options[:ignore_teardown_errors] == true
       end
 
+      def is_delete_tmp?()
+        return @options[:delete_tmp] == true
+      end
+
       def get_logging_level()
         return @options[:logging_level].downcase()
       end

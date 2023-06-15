@@ -30,6 +30,7 @@ module Service
             batch_size: 10,
             logging_level: "info",
             notification_table_name: "",
+            delete_tmp: false
         }
 
         @opts.banner = "Usage: config"
@@ -56,6 +57,10 @@ module Service
 
         @opts.on('-s', '--batch_size integer', Integer, 'Specify how many concurrent listeners and deployers to instantiate, default to 10') do |value|
           options[:batch_size] = value
+        end
+
+        @opts.on('-z', '--delete_tmp', FalseClass, 'Upon completion, delete the entire deployment_path tmp folder (default false)') do |config|
+          options[:delete_tmp] = true
         end
 
         return options

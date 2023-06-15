@@ -6,6 +6,7 @@ module UserConfig
     class AwsCredential < Credential
 
       def initialize (provider, user_config_query_lambda)
+        @secret_key_path = nil
         super(provider, user_config_query_lambda)
       end
 
@@ -22,6 +23,10 @@ module UserConfig
       end
 
       def get_secret_key_name()
+        value = query("secretKeyName")
+        unless value.nil?
+          return value
+        end
         secrect_key_path = get_secret_key_path()
         unless secrect_key_path.nil?
           return File.basename(secrect_key_path, ".*")
@@ -30,7 +35,14 @@ module UserConfig
       end
 
       def get_secret_key_path()
-        return query("secretKeyPath")
+        if @secret_key_path.nil?
+          return query("secretKeyPath")
+        end
+        return @secret_key_path
+      end
+      
+      def get_secret_key_data()
+        return query("secretKeyData")
       end
 
       def get_region()
@@ -45,6 +57,19 @@ module UserConfig
         end
         return nil
       end
+      
+      def ensure_created(deployment_path)
+        default_key_path = get_secret_key_path()
+        name = get_secret_key_name()
+        data = get_secret_key_data()
+        if default_key_path.nil? && !name.empty? && !data.empty?
+          # no key path in config, but key name and data specified
+          filename = "#{name}.pem"
+          file_path = "#{deployment_path}/#{filename}"
+          write_config(file_path, data)
+          @secret_key_path = file_path
+        end
+      end
 
       def to_h(key_prefix = @provider)
         items = {}
@@ -55,6 +80,12 @@ module UserConfig
         add_if_exist(items, "secret_key_path", get_secret_key_path(), key_prefix)
         add_if_exist(items, "region", get_region(), key_prefix)
         return items
+      end
+
+      private
+      def write_config(filepath, content)
+        file_writer = Common::Io::FileWriter.new(filepath, content)
+        file_writer.execute()
       end
 
     end

@@ -28,7 +28,8 @@ module Batch
         options = {
             mode: "deploy",
             batch_size: 10,
-            logging_level: "info"
+            logging_level: "info",
+            delete_tmp: false
         }
 
         @opts.banner = "Usage: config"
@@ -55,6 +56,10 @@ module Batch
 
         @opts.on('-i', '--ignore_teardown_errors', FalseClass, 'When tearing down, specify if any error should be ignored (default false)') do |config|
           options[:ignore_teardown_errors] = true
+        end
+
+        @opts.on('-z', '--delete_tmp', FalseClass, 'Upon completion, delete the entire deployment_path tmp folder (default false)') do |config|
+          options[:delete_tmp] = true
         end
 
         return options

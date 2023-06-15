@@ -67,6 +67,10 @@ module Service
         return false
       end
   
+      def is_delete_tmp?()
+        return @options[:delete_tmp] == true
+      end
+
     end
   end
 end

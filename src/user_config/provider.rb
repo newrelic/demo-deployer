@@ -16,6 +16,19 @@ module UserConfig
       return nil
     end
 
+    def ensure_all_created(deployment_path)
+      unless @config_file.nil?
+        unless @config_file['credentials'].nil?
+          @config_file['credentials'].each do |provider|
+            credential = get_credential(provider)
+            unless credential.nil?
+              credential.ensure_created(deployment_path)
+            end
+          end
+        end
+      end
+    end
+
     def get_new_relic_credential()
       return get_credential('newrelic')
     end
