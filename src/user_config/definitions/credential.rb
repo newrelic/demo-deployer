@@ -76,6 +76,7 @@ module UserConfig
               http_open_timeout: 10,
               http_read_timeout: 10,
             })
+            instance_credentials.refresh!
             client = Aws::SSM::Client.new(credentials: instance_credentials)
             resp = client.get_parameter(parameters)
             return resp.parameter.value
