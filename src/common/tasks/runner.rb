@@ -151,6 +151,10 @@ module Common
             error_file = get_deployment_output(deployment)
             error_files.push(error_file)
           end
+          if is_delete_tmp?()
+            output_file_path = get_deployment_output(deployment)
+            FileUtils.remove_entry_secure(output_file_path, true)
+          end
         end
         return error_files.compact()
 
