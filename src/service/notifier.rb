@@ -61,8 +61,14 @@ module Service
       access_key = aws_credential.get_access_key()
       secret_key = aws_credential.get_secret_key()
       if is_not_empty?(access_key) && is_not_empty?(secret_key)
-        credential = Aws::Credentials.new(access_key, secret_key, aws_credential.get_session_token())
-        options = options.merge({credentials: credential})
+        options = options.merge({
+          access_key_id: access_key,
+          secret_access_key: secret_key
+        })
+      end
+      session_token = aws_credential.get_session_token()
+      if is_not_empty?(session_token)
+        options = options.merge({session_token: session_token})
       end
       return options
     end
