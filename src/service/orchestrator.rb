@@ -42,30 +42,40 @@ module Service
       batch_size = @context.get_command_line_provider().get_batch_size()
       Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}, batchSize:#{batch_size}")
 
-      if batch_size == 0
-        id = 0
-        single_listener(id)
-      else
-        count = 0
-        threads = []
-        batch_size.times do |i|
-          threads[i] = Thread.new {
-            count += 1
-            id = count
-            Thread.current["id"] = id
-            while true
-              single_listener(id)
-              sleep 1
-            end
-          }
+      begin
+        if batch_size == 0
+          id = 0
+          single_listener(id)
+        else
+          count = 0
+          threads = []
+          batch_size.times do |i|
+            threads[i] = Thread.new {
+              count += 1
+              id = count
+              Thread.current["id"] = id
+              while true
+                single_listener(id)
+                sleep 1
+              end
+            }
+          end
+          threads.each do |t|
+            t.join
+            log.info("T#{t["id"]}-terminating")
+          end
         end
-        threads.each do |t|
-          t.join
-          log.info("T#{t["id"]}-terminating")
-        end
+      rescue SystemExit, Interrupt => e
       end
 
       Common::Logger::LoggerFactory.get_logger().info("Service terminating")
+
+      if is_delete_tmp?()
+        deployment_path = get_deployment_path()
+        FileUtils.remove_entry_secure(deployment_path, true)
+        alternate_deployer_path = "#{get_execution_path}/deployer"
+        FileUtils.remove_entry_secure(alternate_deployer_path, true)
+      end
 
       log_token.success()
     end
@@ -73,8 +83,8 @@ module Service
     private
 
     def create_deployment_directory()
-      execution_path = @context.get_app_config_provider().get_execution_path()
-      deployment_name = @context.get_command_line_provider().get_deployment_name()
+      execution_path = get_execution_path()
+      deployment_name = get_deployment_name()
       directory_service = Common::Io::DirectoryService.new(execution_path)
       directory_service.create_sub_directory(deployment_name, true)
       return nil
@@ -99,6 +109,22 @@ module Service
       logging_level = @context.get_command_line_provider().get_logging_level()
       Common::Logger::LoggerFactory.set_logging_level(logging_level)
       return Common::Logger::LoggerFactory.get_logger().task_start("Executing service processing")
+    end
+
+    def is_delete_tmp?()
+      return @context.get_command_line_provider().is_delete_tmp?()
+    end
+
+    def get_execution_path()
+      return @execution_path ||= @context.get_app_config_provider().get_execution_path()
+    end
+  
+    def get_deployment_name()
+      return @deployment_name ||= @context.get_command_line_provider().get_deployment_name()
+    end
+  
+    def get_deployment_path()
+      return @deployment_path ||= "#{get_execution_path()}/#{get_deployment_name()}"
     end
 
     def get_app_config_orchestrator()
