@@ -84,7 +84,8 @@ module UserConfig
             # return resp.parameter.value
 
             # Attempt local ssm command
-            task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption", "./")
+            task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption | sed 's/\\n/\
+            /g'", "./")
             processs_output = task.wait_to_completion()
             if processs_output.succeeded?
               command_output = processs_output.get_stdout()
