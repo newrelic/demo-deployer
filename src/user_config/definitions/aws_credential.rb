@@ -6,7 +6,6 @@ module UserConfig
     class AwsCredential < Credential
 
       def initialize (provider, user_config_query_lambda)
-        @secret_key_path = nil
         super(provider, user_config_query_lambda)
       end
 
@@ -35,10 +34,7 @@ module UserConfig
       end
 
       def get_secret_key_path()
-        if @secret_key_path.nil?
-          return query("secretKeyPath")
-        end
-        return @secret_key_path
+        return query("secretKeyPath")
       end
       
       def get_secret_key_data()
@@ -58,7 +54,7 @@ module UserConfig
         return nil
       end
       
-      def ensure_created(deployment_path)
+      def ensure_created(deployment_path, config_credential)
         default_key_path = get_secret_key_path()
         name = get_secret_key_name()
         data = get_secret_key_data()
@@ -68,7 +64,7 @@ module UserConfig
           file_path = "#{deployment_path}/#{filename}"
           write_config(file_path, data)
           Common::Tasks::ProcessTask.new("sudo chmod 400 #{file_path}", "./").wait_to_completion()
-          @secret_key_path = file_path
+          config_credential[secretKeyPath: "#{file_path}"]
         end
       end
 

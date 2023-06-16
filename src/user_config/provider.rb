@@ -22,7 +22,7 @@ module UserConfig
           @config_file['credentials'].each do |item|
             credential = get_credential(item[0])
             unless credential.nil?
-              credential.ensure_created(deployment_path)
+              credential.ensure_created(deployment_path, item[1])
             end
           end
         end
