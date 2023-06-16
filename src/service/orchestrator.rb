@@ -103,6 +103,10 @@ module Service
         Common::Logger::LoggerFactory.get_logger().info("T#{id}-notification completed")
         get_runner().single_teardown(partition)
         Common::Logger::LoggerFactory.get_logger().info("T#{id}-teardown completed")
+        if is_delete_tmp?()
+          deploy_config_filepath = deployment.get_deploy_config_filepath()
+          FileUtils.remove_entry_secure(deploy_config_filepath, true)
+        end
     end
 
     def init_logging()
