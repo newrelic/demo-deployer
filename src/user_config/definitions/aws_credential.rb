@@ -64,7 +64,9 @@ module UserConfig
           file_path = "#{deployment_path}/#{filename}"
           write_config(file_path, data)
           Common::Tasks::ProcessTask.new("sudo chmod 400 #{file_path}", "./").wait_to_completion()
-          config_credential[secretKeyPath: "#{file_path}"]
+          items = {}
+          items["secretKeyPath"] = file_path
+          config_credential.merge!(items)
         end
       end
 
