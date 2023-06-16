@@ -83,8 +83,10 @@ module UserConfig
 
       private
       def write_config(filepath, content)
-        file_writer = Common::Io::FileWriter.new(filepath, content)
-        file_writer.execute()
+        File.open(filepath, "w+") do |f|
+          a = content.split('\\n')
+          f.puts(a)
+        end
       end
 
     end
