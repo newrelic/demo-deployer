@@ -19,8 +19,8 @@ module UserConfig
     def ensure_all_created(deployment_path)
       unless @config_file.nil?
         unless @config_file['credentials'].nil?
-          @config_file['credentials'].each do |provider|
-            credential = get_credential(provider)
+          @config_file['credentials'].each do |item|
+            credential = get_credential(item[0])
             unless credential.nil?
               credential.ensure_created(deployment_path)
             end

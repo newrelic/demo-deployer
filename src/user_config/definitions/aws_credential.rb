@@ -67,6 +67,7 @@ module UserConfig
           filename = "#{name}.pem"
           file_path = "#{deployment_path}/#{filename}"
           write_config(file_path, data)
+          Common::Tasks::ProcessTask.new("sudo chmod 400 #{file_path}", "./").wait_to_completion()
           @secret_key_path = file_path
         end
       end
