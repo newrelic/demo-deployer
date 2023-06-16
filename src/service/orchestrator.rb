@@ -36,6 +36,8 @@ module Service
       get_user_config_orchestrator().execute()
       log_token = init_logging()
 
+      create_deployment_directory()
+
       batch_size = @context.get_command_line_provider().get_batch_size()
       Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}, batchSize:#{batch_size}")
 
@@ -68,6 +70,14 @@ module Service
     end
 
     private
+
+    def create_deployment_directory()
+      execution_path = @context.get_app_config_provider().get_execution_path()
+      deployment_name = @context.get_command_line_provider().get_deployment_name()
+      directory_service = Common::Io::DirectoryService.new(execution_path)
+      directory_service.create_sub_directory(deployment_name, true)
+      return nil
+    end
 
     def single_listener(id)
         Common::Logger::LoggerFactory.get_logger().info("T#{id}-waiting next")
