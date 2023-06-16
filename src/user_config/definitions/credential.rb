@@ -71,7 +71,11 @@ module UserConfig
             return resp.parameter.value
           rescue Exception => e
             # Attempt with InstanceProfile as a fallback
-            instance_credentials = Aws::InstanceProfileCredentials.new
+            instance_credentials = Aws::InstanceProfileCredentials.new({
+              retries: 3,
+              http_open_timeout: 10,
+              http_read_timeout: 10,
+            })
             client = Aws::SSM::Client.new(credentials: instance_credentials)
             resp = client.get_parameter(parameters)
             return resp.parameter.value
