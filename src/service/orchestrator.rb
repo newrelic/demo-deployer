@@ -33,10 +33,11 @@ module Service
     def execute(arguments = ARGV)
       get_command_line_orchestrator().execute(arguments)
       get_app_config_orchestrator().execute()
-      get_user_config_orchestrator().execute()
-      log_token = init_logging()
 
       create_deployment_directory()
+
+      get_user_config_orchestrator().execute()
+      log_token = init_logging()
 
       batch_size = @context.get_command_line_provider().get_batch_size()
       Common::Logger::LoggerFactory.get_logger().info("Service starting with queue:#{@context.get_command_line_provider().get_queue_url()} wait_time_seconds:#{@context.get_command_line_provider().get_wait_time_seconds()}, batchSize:#{batch_size}")
