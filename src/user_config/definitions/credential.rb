@@ -70,13 +70,17 @@ module UserConfig
             resp = client.get_parameter(parameters)
             return resp.parameter.value
           rescue Exception => e
-            # Attempt local ssm command
-            task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption", "./")
-            processs_output = task.wait_to_completion()
-            if processs_output.succeeded?
-              command_output = processs_output.get_stdout()
-              return command_output.gsub(/\n/," ").gsub(/\r/," ").strip()
-            end
+            # Attempt with InstanceProfile as a fallback
+            client = Aws::SSM::Client.new(credentials: instance_credentials)
+            resp = client.get_parameter(parameters)
+            return resp.parameter.value
+            # # Attempt local ssm command
+            # task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption", "./")
+            # processs_output = task.wait_to_completion()
+            # if processs_output.succeeded?
+            #   command_output = processs_output.get_stdout()
+            #   return command_output.gsub(/\n/," ").gsub(/\r/," ").strip()
+            # end
           end
           # task = Common::Tasks::ProcessTask.new("aws ssm get-parameters --names \"#{name}\" --query Parameters[0].Value --with-decryption", "./")
           # processs_output = task.wait_to_completion()
