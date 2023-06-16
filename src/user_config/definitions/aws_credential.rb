@@ -58,7 +58,7 @@ module UserConfig
         default_key_path = get_secret_key_path()
         name = get_secret_key_name()
         data = get_secret_key_data()
-        if default_key_path.nil? && !name.empty? && !data.empty?
+        if default_key_path.nil? && !name.nil && !name.empty? && !data.nil? && !data.empty?
           # no key path in config, but key name and data specified
           filename = "#{name}.pem"
           file_path = "#{deployment_path}/#{filename}"
