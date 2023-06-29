@@ -70,6 +70,22 @@ Note, any credential value can also be passed through environment variable, usin
 }
 ```
 
+Likewise, any value can also be configured with AWS SystemManager ParameterStore (SSM)for example, here is a set of AWS credentials with the actual values provided by the ParameterStore.
+Note, when looking up AWS credentials through this mechanism, the default AWS configuration lookup strategy is used (~/.aws/credentials, env var...), for more info see `Configuration and credential precedence` at https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html
+
+```json
+{
+  "credentials": {
+    "aws": {
+      "apiKey": "[aws_ssm_param:/my_team/my_service/access_key]",
+      "secretKey": "[aws_ssm_param:/my_team/my_service/secret_key]",
+      "secretKeyName": "[aws_ssm_param:/my_team/my_service/secret_key_name]",
+      "secretKeyData": "[aws_ssm_param:/my_team/my_service/secret_key_data]",
+      "region": "[aws_ssm_param:/my_team/my_service/aws_region]",
+    }
+  }
+}
+```
 
 ## Credentials
 
