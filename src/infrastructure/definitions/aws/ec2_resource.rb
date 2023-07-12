@@ -55,7 +55,7 @@ module Infrastructure
           if is_windows?()
             return "<powershell>
             Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force\n
-            $url = \"https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1\"\n
+            $url = \"https://raw.githubusercontent.com/ansible/ansible-documentation/devel/examples/scripts/ConfigureRemotingForAnsible.ps1\"\n
             $file = \"$env:temp\\ConfigureRemotingForAnsible.ps1\"\n
             [Net.ServicePointManager]::SecurityProtocol = \"tls12, tls\"\n
             (New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)\n
