@@ -1,4 +1,4 @@
-FROM python:3.10.8
+FROM python:3.12.0b4
 
 RUN apt-get clean all
 RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="America/New_York" apt-get install -y tzdata
