@@ -1,4 +1,6 @@
-[![Experimental Project header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Experimental.png)](https://opensource.newrelic.com/oss-category/#experimental)
+[![Archived header](https://github.com/newrelic/opensource-website/raw/master/src/images/categories/Archived.png)](https://opensource.newrelic.com/oss-category/#archived)
+
+Active development for this project has been moved to https://github.com/newrelic-experimental/deployer
 
 # Demo Deployer
 
@@ -15,7 +17,8 @@ While you can build components and deployment configurations for the deployer, w
 To learn how to use the deployer and run a demo, have a look at our [Demo catalog](https://github.com/newrelic/demo-catalog).
 
 ## Building the demo-deployer locally
-First make sure to [Install Docker](https://docs.docker.com/get-docker/) and [install Git](https://git-scm.com/downloads) 
+
+First make sure to [Install Docker](https://docs.docker.com/get-docker/) and [install Git](https://git-scm.com/downloads)
 
 Clone the `demo-deployer` repository:
 
@@ -31,6 +34,7 @@ $ docker build -t deployer .
 ```
 
 Follow our [Getting Started guide](https://github.com/newrelic/demo-catalog/blob/main/GETTING_STARTED.md) to deploy a demo scenario (note that you already have the deployer running locally if you have followed the above build steps)
+
 ## Developer
 
 For more advanced insights of what the deployer is and does, check the [Developer documentation](documentation/developer/README.md). There, you'll learn about the deployer's architecture and how to run and test the application locally.
@@ -39,7 +43,7 @@ For more advanced insights of what the deployer is and does, check the [Develope
 
 We encourage your contributions to improve the V3 Deployer! Keep in mind that when you submit your pull request, you'll need to sign the Contributor License Agreement (CLA) via the CLA-Assistant. You only have to sign the CLA one time per project.
 
-If you have any questions, or to execute our corporate CLA, which required if your contribution is on behalf of a company,  please drop us an email at opensource@newrelic.com.
+If you have any questions, or to execute our corporate CLA, which required if your contribution is on behalf of a company, please drop us an email at opensource@newrelic.com.
 
 ## License
 
